@@ -1,0 +1,29 @@
+# Site settings
+title: Lament's Blog
+subtitle: by HTML5 UP
+email: lament.wy@gmail.com
+description: A responsive site template designed by HTML5 Up<br /> and released under the Creative Commons.
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "https://lament-wy.com" # the base hostname & protocol for your site
+author:Lament
+street_address: 跨星空间
+city: 杭州
+state: 浙江
+zip_code: 000000
+country: china
+phone: (+86）158 4088 9332
+
+# Homepage tiles
+tiles-source: posts # accepts "posts" or "pages"
+tiles-count: 6
+
+# Social settings
+weibo_url:http://weibo.com/CaliforniaDL
+github_url:https://github.com/LamentWy
+googleplus_url: https://plus.google.com/u/0/+AndrewBanchich
+instagram_url: n/a 
+# Build settings
+markdown: kramdown
+
+sass:
+  style: compressed
