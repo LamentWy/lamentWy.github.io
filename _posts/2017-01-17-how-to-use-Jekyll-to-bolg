@@ -1,0 +1,19 @@
+---
+layout: post
+title: 如何使用Jekyll写blog
+---
+
+使用Jekyll编写博客与常规博客网站编写有一点点不同，那就是Jekyll需要“头信息”。
+也就是说一篇博客会包含两大部分：1、头信息；2、正文。
+
+什么是头信息？
+{% highlight ruby %}
+---
+layout: post
+title: 这篇blog的标题
+---
+{% endhighlight ruby %}
+上方代码就是一个标准的头信息，有了这个头信息Jekyll就可以识别这个文件，并对它进行特殊处理啦～
+详细说明可以参考：头信息（http://jekyllcn.com/docs/frontmatter/）
+
+暂时先写到这里。
