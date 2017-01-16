@@ -3,7 +3,7 @@ title: Lament's Blog
 subtitle: by HTML5 UP
 email: lament.wy@gmail.com
 description: A responsive site template designed by HTML5 Up<br /> and released under the Creative Commons.
-baseurl: "/" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://lament-wy.com" # the base hostname & protocol for your site
 author: Lament
 street_address: qian mo road
