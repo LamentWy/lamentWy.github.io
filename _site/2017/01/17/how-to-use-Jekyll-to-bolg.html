@@ -23,7 +23,7 @@
 <div id="wrapper">
 
 <!-- Header -->
-<header id="header" class="alt">
+<header id="header">
 	<a href="http://localhost:4000/" class="logo"><strong>Lament's Blog</strong> <span>by HTML5 UP</span></a>
 	<nav>
 		<a href="#menu">Menu</a>
@@ -64,128 +64,52 @@
 		<li><a href="#" class="button special fit">Get Started</a></li>
 		<li><a href="#" class="button fit">Log In</a></li>
 	</ul>
-</nav>
+</nav> 
+    
+    
+<!-- Main -->
+<div id="main" class="alt">
 
-    <!-- Banner -->
-    <section id="banner" class="major">
-        <div class="inner">
-            <header class="major">
-                <h1>Hi, Welcome to my blog :)</h1>
-            </header>
-            <div class="content">
-                <p style="text-transform: uppercase;">A responsive site template designed by HTML5 Up<br /> and released under the Creative Commons.</p>
-                <ul class="actions">
-                    <li><a href="#one" class="button next scrolly">Get Started</a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
+<!-- One -->
+<section id="one">
+	<div class="inner">
+		<header class="major">
+			<h1>如何使用Jekyll写blog</h1>
+		</header>
+		
+		<p><p>使用Jekyll编写博客与常规博客网站编写有一点点不同，那就是Jekyll需要“头信息”。
+也就是说一篇博客会包含两大部分：1、头信息；2、正文。</p>
 
-    <!-- Main -->
-    <div id="main">
+<p>什么是头信息？</p>
 
-        <!-- One -->
-        <section id="one" class="tiles">
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/01/17/useJekyllWriteBolg2.html" class="link">如何使用Jekyll写blog(二)</a></h3>
-                        <p></p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/01/17/how-to-use-Jekyll-to-bolg.html" class="link">如何使用Jekyll写blog</a></h3>
-                        <p></p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="assets/images/pic01.jpg" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2016/08/25/aliquam.html" class="link">First Bolg</a></h3>
-                        <p>test alter this paper</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="assets/images/pic02.jpg" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2016/08/24/tempus.html" class="link">Tempus</a></h3>
-                        <p>Feugiat amet tempus</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="assets/images/pic03.jpg" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2016/08/23/magna.html" class="link">Magna</a></h3>
-                        <p>Lorem etiam nullam</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="assets/images/pic04.jpg" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2016/08/22/ipsum.html" class="link">Ipsum</a></h3>
-                        <p>Nisl sed aliquam</p>
-                </header>
-        </article>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">---</span>
+<span class="ss">layout: </span><span class="n">post</span>
+<span class="ss">title: </span><span class="err">这篇</span><span class="n">blog</span><span class="err">的标题</span>
+<span class="o">---</span></code></pre></figure>
+
+<p>上方代码就是一个标准的头信息，有了这个头信息Jekyll就可以识别这个文件，并对它进行特殊处理啦～
+详细说明可以参考：头信息（http://jekyllcn.com/docs/frontmatter/）</p>
+
+<p>头信息就是代码快里的内容，你可以不去了解他，只要复制一份到你这篇blog的开头就行了，把title：空格 后面的标题换成自己的标题即可。</p>
+
+<p>注意：空格不能少哟～</p>
+
+<p>然后在头信息下面随便写点什么就可以保存啦～</p>
+
+<p>保存时需要注意：
+	1、文件名需要遵循： 年-月-日-标题.MARKUP。 不知道啥是markup也无所谓，保存成.md 就行了。 
+	2、保存/上传路径：你的github中对应gitpage的仓库（{userName}.github.io）中的_posts文件夹，当然你如果有同步到本地的对应仓库的话同理。</p>
+
+<p>保存至本地仓库的话，commit并同步给远程github仓库，等几分钟刷新你的博客就可以看到啦～</p>
+
+<hr />
+<p>譬如本篇地址：
+http://lament-wy.com/2017/01/17/how-to-use-Jekyll-to-bolg.html</p>
+</p>
+	</div>
 </section>
 
-
-        <!-- Two -->
-        <section id="two">
-            <div class="inner">
-                <header class="major">
-                    <h2>Massa libero</h2>
-                </header>
-                <p><p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.</p>
-</p>
-                <ul class="actions">
-                    <li><a href="landing.html" class="button next">Get Started</a></li>
-                </ul>
-            </div>
-        </section>
-
-    </div>
+</div>
 
     <!-- Contact -->
 <section id="contact">

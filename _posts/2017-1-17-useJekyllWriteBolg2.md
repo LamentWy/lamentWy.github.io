@@ -101,17 +101,7 @@ rock & roll
 
 ># 演示一下，我是一级
 
-之所以说类似是因为代码框我用了另外一种标记语言的语法，java写多了，啥都想括号括起来 =,=
-
-{% highlight ruby linenos %}
-{% highlight ruby %}
-System.out.println("hello world!"); 
-{% endhighlight ruby%}
-{% endhighlight ruby%}
-
-let's see what happen!
-
-好吧，不是很好～ 代码嵌套带来了一些问题。虽然你们看到的时候可能已经正常了。
+之所以说类似是因为代码框我用了另外一种标记语言的语法，也是jekyll自带的一个语法高亮，可以继续参考之前的链接。
 
 段落、标题、代码块就到这里啦～
 
