@@ -95,9 +95,9 @@ rock & roll
 
 比如你想输出前面的框
 “ # 演示一下，我是一级 ”
-在文本编辑器中输入：
+在文本编辑器中输入(去掉引号)：
 
-> ># 演示一下，我是一级
+> "># 演示一下，我是一级"
 
 发布之后就是下面的效果啦～
 
@@ -106,11 +106,9 @@ rock & roll
 之所以说类似是因为代码框我用了另外一种标记语言的语法，java写多了，啥都想括号括起来 =,=
 
 {% highlight ruby %}
-
- {% highlight ruby %}
- # 演示一下，我是一级 
- {% endhighlight ruby%}
-
+{% highlight ruby %}
+# 演示一下，我是一级 
+{% endhighlight ruby%}
 {% endhighlight ruby%}
 
 let's see what happen!
