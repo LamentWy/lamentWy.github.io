@@ -16,4 +16,4 @@ title: 这篇blog的标题
 上方代码就是一个标准的头信息，有了这个头信息Jekyll就可以识别这个文件，并对它进行特殊处理啦～
 详细说明可以参考：头信息（http://jekyllcn.com/docs/frontmatter/）
 
-暂时先写到这里。
+end.
