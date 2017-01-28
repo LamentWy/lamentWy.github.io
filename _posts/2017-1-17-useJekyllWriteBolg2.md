@@ -104,16 +104,16 @@ rock & roll
 之所以说类似是因为代码框我用了另外一种标记语言的语法，java写多了，啥都想括号括起来 =,=
 
 {% highlight ruby %}
- {% highlight ruby %}
- # 演示一下，我是一级 
- {% endhighlight ruby%}
+{% highlight ruby %}
+  # 演示一下，我是一级 
+{% endhighlight ruby%}
 {% endhighlight ruby%}
 
 let's see what happen!
 
 好吧，不是很好～ 代码嵌套带来了一些问题。虽然你们看到的时候可能已经正常了。
 
-继续～
+段落、标题、代码块就到这里啦～
 
 
 
