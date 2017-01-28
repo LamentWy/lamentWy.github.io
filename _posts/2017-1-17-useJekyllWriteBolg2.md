@@ -104,9 +104,9 @@ rock & roll
 之所以说类似是因为代码框我用了另外一种标记语言的语法，java写多了，啥都想括号括起来 =,=
 
 {% highlight ruby linenos %}
-	{% highlight ruby %}
-  	System.out.println("hello world!"); 
-	{% endhighlight ruby%}
+{% highlight ruby %}
+System.out.println("hello world!"); 
+{% endhighlight ruby%}
 {% endhighlight ruby%}
 
 let's see what happen!
