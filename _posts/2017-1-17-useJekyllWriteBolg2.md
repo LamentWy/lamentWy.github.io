@@ -35,14 +35,14 @@ rock & roll
 
 {% highlight ruby %}
 = 代表大标题 - 代表小标题 
-{% endhighlight ruby%}
+{% endhighlight %}
 
 {% highlight ruby %}
 最高标题，字最粗！
 =
 次级标题，稍微小点～
 -
-{% endhighlight ruby %}
+{% endhighlight %}
 
 效果如下：
 
@@ -56,7 +56,7 @@ rock & roll
 
 {% highlight ruby %}
 # : 1~6个"#" 对应1～6级标题 
-{% endhighlight ruby%}
+{% endhighlight %}
 
 在文本编辑器里输入：
 
@@ -67,7 +67,7 @@ rock & roll
 #### 四级
 ##### 五级
 ###### 六级
-{% endhighlight ruby%}
+{% endhighlight %}
 
 效果如下：
 
