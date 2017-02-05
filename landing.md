@@ -1,7 +1,7 @@
 ---
 title: Landing
 layout: landing
-description: 'Lorem ipsum dolor sit amet nullam consequa<br />sed veroeros. tempus adipiscing nulla.'
+description: 'landing page的描述'
 image: assets/images/pic07.jpg
 nav-menu: true
 ---
@@ -28,11 +28,11 @@ nav-menu: true
   <section id="one">
   <div class="inner"><header class="major">
 
-## Sed amet aliquam
+## 标题1
 
 </header>
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna.
+段落1
 
 </div>
   <p></p>
@@ -47,11 +47,11 @@ Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc r
 <div class="content">
   <div class="inner"><header class="major">
 
-### Orci maecenas
+### 标题2
 
 </header>
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+段落2
 
 <em><a href="generic.html">Learn more</a>{:.button}
 
@@ -67,11 +67,11 @@ Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc r
   <em></em>
   <div class="inner"><em><header class="major">
 
-### Rhoncus magna
+### 标题3
 
 </header>
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+段落3，忍不住吐个槽，为什么md里面夹杂html标签啊，看的一脸懵逼。
 
 </em>   <a href="generic.html">Learn more</a>{:.button}
 
@@ -85,11 +85,11 @@ Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc r
 <div class="content">
   <div class="inner"><header class="major">
 
-### Sed nunc ligula
+### 标题4
 
 </header>
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+段落4
 
 <em><a href="generic.html">Learn more</a>{:.button}
 
@@ -105,11 +105,11 @@ Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc r
   <em></em>
   <div class="inner"><em><header class="major">
 
-## Massa libero
+## 标题5
 
 </header>
 
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.
+段落5
 
 </em>   <a href="generic.html">Get Started</a>{:.button .next}
 

@@ -2,14 +2,14 @@
 title: 叽里咕噜海贼团
 subtitle: by 小野不是妹纸
 email: lament.wy@gmail.com
-description: Don't Panic!
+description: Don't Panic! 大胆戳右边 -->
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://lament-wy.com" # the base hostname & protocol for your site
 author: Lament
 street_address: 阡陌路
 city: 杭州
 state: 浙江
-zip_code: 000000
+#zip_code: 000000
 country: 中国
 phone: (+86）158 4088 9332
 
