@@ -1,10 +1,9 @@
 ---
 layout: home
 title: Home
-landing-title: 'Hi, Welcome to my blog :)'
-description: null
+landing-title: '嘿,欢迎上船～'
+description: 这里是小野不是妹纸的博客，什么都写
 image: null
-author: null
+author: Lament
 ---
-
-Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.
+测试一下这里是什么区域！
