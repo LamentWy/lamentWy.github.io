@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 如何使用Jekyll写blog(二)
+description: markdown语法简介
 ---
 
 经过第一篇，你可能已经成功发布了第一篇blog。
@@ -31,7 +32,7 @@ markdown语法参考url：http://wowubuntu.com/markdown/basic.html
 rock & roll
 -
 
-首先是，段落标题代码块。
+# 段落 标题 代码块 
 
 {% highlight ruby %}
 = 代表大标题 - 代表小标题 
@@ -105,5 +106,100 @@ rock & roll
 
 段落、标题、代码块就到这里啦～
 
+# 斜体和加粗
 
+使用*和_来标记需要强调（斜体or加粗）的内容。
 
+{% highlight markdown %}
+这样可以 *斜体*
+这样也可以 _斜体_
+{% endhighlight %}
+
+效果如下:
+
+这样可以 *斜体* 
+
+这样也可以 _斜体_
+
+{% highlight markdown %}
+**加粗** 是这样的
+__加粗__ 也可以这样
+{% endhighlight %}
+
+效果如下：
+
+**加粗** 是这样的
+
+__加粗__ 也可以这样，好吧字体的原因看起来没粗多少 =，=
+
+> tips: 建议使用星号,下划线会偶尔产生一些问题，比如加粗之后的空格去掉对比一下效果
+
+# 列表
+
+1. 无序列表使用星号、加号和减号来做为列表的项目标记.
+
+{% highlight markdown %}
+* 吃饭
+* 遛狗
+* 更新blog
+{% endhighlight %}
+
+* 吃饭
+* 遛狗
+* 更新blog
+
+{% highlight markdown%}
++ 吃饭
++ 遛狗
++ 更新blog
+{% endhighlight %}
+
++ 吃饭
++ 遛狗
++ 更新blog
+
+减号同理，注意符号和项目名之间要有一个空格
+
+2. 有序的列表则是数字加英文.
+
+{% highlight markdown %}
+1. 把冰箱门打开
+2. 把大象放进去
+3. 把冰箱门关上
+{% endhighlight %}
+
+1. 把冰箱门打开
+2. 把大象放进去
+3. 把冰箱门关上
+
+# 链接
+
+Markdown 支援两种形式的链接语法: *行内* 和 *参考*
+
+* 行内 
+{% highlight markdown %}
+欢迎大家关注我的[知乎](https://www.zhihu.com/people/lament42 "去看看"),虽然最近很少上 o_o 
+{% endhighlight %}
+
+欢迎大家关注我的[知乎](https://www.zhihu.com/people/lament42 "去看看"),虽然最近很少上 o_o
+
+* 引用
+
+引用类似各种paper中的资料引用，也就是说链接可以丢到最后去，不必加入正文。
+
+{% highlight markdown %}
+jekyll的相关内容来自[jekyllcn][1].
+
+[1]: http://jekyllcn.com/
+{% endhighlight %}
+
+jekyll的相关内容来自[jekyllcn][1].
+
+[1]: http://jekyllcn.com/
+
+# 图片
+
+图片的语法跟链接极其相似。
+由于手头没有合适的图片，回头再补。
+
+lastupdate 2017-02-08 23:40  碎叫！
