@@ -64,12 +64,11 @@ description: 文字版+图片
 > $ git pull <remote> <branch>     #从指定远程库获取指定分支，并自动合并 <!>
 
 > $ git push <remote> <branch>     #将当前分支（仅包含已提交的更新）上传到指定远程库的指定分支，并自动合并 
-
-> $ git push --tags     # 上传所有标签
+> $ git push --tags                # 上传所有标签
 
 
 # 图片版
-![temp_git_pic](assets/images/gitcmd0.jpg "临时借用")
+![temp_git_pic](http://lament-wy.com/assets/images/gitcmd0.jpg "临时借用")
 
 
 
