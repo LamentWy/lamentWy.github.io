@@ -74,24 +74,82 @@
 <section id="one">
 	<div class="inner">
 		<header class="major">
-			<h1>Consequat</h1>
+			<h1>git快速入门（1）</h1>
 		</header>
-		<span class="image main"><img src="/assets/images/pic05.jpg" alt="" /></span>
-		<p><p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. 
-Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. 
-Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. 
-Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
+		
+		<p><h1 id="什么是git">什么是Git？</h1>
+<p>一种分布式版本控制系统。</p>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. 
-Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. 
-Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. 
-Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. 
-Pellentesque aliquam maximus risus, vel sed vehicula.</p>
+<h1 id="与svn的区别">与svn的区别</h1>
+<p>svn属于集中化版本控制系统。</p>
 
-<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. 
-Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. 
-Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
+<h1 id="git原理简述">Git原理简述</h1>
+<p>模拟思考，如何设计git。</p>
+<ol>
+  <li>区域划分</li>
+</ol>
+
+<p>传统的版本控制设计方案可以简单的概括为： 工作区–&gt;远程仓库。</p>
+
+<p>Git作为分布式版本控制系统，所以一定会在工作区之间加入本地仓库： 工作区-&gt;本地仓库-&gt;远程仓库。</p>
+
+<p>然后在工作区和本地仓库之间加入一个缓冲or缓存区： 工作区-&gt;暂存区-&gt;本地仓库 –&gt;远程仓库。</p>
+
+<h3 id="为什么要加入暂存区了解即可">为什么要加入暂存区？（了解即可）</h3>
+<ul>
+  <li>为了能够实现部分提交</li>
+  <li>为了不在工作区创建状态文件，这样状态文件不会污染工作区</li>
+  <li>暂存区可以记录文件修改时间等信息，提高文件对比的效率</li>
+</ul>
+
+<p>由上可知，本地一共有3个重要区域：工作区，暂存区，本地仓库。
+远程有一个远程仓库.</p>
+
+<ol>
+  <li>快照</li>
+</ol>
+
+<p>原始的设计是仓库按照版本，把这个版本所有的文件都保存下来，实际上重复保存了大量未做修改的文件。</p>
+
+<p>Git 引入了sha-1算法来解决这个问题。</p>
+
+<blockquote>
+  <p>sha-1算法的特性
+根据文件内容计算hash值
+hash值相同，则文件相同
+同时完成了文件完整性校验</p>
+</blockquote>
+
+<p>这样每个文件有了自己的id，Git在保存版本时只需要将文件的id与版本对应即可。</p>
+
+<p>2.1.1 Git的实际存储
+git/objects/目录下存放了许多文件，这些文件都是使用sha-1的前两位创建文件夹，其余38位作为文件名的格式保存的，暂时称呼它们为obj文件。</p>
+
+<p>这些obj文件就是我们每一次commit的所有记录，它们一共分为四种类型。</p>
+
+<blockquote>
+  <p>blob , tree , commit , tag</p>
+</blockquote>
+
+<ul>
+  <li>blob 类型</li>
+</ul>
+
+<p>这个类型对应的就是我们每次提交版本时文件的内容，比如<em>.java，</em>.html这些文件的内容。该类型只存放文件内容，不包括文件的路径，名称，格式等等描述信息。</p>
+
+<ul>
+  <li>
+    <p>tree 类型
+tree用来保存目录，通过sha-1来引用，tree的根节点为版本快照，子节点为blob.</p>
+  </li>
+  <li>
+    <p>commit类型
+用来记录所有跟commit有关系的信息，并且指向一个tree的根节点（or 顶层tree）</p>
+  </li>
+</ul>
+
+<p>未完待续，原理部分内容均参考<a href="https://coding.net/help/doc/practice/git-principle.html#git--1">coding.net：原理视角看Git</a></p>
+
 </p>
 	</div>
 </section>

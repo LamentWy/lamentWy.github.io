@@ -74,24 +74,100 @@
 <section id="one">
 	<div class="inner">
 		<header class="major">
-			<h1>Tempus</h1>
+			<h1>Git常用命令速查表</h1>
 		</header>
-		<span class="image main"><img src="/assets/images/pic02.jpg" alt="" /></span>
-		<p><p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. 
-Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. 
-Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. 
-Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
+		
+		<p><h1 id="git常用命令速查">Git常用命令速查</h1>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. 
-Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. 
-Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. 
-Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. 
-Pellentesque aliquam maximus risus, vel sed vehicula.</p>
+<h2 id="创建版本库范围当前目录版本库">创建版本库（范围当前目录/版本库）</h2>
 
-<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. 
-Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. 
-Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
+<blockquote>
+  <p>$ git clone <url>    #克隆远程库
+$ git init           #初始化版本库</url></p>
+</blockquote>
+
+<h2 id="修改和提交范围当前库">修改和提交（范围当前库）</h2>
+
+<blockquote>
+  <p>$ git status              #查看状态
+$ git diff                #查看变更内容
+$ git add .               #追踪所有改动过的文件
+$ git add <file>          #追踪指定文件
+$ git mv <old> <new>      #文件重命名
+$ git rm <file>           #删除指定文件
+$ git rm --cached <file>  #停止追踪指定文件,但不删除
+$ git commit -m "commit message"   # 提交所有更新||新增的文件
+$ git commit --amend      #修改最近一次提交</file></file></new></old></file></p>
+</blockquote>
+
+<h2 id="查看提交历史范围当前库">查看提交历史(范围当前库)</h2>
+
+<blockquote>
+  <p>$ git log                 #查看历史提交记录 
+$ git log -p <file>       #查看指定文件的历史提交记录
+$ git blame <file>        #以列表形式查看指定文件的历史提交记录</file></file></p>
+</blockquote>
+
+<h2 id="撤销--慎重操作">撤销 （&lt;!&gt; 慎重操作）</h2>
+
+<blockquote>
+  <p>$ git reset –hard HEAD    #撤销工作区中所有未提及的修改内容 &lt;!&gt;
+$ git checkout HEAD <file> #撤销指定文件的未提交的修改内容 &lt;!&gt;
+$ git revert <commit>      #撤销指定的提交 &lt;!&gt;</commit></file></p>
+</blockquote>
+
+<h2 id="分支和标签范围当前库">分支和标签（范围当前库）</h2>
+
+<blockquote>
+  <p>$ git branch                #显示所有分支
+$ git branch <new-branch>   #创建新分支
+$ git branch -d <branch>    #删除指定分支
+$ git tag                   #显示所有标签
+$ git tag <tag>             #显示指定标签
+$ git tag -d <tag>          #删除指定标签
+$ git checkout &lt;branch/tag&gt; #切换到指定分支/标签</tag></tag></branch></new-branch></p>
+</blockquote>
+
+<h2 id="合并和重建">合并和重建</h2>
+
+<blockquote>
+  <p>$ git merge <branch>    #合并指定分支到当前分支
+$ git rebase <branch>   #结合指定分支与当前分支进行重建
+$ git rebase -continue  #在rebase <branch>遇到冲突，并解决冲突后继续
+$ git rebase -abort     #在rebase <branch>遇到冲突，但并不想处理冲突时放弃rebase
+$ git rebase -skip      #在rebase <branch>遇到冲突，不处理冲突，直接用指定分支替换当前分支</branch></branch></branch></branch></branch></p>
+</blockquote>
+
+<h2 id="远程操作">远程操作</h2>
+
+<blockquote>
+  <p>$ git remote -v                  #查看远程创库信息
+$ git remote show <remote>       #查看指定远程库信息
+$ git remote add <remote> <url>  #将远程库与本地库进行关联</url></remote></remote></p>
+</blockquote>
+
+<blockquote>
+  <p>$ git fetch <remote>             #从指定远程库获取最新版本，但不自动合并（merge）<推荐></推荐></remote></p>
+</blockquote>
+
+<blockquote>
+  <p>$ git pull <remote> <branch>     #从指定远程库获取指定分支，并自动合并 &lt;!&gt;</branch></remote></p>
+</blockquote>
+
+<blockquote>
+  <p>$ git push <remote> <branch>     #将当前分支（仅包含已提交的更新）上传到指定远程库的指定分支，并自动合并</branch></remote></p>
+</blockquote>
+
+<blockquote>
+  <p>$ git push –tags     # 上传所有标签</p>
+</blockquote>
+
+<h1 id="图片版">图片版</h1>
+<p><img src="assets/images/gitcmd0.jpg" alt="temp_git_pic" title="临时借用" /></p>
+
+<blockquote>
+  <h1 id="git-cmd-sheet-v1-------仅供参考--------2017-2-9---by-小野不是妹纸--六六">Git CMD SHEET v1       #仅供参考       # 2017-2-9   –by 小野不是妹纸 &amp;&amp; 六六</h1>
+</blockquote>
 </p>
 	</div>
 </section>
