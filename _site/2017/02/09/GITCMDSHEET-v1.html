@@ -77,93 +77,97 @@
 			<h1>Git常用命令速查表</h1>
 		</header>
 		
-		<p><h1 id="git常用命令速查">Git常用命令速查</h1>
+		<p><h2 id="创建版本库范围当前目录版本库">创建版本库（范围当前目录/版本库）</h2>
 
-<h2 id="创建版本库范围当前目录版本库">创建版本库（范围当前目录/版本库）</h2>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git clone <span class="nt">&lt;url&gt;</span>    #克隆远程库
 
-<blockquote>
-  <p>$ git clone <url>    #克隆远程库
-$ git init           #初始化版本库</url></p>
-</blockquote>
+$ git init           #初始化版本库  </code></pre></figure>
 
 <h2 id="修改和提交范围当前库">修改和提交（范围当前库）</h2>
 
-<blockquote>
-  <p>$ git status              #查看状态
-$ git diff                #查看变更内容
-$ git add .               #追踪所有改动过的文件
-$ git add <file>          #追踪指定文件
-$ git mv <old> <new>      #文件重命名
-$ git rm <file>           #删除指定文件
-$ git rm --cached <file>  #停止追踪指定文件,但不删除
-$ git commit -m "commit message"   # 提交所有更新||新增的文件
-$ git commit --amend      #修改最近一次提交</file></file></new></old></file></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git status              #查看状态   
+
+$ git diff                #查看变更内容   
+
+$ git add .               #追踪所有改动过的文件  
+
+$ git add <span class="nt">&lt;file&gt;</span>          #追踪指定文件   
+
+$ git mv <span class="nt">&lt;old&gt;</span> <span class="nt">&lt;new&gt;</span>      #文件重命名  
+
+$ git rm <span class="nt">&lt;file&gt;</span>           #删除指定文件  
+
+$ git rm --cached <span class="nt">&lt;file&gt;</span>  #停止追踪指定文件,但不删除  
+
+$ git commit -m "commit message"   #提交所有更新/新增的文件  
+
+$ git commit --amend      #修改最近一次提交  </code></pre></figure>
 
 <h2 id="查看提交历史范围当前库">查看提交历史(范围当前库)</h2>
 
-<blockquote>
-  <p>$ git log                 #查看历史提交记录 
-$ git log -p <file>       #查看指定文件的历史提交记录
-$ git blame <file>        #以列表形式查看指定文件的历史提交记录</file></file></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git log                 #查看历史提交记录   
+
+$ git log -p <span class="nt">&lt;file&gt;</span>       #查看指定文件的历史提交记录  
+
+$ git blame <span class="nt">&lt;file&gt;</span>        #以列表形式查看指定文件的历史提交记录  </code></pre></figure>
 
 <h2 id="撤销--慎重操作">撤销 （&lt;!&gt; 慎重操作）</h2>
 
-<blockquote>
-  <p>$ git reset –hard HEAD    #撤销工作区中所有未提及的修改内容 &lt;!&gt;
-$ git checkout HEAD <file> #撤销指定文件的未提交的修改内容 &lt;!&gt;
-$ git revert <commit>      #撤销指定的提交 &lt;!&gt;</commit></file></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git reset --hard HEAD    #撤销工作区中所有未提及的修改内容 <span class="err">&lt;</span>!&gt;  
+
+$ git checkout HEAD <span class="nt">&lt;file&gt;</span> #撤销指定文件的未提交的修改内容 <span class="err">&lt;</span>!&gt;  
+
+$ git revert <span class="nt">&lt;commit&gt;</span>      #撤销指定的提交 <span class="err">&lt;</span>!&gt;  </code></pre></figure>
 
 <h2 id="分支和标签范围当前库">分支和标签（范围当前库）</h2>
 
-<blockquote>
-  <p>$ git branch                #显示所有分支
-$ git branch <new-branch>   #创建新分支
-$ git branch -d <branch>    #删除指定分支
-$ git tag                   #显示所有标签
-$ git tag <tag>             #显示指定标签
-$ git tag -d <tag>          #删除指定标签
-$ git checkout &lt;branch/tag&gt; #切换到指定分支/标签</tag></tag></branch></new-branch></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git branch                #显示所有分支  
+
+$ git branch <span class="nt">&lt;new-branch&gt;</span>   #创建新分支  
+
+$ git branch -d <span class="nt">&lt;branch&gt;</span>    #删除指定分支  
+
+$ git tag                   #显示所有标签  
+
+$ git tag <span class="nt">&lt;tag&gt;</span>             #显示指定标签  
+
+$ git tag -d <span class="nt">&lt;tag&gt;</span>          #删除指定标签  
+
+$ git checkout <span class="nt">&lt;branch</span><span class="err">/</span><span class="na">tag</span><span class="nt">&gt;</span> #切换到指定分支/标签  </code></pre></figure>
 
 <h2 id="合并和重建">合并和重建</h2>
 
-<blockquote>
-  <p>$ git merge <branch>    #合并指定分支到当前分支
-$ git rebase <branch>   #结合指定分支与当前分支进行重建
-$ git rebase -continue  #在rebase <branch>遇到冲突，并解决冲突后继续
-$ git rebase -abort     #在rebase <branch>遇到冲突，但并不想处理冲突时放弃rebase
-$ git rebase -skip      #在rebase <branch>遇到冲突，不处理冲突，直接用指定分支替换当前分支</branch></branch></branch></branch></branch></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git merge <span class="nt">&lt;branch&gt;</span>    #合并指定分支到当前分支  
+
+$ git rebase <span class="nt">&lt;branch&gt;</span>   #结合指定分支与当前分支进行重建  
+
+$ git rebase -continue  #在rebase <span class="nt">&lt;branch&gt;</span>遇到冲突，并解决冲突后继续  
+
+$ git rebase -abort     #在rebase <span class="nt">&lt;branch&gt;</span>遇到冲突，但并不想处理冲突时放弃rebase  
+
+$ git rebase -skip      #在rebase <span class="nt">&lt;branch&gt;</span>遇到冲突，不处理冲突，直接用指定分支替换当前分支  </code></pre></figure>
 
 <h2 id="远程操作">远程操作</h2>
 
-<blockquote>
-  <p>$ git remote -v                  #查看远程创库信息
-$ git remote show <remote>       #查看指定远程库信息
-$ git remote add <remote> <url>  #将远程库与本地库进行关联</url></remote></remote></p>
-</blockquote>
+<figure class="highlight"><pre><code class="language-markdown" data-lang="markdown">$ git remote -v                  #查看远程创库信息		
 
-<blockquote>
-  <p>$ git fetch <remote>             #从指定远程库获取最新版本，但不自动合并（merge）<推荐></推荐></remote></p>
-</blockquote>
+$ git remote show <span class="nt">&lt;remote&gt;</span>       #查看指定远程库信息  
 
-<blockquote>
-  <p>$ git pull <remote> <branch>     #从指定远程库获取指定分支，并自动合并 &lt;!&gt;</branch></remote></p>
-</blockquote>
+$ git remote add <span class="nt">&lt;remote&gt;</span> <span class="nt">&lt;url&gt;</span>  #将远程库与本地库进行关联  
 
-<blockquote>
-  <p>$ git push <remote> <branch>     #将当前分支（仅包含已提交的更新）上传到指定远程库的指定分支，并自动合并 
-$ git push --tags                # 上传所有标签</branch></remote></p>
-</blockquote>
+$ git fetch <span class="nt">&lt;remote&gt;</span>             #从指定远程库获取最新版本，但不自动合并（merge）<span class="err">&lt;</span>推荐&gt;  
+
+$ git pull <span class="nt">&lt;remote&gt;</span> <span class="nt">&lt;branch&gt;</span>     #从指定远程库获取指定分支，并自动合并 <span class="err">&lt;</span>!&gt;  
+
+$ git push <span class="nt">&lt;remote&gt;</span> <span class="nt">&lt;branch&gt;</span>     #将当前分支（仅包含已提交的更新）上传到指定远程库的指定分支，并自动合并   
+
+$ git push --tags                # 上传所有标签  </code></pre></figure>
 
 <h1 id="图片版">图片版</h1>
 <p><img src="http://lament-wy.com/assets/images/gitcmd0.jpg" alt="temp_git_pic" title="临时借用" /></p>
 
 <blockquote>
-  <h1 id="git-cmd-sheet-v1-------仅供参考--------2017-2-9---by-小野不是妹纸--六六">Git CMD SHEET v1       #仅供参考       # 2017-2-9   –by 小野不是妹纸 &amp;&amp; 六六</h1>
+  <h6 id="git-cmd-sheet-v1-------仅供参考-------2017-2-9---by-小野不是妹纸--六六">#Git-CMD-SHEET-v1       #仅供参考       #2017-2-9   –by 小野不是妹纸 &amp;&amp; 六六</h6>
 </blockquote>
 </p>
 	</div>

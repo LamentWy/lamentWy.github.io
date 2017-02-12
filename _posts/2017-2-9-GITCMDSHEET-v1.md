@@ -105,7 +105,7 @@ $ git push --tags                # 上传所有标签
 {% endhighlight %}
 
 # 图片版
-![temp_git_pic](http://lament-wy.com/assets/images/gitcmd0.jpg "临时借用")
+![temp_git_pic](http://lament-wy.com/assets/images/gitcmd1.jpg "临时借用")
 
 
 
