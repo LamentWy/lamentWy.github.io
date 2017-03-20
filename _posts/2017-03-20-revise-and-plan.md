@@ -13,7 +13,7 @@ description: 起名困难症，见笑
 
 1. 在写多媒体资源url拼接时发现，本地测试一切ok，打包发布测试后失效。
 
-I need more be careful with String.
+I need be more careful with String.
 
 2. SpringMVC   
 FileUploadException: the request was rejected because no multipart boundary was found   
@@ -25,7 +25,7 @@ so be careful with your tools .
 堆空指针异常...
 
 something like :  
-{% highlight java %}
+{% highlight  %}
  null == someThing  
  Integer.equels(someThingInger)
 {% endhighlight %}
