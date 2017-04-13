@@ -25,7 +25,7 @@ so be careful with your tools .
 堆空指针异常...
 
 something like :  
-{% highlight  %}
+{% highlight ruby %}
  null == someThing  
  Integer.equels(someThingInger)
 {% endhighlight %}

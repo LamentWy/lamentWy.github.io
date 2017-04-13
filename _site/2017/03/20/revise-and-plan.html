@@ -23,7 +23,7 @@
 <div id="wrapper">
 
 <!-- Header -->
-<header id="header" class="alt">
+<header id="header">
 	<a href="http://localhost:4000/" class="logo"><strong>叽里咕噜海贼团</strong> <span>by 小野不是妹纸</span></a>
 	<nav>
 		<a href="#menu">Menu</a>
@@ -64,130 +64,84 @@
 		<li><a href="#" class="button special fit">Get Started</a></li>
 		<li><a href="#" class="button fit">Log In</a></li>
 	</ul>
-</nav>
+</nav> 
+    
+    
+<!-- Main -->
+<div id="main" class="alt">
 
-    <!-- Banner -->
-    <section id="banner" class="major">
-        <div class="inner">
-            <header class="major">
-                <h1>嘿,欢迎上船～</h1>
-            </header>
-            <div class="content">
-                <p style="text-transform: uppercase;">Don't Panic! 大胆戳右边 --></p>
-                <ul class="actions">
-                    <li><a href="#one" class="button next scrolly">Get Started</a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
+<!-- One -->
+<section id="one">
+	<div class="inner">
+		<header class="major">
+			<h1>FXXK the title!</h1>
+		</header>
+		
+		<p><blockquote>
+  <p>吐槽：将近一个月没有更新，结果发现subline text告诉我，不花钱连保存都不行，一看70$。 <br />
+好好赚钱 T_T  <br />
+AND I delete the subline text. turn to the Atom. <br />
+thanks github.</p>
+</blockquote>
 
-    <!-- Main -->
-    <div id="main">
+<h2 id="入职2个月踩过的那些坑们">入职2个月踩过的那些坑们</h2>
 
-        <!-- One -->
-        <section id="one" class="tiles">
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/03/20/revise-and-plan.html" class="link">FXXK the title!</a></h3>
-                        <p>起名困难症，见笑</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/02/16/MybatisGenerator%E7%AE%80%E4%BB%8B.html" class="link">mybatis generator</a></h3>
-                        <p>如何使用MBG插件自动生成dao层代码</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/02/09/git%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.html" class="link">git快速入门（1）</a></h3>
-                        <p>Git简介 未完成</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/02/09/GITCMDSHEET-v1.html" class="link">Git常用命令速查表</a></h3>
-                        <p>文字版+图片</p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/02/08/%E7%BC%96%E7%A8%8B%E6%96%B9%E6%B3%95%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0.html" class="link">斯坦福编程方法学 in java</a></h3>
-                        <p></p>
-                </header>
-        </article>
-	
-	
-	
-        <article>
-                <span class="image">
-                        <img src="" alt="" />
-                </span>
-                <header class="major">
-                        <h3><a href="/2017/01/17/useJekyllWriteBolg2.html" class="link">如何使用Jekyll写blog(二)</a></h3>
-                        <p>markdown语法简介</p>
-                </header>
-        </article>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+<ol>
+  <li>在写多媒体资源url拼接时发现，本地测试一切ok，打包发布测试后失效。</li>
+</ol>
+
+<p>I need be more careful with String.</p>
+
+<ol>
+  <li>
+    <p>SpringMVC <br />
+FileUploadException: the request was rejected because no multipart boundary was found <br />
+SpringMVC会自动根据客户端POST的参数类型来确定Header的Content-Type ,I didn’t set any Header ， <br />
+but still got this Exception , then I change anther http client tool , it’s ok . <br />
+so be careful with your tools .</p>
+  </li>
+  <li>
+    <p>用确定的类型去判断，养成习惯，不然你会发现在赶进度的时候，每个单元测试都不想跟你说话并向你抛出一 <br />
+堆空指针异常…</p>
+  </li>
+</ol>
+
+<p>something like :</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"> <span class="n">null</span> <span class="o">==</span> <span class="n">someThing</span>  
+ <span class="no">Integer</span><span class="p">.</span><span class="nf">equels</span><span class="p">(</span><span class="n">someThingInger</span><span class="p">)</span></code></pre></figure>
+
+<p>I miss the Optional in swift.  <br />
+And I miss python when quick developing(我猜快速开发是这么拼的！).</p>
+
+<h2 id="whats-next">what’s next</h2>
+
+<ol>
+  <li>按照app端发来的需求列表（别问我为什么app端给后端发需求）</li>
+</ol>
+
+<p>本周接下来要沟通用户状态；要完成用户消息的拉取模式，并构思推送模式；要写好独立的支付模块，并完成  <br />
+支付相关的接口开发；哦，还要写一个音频/视频的通用上传服务，然后注入到接口中。</p>
+
+<ol>
+  <li>写给不知道啥时候才能有时间的自己，估摸着也就下周了吧</li>
+</ol>
+
+<p>处理掉所有的hardcode，该enum enum，该写properties里的都丢进去。 <br />
+使用lambda简化Controller中的代码，其实好像整理一下抽取出公共部分然后利用aop的特性切入进去？ <br />
+给手头的项目做个监控系统，看一下如何做成独立的，仅需些许配置文件就可以监控其他项目的系统。貌似可以 <br />
+参考dubbo中的监控中心。  <br />
+学习一下服务器虚拟化技术，把公司那台几乎可以算是闲着没用的测试服务器搞成类似简化版阿里云的服务器。 <br />
+然后模拟线上环境在测试服务器上进行部署和备份的演练。  <br />
+再然后把热部署什么的搞上去。。。不过这个还要现学现卖。  <br />
+再然后把原项目的测试搞起来。</p>
+
+<p>先到这里吧。。。其他的事情等上面的做完再说。</p>
+</p>
+	</div>
 </section>
 
-
-        <!-- Two -->
-        <section id="two">
-            <div class="inner">
-                <header class="major">
-                    <h2>Massa libero</h2>
-                </header>
-                <p><p>landing page 的区域。
-至于什么事landing page，我还不了解，先放着 -,-
-请不要点右边的按钮哦，因为还没有建设landing page～</p>
-</p>
-                <ul class="actions">
-                    <li><a href="landing.html" class="button next">Get Started</a></li>
-                </ul>
-            </div>
-        </section>
-
-    </div>
+</div>
 
     <!-- Contact -->
 <section id="contact">

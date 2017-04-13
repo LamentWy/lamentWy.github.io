@@ -1,0 +1,18 @@
+---
+layout: post
+title: JMeter (一)
+description: JMeter 简介
+---
+
+# JMeter 简介
+
+# JMeter 环境 ( MAC OS )   
+
++ java环境(mac)   
+> $ java -version  
+
++ 安装JMeter   
+> $ brew install JMeter   
+
++ 运行JMeter   
+> $ jmeter   
