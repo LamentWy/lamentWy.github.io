@@ -15,13 +15,13 @@ phone: (+86）158 4088 9332
 
 # Homepage tiles
 tiles-source: posts # accepts "posts" or "pages"
-tiles-count: 6
+tiles-count: 100
 
 # Social settings
 weibo_url: http://weibo.com/CaliforniaDL
 github_url: https://github.com/LamentWy
 googleplus_url: https://plus.google.com/u/0/+AndrewBanchich
-instagram_url: n/a 
+instagram_url: n/a
 # Build settings
 markdown: kramdown
 
