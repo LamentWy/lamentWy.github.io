@@ -11,7 +11,6 @@ city: 杭州
 state: 浙江
 #zip_code: 000000
 country: 中国
-phone: (+86）158 4088 9332
 
 # Homepage tiles
 tiles-source: posts # accepts "posts" or "pages"
@@ -20,7 +19,7 @@ tiles-count: 100
 # Social settings
 weibo_url: http://weibo.com/CaliforniaDL
 github_url: https://github.com/LamentWy
-googleplus_url: https://plus.google.com/u/0/+AndrewBanchich
+googleplus_url: https://plus.google.com/u/0/+Lament42lucky
 instagram_url: n/a
 # Build settings
 markdown: kramdown
