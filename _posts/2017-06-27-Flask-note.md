@@ -159,33 +159,30 @@ app.run() 可以接收多种参数，比如例子中的开启debug模式～
 
 #### 来实战一下～
 
-例子看过两个了，动手尝试一下吧～
+例子看过两个了，动手尝试一下吧～  
 
-哦，首先要先介绍一下文件目录结构  
+新建一个文件 helloflask.py
 
-{% highlight ruby %}
+然后粘贴如下代码
 
-/projectName/
-      |app/
-          /static/        (静态资源目录:js ，css什么的)
-          /templates/      (模版目录: Jinja2模版都放在这里)
-          /main/          （flask程序）
-              __init__.py
-              errers.py
-              forms.py
-              views.py
-          __init__.py
-          email.py           （邮件通知相关）
-          migrtations/       (迁移相关脚本，比如数据库)
-          tests/            （测试目录）
-              __init__.py     （测试的init）
-              test*.py         (测试)  
-        venv/                 （虚拟环境）
-        ReadMe.md／txt         (介绍项目，以及列出依赖等，方便他人部署)
-        config.py             （配置信息）
-        manage.py              (启动程序)
+{% highlight python %}
+#coding=utf-8
 
-{% endhighlight %}
+from flask import Flask
+
+app = Flask(__name__)
 
 
- S   创建数据库链接
+@app.route('/')
+def index():
+    return '<h1> hello flask!</h1>'
+
+@app.route('/user/<username>')
+def sayhello(username):
+    return '<h1>Hello %s!</h1>' % username
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+{% endhighlight %}    
