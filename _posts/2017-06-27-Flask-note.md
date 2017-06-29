@@ -1,9 +1,9 @@
-
 ---
 layout: post
-title: 这是Java程序员跑路写python的故事
-description: 从Flask是个啥到我的webapp部署成功了
+title: let's Https
+description: 申请个人使用的免费https证书
 ---
+
 
 
 # Flask 学习记录
@@ -76,6 +76,7 @@ notice : 如果你使用了非系统默认的 shell 比如 我用了 zsh ， 它
 3. 退出虚拟环境
 
 当你想回到全局Python解释器中的时候，在终端中输入:
+
 > (venv)$ deactivate
 
 观察命令行提示符，你会发现已经回去啦～
@@ -88,12 +89,21 @@ notice : 如果你使用了非系统默认的 shell 比如 我用了 zsh ， 它
 
 + 当然是先安装要用的Python包啦～  （呃，新同学注意区分 包:package 和 模组/模块:module）
 
-> (venv) $ pip install flask
+{% highlight ruby %}
+
+ (venv) $ pip install flask
+
+{% endhighlight %}
+
 
 + 然后验证下安装成功没～
+{% highlight ruby %}
 
-> (venv) $ python
-> >>> import flask
+ (venv) $ python
+      >>> import flask
+
+{% endhighlight %}
+
 
 没有任何错误提醒那就是ok咯（Linux 的哲学，没消息就是好消息）～
 
@@ -186,3 +196,39 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 {% endhighlight %}    
+
+然后在命令行中执行～
+
+> $ python helloflask.py  
+
+接下来能看到如下输出信息～快在浏览器中访问看看，记得试试 /user/<username>
+
+{% highlight python %}
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 186-779-723
+{% endhighlight %}
+
+
+####  玩过上面的例子之后，来稍微了解下 Flask 框架的设计  
+
+web程序（也就是上文中的WebApplication/webapp）说白了就是处理浏览器发来的http请求
+
+无论什么语言编写的webapp都是如此
+
+Flask收到浏览器发送的http请求之后，就要让视图函数(view function)调用／访问一些对象，然后才真正开始处理这个http请求
+
+举个简单的例子，当用户访问某个页面时，webapp 返回用户实用的浏览器类型.
+
+{% highlight python %}
+
+#coding=utf-8
+from flask import request
+
+@app.route('/brower')
+def getBrower():
+    user_agent = request.headers.get('User_Agent')
+    return '<h1>您正在使用 %s 浏览器' % str(user_agent)
+
+{% endhighlight %}
