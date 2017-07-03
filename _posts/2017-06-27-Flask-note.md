@@ -219,7 +219,7 @@ web程序（也就是上文中的WebApplication/webapp）说白了就是处理�
 
 Flask收到浏览器发送的http请求之后，就要让视图函数(view function)调用／访问一些对象，然后才真正开始处理这个http请求
 
-举个简单的例子，当用户访问某个页面时，webapp 返回用户实用的浏览器类型.
+举个简单的例子，当用户访问某个页面时，webapp 返回用户使用的浏览器类型.
 
 {% highlight python %}
 
@@ -230,5 +230,32 @@ from flask import request
 def getBrower():
     user_agent = request.headers.get('User_Agent')
     return '<h1>您正在使用 %s 浏览器' % str(user_agent)
+
+{% endhighlight %}
+
+__notice: Flask 有两种 Context : The Application Context 和 The Request Context,只有相应的Context激活时，才可以使用Context所提供的对象（Object）__
+
+__同时这也是Flask框架背后的设计思想的体现，将代码执行之后发生的一切，分为两种不同的"状态(states),[参考Flask文档](http://flask.pocoo.org/docs/0.12/appcontext/#purpose-of-the-application-context)"__
+
+好了细节之后再说，我们继续～
+
+上面的代码中可以看到，我们在视图函数 getBrower()中，像使用全局变量一样使用了 flask.request 对象，这是因为当请求生效（active）时，The Application Context的对象（比如这里的flask.request）会指向当前的请求（request），这时所有的代码都可以使用这个对象。（[参考](http://flask.pocoo.org/docs/0.12/appcontext/#purpose-of-the-application-context)  
+
+接下来是 URL映射，服务器收到浏览器发来的请求之后，Flask会在我们的WebApplication的 URL映射中查找对应的URL，这个所谓的 URL映射就是URL和视图函数之间的对应关系。Flask支持两种方式来生成这个映射关系：
+
+1. app.route修饰器 （使用方式有点像Java中的@requestMapping()）
+2. app.add_url_rule() 或者
+
+同时python支持在 python shell 中查看我们在代码中的映射：
+
+{% highlight python %}
+
+（venv）$ python
+>>> from helloflask import app
+>>> app.url_map
+Map([<Rule '/brower' (HEAD, OPTIONS, GET) -> getbrower>,
+<Rule '/' (HEAD, OPTIONS, GET) -> index>,
+<Rule '/static/<filename>' (HEAD, OPTIONS, GET) -> static>,
+<Rule '/user/<username>' (HEAD, OPTIONS, GET) -> sayhello>])
 
 {% endhighlight %}
