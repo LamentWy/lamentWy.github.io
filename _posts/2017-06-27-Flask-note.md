@@ -217,6 +217,8 @@ web程序（也就是上文中的WebApplication/webapp）说白了就是处理�
 
 无论什么语言编写的webapp都是如此
 
+##### flask 中的 Context
+
 Flask收到浏览器发送的http请求之后，就要让视图函数(view function)调用／访问一些对象，然后才真正开始处理这个http请求
 
 举个简单的例子，当用户访问某个页面时，webapp 返回用户使用的浏览器类型.
@@ -241,6 +243,8 @@ __同时这也是Flask框架背后的设计思想的体现，将代码执行之�
 
 上面的代码中可以看到，我们在视图函数 getBrower()中，像使用全局变量一样使用了 flask.request 对象，这是因为当请求生效（active）时，The Application Context的对象（比如这里的flask.request）会指向当前的请求（request），这时所有的代码都可以使用这个对象。（[参考](http://flask.pocoo.org/docs/0.12/appcontext/#purpose-of-the-application-context)  
 
+##### URL映射，或者说，路由。
+
 接下来是 URL映射，服务器收到浏览器发来的请求之后，Flask会在我们的WebApplication的 URL映射中查找对应的URL，这个所谓的 URL映射就是URL和视图函数之间的对应关系。Flask支持两种方式来生成这个映射关系：
 
 1. app.route修饰器 （使用方式有点像Java中的@requestMapping()）
@@ -257,5 +261,18 @@ Map([<Rule '/brower' (HEAD, OPTIONS, GET) -> getbrower>,
 <Rule '/' (HEAD, OPTIONS, GET) -> index>,
 <Rule '/static/<filename>' (HEAD, OPTIONS, GET) -> static>,
 <Rule '/user/<username>' (HEAD, OPTIONS, GET) -> sayhello>])
+
+{% endhighlight %}
+
+##### 请求钩子简介
+
+类似Spring的aop，也通过修饰器实现。
+
+{% highlight python %}
+
+1. before_first_request : 第一个请求执行前，注册一个函数.
+2. before_request : 每次请求执行之前，注册一个函数.
+3. after_request : 每次请求之后，且请求未抛出未经处理的异常时，注册一个函数.
+4. teardown_request : 每次请求之后，且无论是否抛出异常，注册一个函数.
 
 {% endhighlight %}

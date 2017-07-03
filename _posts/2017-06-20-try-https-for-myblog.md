@@ -24,3 +24,13 @@ dns解析是用国内的云解析
 嗯，证书申请下来了，发现跟原计划不太一样。。。
 
 还在测试中。
+
+
+## 关联了独立域名的博客，github pages 并不支持自己上传证书  
+
+于是换成cloudflare，具体步骤见[链接](https://zhuanlan.zhihu.com/p/22667528)
+
+简单的说就是，首先把dns服务器改成cloudflare的，然后开启ssl和强制https 。
+然后等新的dns生效就是了。
+
+目前还没有被墙。

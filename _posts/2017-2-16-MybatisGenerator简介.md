@@ -7,7 +7,7 @@ description: 如何使用MBG插件自动生成dao层代码
 ## What is Mybatis Generator
 
 MyBatis Generator (MBG) 是一个Mybatis的代码生成器 MyBatis 和 iBATIS. 他可以生成Mybatis各个版本的代码，和iBATIS 2.2.0版本以后的代码。 他可以内省数据库的表（或多个表）然后生成可以用来访问（多个）表的基础对象。  
-这样和数据库表进行交互时不需要创建对象和配置文件。 
+这样和数据库表进行交互时不需要创建对象和配置文件。
 MBG的解决了对数据库操作有最大影响的一些简单的CRUD操作。   
 您仍然需要对联合查询和存储过程手写SQL和对象。
 
@@ -30,7 +30,9 @@ insert , update by primary key , delete by primary key , select by primary key ,
 
 在迭代式开发的环境中，可以将MBG作为一个maven插件集成进去。   
 需要注意的是：   
+
 > 当MBG新生成一个与已存在的xml文件同名的文件时，它会自动合并二者的内容，并且不会覆盖掉原有xml文件中你所编写的内容，仅覆盖原xml中属于MBG生成的部分。  
+
 > MBG不会合并.java文件，只会覆盖或者另存为一个新的.java文件，当你不想覆盖掉原有.java文件时，需要自行手动合并。（某些eclipse的MBG插件支持自动合并）
 
 ## 运行MBG
@@ -42,7 +44,7 @@ insert , update by primary key , delete by primary key , select by primary key ,
 
 + pom.xml，最简配置:  
 
-{% highlight xml %}
+{% highlight ruby %}
 <project ...>
      ...
      <build>
@@ -63,12 +65,15 @@ insert , update by primary key , delete by primary key , select by primary key ,
 {% endhighlight %}
 
 + Maven Goal & Execution
-  
+
 mvn命令行:
+
 > mvn mybatis-generator:generate   
 
 mvn build时自动执行:   
-{% highlight xml %}  
+
+{% highlight ruby %}  
+
 <project ...>
      ...
      <build>
@@ -94,6 +99,7 @@ mvn build时自动执行:
     </build>
      ...
 </project>
-{% endhighlight %}   
-> 会在编译之前执行   
 
+{% endhighlight %}  
+ 
+> 会在编译之前执行   
