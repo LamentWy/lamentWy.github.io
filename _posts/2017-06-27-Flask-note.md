@@ -276,3 +276,74 @@ Map([<Rule '/brower' (HEAD, OPTIONS, GET) -> getbrower>,
 4. teardown_request : 每次请求之后，且无论是否抛出异常，注册一个函数.
 
 {% endhighlight %}
+
+钩子函数和视图函数直接共享数据一般使用The Application Context的对象，flask.g来实现。
+举个简单的例子，比如说在请求访问某些函数视图前，要判定用户是否登陆，就可以通过before_request中来判定是否登陆，然后进行登陆跳转，或加载用户信息并保存到g.user_info,然后视图函数需要使用该用户信息时只要访问g.user_info就可以获取用户信息。
+
+##### 请求差不多说完了，来说说响应(Response)
+
+开发中我们一般需要Response的肯定都是支持的啦
+
+毕竟Http协议摆在那里嘛。
+
+之前我们的几个例子里面基本都是在视图函数处理完之后，直接return 一个字符串，实际上flask这个时候还默认返回了http状态码200.
+
+在视图函数的return 中，flask允许我们返回 由1、2、3个值组成的元组，这仨值按照顺序分别对应: Response body中的字符串 , httpcode ,和响应类型 比如 text/html.
+
+用第一个helloworld举例的话就是：
+{% highlight ruby %}
+
+   @app.route('/')
+   def index():
+       return '<h1>Hello World!</h1>'
+
+{% endhighlight %}
+
+Response body: <h1>Hello World!</h1>
+
+httpcode : 200 OK  (默认值)
+
+Content-Type : text/html (默认值)
+
+不想手动指定这仨值的话还有另外一种办法：
+
+直接返回 Response 对象
+
+{% highlight ruby %}
+
+@app.route('/response')
+def testResponse():
+    response = make_response('<h1>this is the body string , I will set a cookie in response! </h1>')
+    response.set_cookie('user','lament')
+    return response
+
+{% endhighlight %}
+
+最后是两种特殊的响应，一个是重定向(redirect)，一个是忽略（abort）
+
+{% highlight ruby %}
+
+from flask import redirect
+
+
+@app.route('/redirect')
+def testRedirect():
+    return redirect('https://lament-wy.com')
+
+{% endhighlight %}
+
+{% highlight ruby %}
+from flask import abort
+
+
+@app.route('/vip/<userName>')
+def testAbort(userName):
+
+    userName = str(userName)
+
+    if userName == 'lament-wy':
+        abort(404)
+    else:
+        return "欢迎回来～ %s " % userName
+
+{% endhighlight %}
