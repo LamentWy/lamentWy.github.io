@@ -1,4 +1,77 @@
 
 _posts/214.md
 
+_drafts/
+
+_backup/
+
+
 git-quickstart-binary.png
+_site
+.sass-cache
+node_modules
+Gemfile.lock
+*.gem
+npm-debug.log
+
+
+*.sh
+.vscode
+
+
+*.pydevproject
+.metadata
+.gradle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.DS_Store
+*.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+
+# local profiles
+application-lament-local.properties
+application-dev.properties
+application-dev-lament.properties
+# Package Files #
+*.jar
+*.war
+*.ear
+*.log
+
+target/
+
+# Eclipse Core
+.project
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# PDT-specific
+.buildpath
+
+# sbteclipse plugin
+.target
+
+# TeXlipse plugin
+.texlipse
+
+.idea
+
+*.iml
