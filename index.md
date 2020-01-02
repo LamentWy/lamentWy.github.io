@@ -1,9 +1,9 @@
 ---
 layout: home
 title: Home
-landing-title: '嘿,欢迎上船～'
-description: 这里是小野不是妹纸的博客，什么都写
+landing-title: '如何成为一名魔法师'
+description:
 image: null
 author: Lament
 ---
-建设中...
+一个逗逼的博客，主要讲如何凭借自己的努力学会魔（dan）法(shen)！

@@ -1,23 +1,23 @@
 # Site settings
-title: 叽里咕噜海贼团
+title: 小野妹纸的魔法禁书目录
 subtitle: by 小野不是妹纸
 email: lament.wy@gmail.com
 description: Don't Panic! 大胆戳右边 -->
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://lament-z.com" # the base hostname & protocol for your site
 author: Lament
-street_address: 龙潭路
-city: 杭州
-state: 浙江
+#street_address:
+#city:
+#state:
 #zip_code: 000000
-country: 中国
+#country:
 
 # Homepage tiles
 tiles-source: posts # accepts "posts" or "pages"
 tiles-count: 100
 
 # Social settings
-weibo_url: http://weibo.com/CaliforniaDL
+#weibo_url: waste time
 github_url: https://github.com/LamentWy
 instagram_url: n/a
 # Build settings
