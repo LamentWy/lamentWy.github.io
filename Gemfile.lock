@@ -212,11 +212,7 @@ GEM
       sawyer (~> 0.8.0, >= 0.5.3)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
-<<<<<<< HEAD
     public_suffix (2.0.5)
-=======
-    public_suffix (4.0.2)
->>>>>>> 04bf698a7ef766ecf7445351fd5ce2d33c075923
     rake (12.3.3)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
@@ -248,16 +244,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-<<<<<<< HEAD
   github-pages (~> 192)
   jekyll (~> 3.7.4)
   rake (~> 12.3.1)
-=======
-  bundler (~> 1.12)
-  forty_jekyll_theme!
-  jekyll (~> 3.3)
-  rake (~> 12.3)
->>>>>>> 04bf698a7ef766ecf7445351fd5ce2d33c075923
 
 BUNDLED WITH
    2.1.2

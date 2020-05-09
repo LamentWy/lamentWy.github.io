@@ -1,8 +1,12 @@
-hand-painting:
-  name: hand-painting
+magical-index:
+  name: magical-index
   description: False
   cover: False
-design:
-  name: design
+alchemy-lab:
+  name: alchemy-lab
+  description: False
+  cover: False
+scroll:
+  name: scroll
   description: False
   cover: False

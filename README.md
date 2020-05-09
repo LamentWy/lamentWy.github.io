@@ -1,4 +1,12 @@
-<<<<<<< HEAD
+## MyBolg
+
+什么都可能会写一点儿，更新极其不稳定，草稿箱和备份里面的太监稿比发出来的要多得多...
+
+The theme fork from Jasper2, you can find more details of Jasper2 below.
+
+
+
+
 ## Jasper2
 
 [![Build Status](https://travis-ci.org/jekyller/jasper2.svg?branch=master)](https://travis-ci.org/jekyller/jasper2)
@@ -111,6 +119,3 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-=======
-#mxd-resume
->>>>>>> 985505159b25fa4190df2c78c3b734481cab9e78
