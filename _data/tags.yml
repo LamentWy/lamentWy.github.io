@@ -1,0 +1,8 @@
+hand-painting:
+  name: hand-painting
+  description: False
+  cover: False
+design:
+  name: design
+  description: False
+  cover: False

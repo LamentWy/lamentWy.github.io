@@ -1,0 +1,20 @@
+mxd:
+  username: 马小未
+  name: 马小未
+  url_full:
+  url:
+  bio: 个人作品展示
+  picture: assets/images/ghost.png
+  facebook: n/a
+  twitter: n/a
+  cover: False
+lament:
+  username: lament
+  name: lament
+  location: China
+  url_full: https://lament-z.com/
+  url: https://lament-z.com/
+  bio: 不干正事的程序员
+  facebook: False
+  twitter: False
+  cover: False
