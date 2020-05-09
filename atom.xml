@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title> - Articles</title>
+    <description>Neutral, sometimes chaotic neutral</description>
+    <link>
+    http://localhost:4000</link>
+    
+      
+      <item>
+        <title>2019读过的书</title>
+        
+          <description>&lt;p&gt;2019之前真的很久没有读书了，之前的阅读基本都是在飞机上完成的，其他时间除了用来催眠的网络小说之外几乎什么都没读。&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/2019booklist</link>
+        <guid isPermaLink="true">http://localhost:4000/2019booklist</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>2019年终总结</title>
+        
+          <description>&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;blockquote&gt;
+
+      &lt;p&gt;这个博客17年更新了没几次然后就没更了。 &lt;br /&gt;
+当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  &lt;br /&gt;
+短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+</description>
+        
+        <pubDate>Tue, 31 Dec 2019 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/in-the-end</link>
+        <guid isPermaLink="true">http://localhost:4000/in-the-end</guid>
+      </item>
+      
+    
+  </channel>
+</rss>
