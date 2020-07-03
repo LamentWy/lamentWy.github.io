@@ -27,6 +27,8 @@ subscribers: True # you need to connect an external service for this to work,
 #twitter: tryghost # replace by your username
 #facebook: ghost # replace by your username
 
+## test
+
 # Disqus
 disqus: False
 disqus_shortname: jekyller # replace with your disqus username
