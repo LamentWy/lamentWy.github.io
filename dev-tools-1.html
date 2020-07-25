@@ -11,7 +11,7 @@
 
 
 
-    <title>2019年终总结</title>
+    <title>好用的工具们(一)</title>
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Styles'n'Scripts -->
@@ -34,104 +34,32 @@
     <![endif]-->
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
-    <meta name="description" content="休息一下" />
+    <meta name="description" content="Neutral, sometimes chaotic neutral" />
     <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="/in-the-end" />
+    <link rel="canonical" href="/dev-tools-1" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
     <meta property="og:site_name" content="Lament's Mage Tower" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="2019年终总结" />
-    <meta property="og:description" content="
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-" />
-    <meta property="og:url" content="/in-the-end" />
+    <meta property="og:title" content="好用的工具们(一)" />
+    <meta property="og:description" content="好用的工具们 NOTICE 这个系列主要是罗列一些我很喜欢的工具们（多数为开发时使用的工具），进行简单的介绍，并分享一些自己的使用心得。 大部分工具都有详细的文档，所以关于安装啥的不会详细列出，仅涉及一些常见的坑点和我认为需要记住的点。 无特殊说明系统环境均为 macOS Catalina Version 10.15.4。 port 443: Connection refused || 其他连接失败 这个会是国内用户非常常见的错误。基本上就是网络相关的问题，有以下几种解决方案: 直接在浏览器中访问脚本文件，下载到本地然后安装。 浏览器中都打不开，挂vpn 没有vpn，找找别的源，找一个换上用。 macOS的command line tool不符合要求，使用xcode-select --install重装，或者注册个开发者账号自行下载安装对应版本。 修改host，不建议使用该方法，或者你记得改回去。 修改dns，也不建议，或者记得改回去。 Homebrew 神器. brew everything brew install [xxx] brew cask install [xxx] ... brew services # 列出所有 brew 管理的服务 brew services # 帮助，省的记其他命令 brew services -h" />
+    <meta property="og:url" content="/dev-tools-1" />
     <meta property="og:image" content="/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
-    <meta property="article:published_time" content="2019-12-31T00:00:00+08:00" />
-    <meta property="article:modified_time" content="2019-12-31T00:00:00+08:00" />
-    <meta property="article:tag" content="Scroll" />
+    <meta property="article:published_time" content="2020-07-23T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2020-07-23T00:00:00+08:00" />
+    <meta property="article:tag" content="Alchemy-lab" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="2019年终总结" />
-    <meta name="twitter:description" content="
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-" />
+    <meta name="twitter:title" content="好用的工具们(一)" />
+    <meta name="twitter:description" content="好用的工具们 NOTICE 这个系列主要是罗列一些我很喜欢的工具们（多数为开发时使用的工具），进行简单的介绍，并分享一些自己的使用心得。 大部分工具都有详细的文档，所以关于安装啥的不会详细列出，仅涉及一些常见的坑点和我认为需要记住的点。 无特殊说明系统环境均为 macOS Catalina Version 10.15.4。 port 443: Connection refused || 其他连接失败 这个会是国内用户非常常见的错误。基本上就是网络相关的问题，有以下几种解决方案: 直接在浏览器中访问脚本文件，下载到本地然后安装。 浏览器中都打不开，挂vpn 没有vpn，找找别的源，找一个换上用。 macOS的command line tool不符合要求，使用xcode-select --install重装，或者注册个开发者账号自行下载安装对应版本。 修改host，不建议使用该方法，或者你记得改回去。 修改dns，也不建议，或者记得改回去。 Homebrew 神器. brew everything brew install [xxx] brew cask install [xxx] ... brew services # 列出所有 brew 管理的服务 brew services # 帮助，省的记其他命令 brew services -h" />
     <meta name="twitter:url" content="/" />
     <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Lament's Mage Tower" />
     <meta name="twitter:label2" content="Filed under" />
-    <meta name="twitter:data2" content="Scroll" />
+    <meta name="twitter:data2" content="Alchemy-lab" />
     <meta name="twitter:site" content="@" />
     <meta name="twitter:creator" content="@" />
     <meta property="og:image:width" content="1400" />
@@ -146,7 +74,7 @@
         "name": "Lament's Mage Tower",
         "logo": "/assets/images/blog-icon.png"
     },
-    "url": "/in-the-end",
+    "url": "/dev-tools-1",
     "image": {
         "@type": "ImageObject",
         "url": "/assets/images/blog-cover.jpg",
@@ -155,45 +83,9 @@
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "/in-the-end"
+        "@id": "/dev-tools-1"
     },
-    "description": "
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-"
+    "description": "好用的工具们 NOTICE 这个系列主要是罗列一些我很喜欢的工具们（多数为开发时使用的工具），进行简单的介绍，并分享一些自己的使用心得。 大部分工具都有详细的文档，所以关于安装啥的不会详细列出，仅涉及一些常见的坑点和我认为需要记住的点。 无特殊说明系统环境均为 macOS Catalina Version 10.15.4。 port 443: Connection refused || 其他连接失败 这个会是国内用户非常常见的错误。基本上就是网络相关的问题，有以下几种解决方案: 直接在浏览器中访问脚本文件，下载到本地然后安装。 浏览器中都打不开，挂vpn 没有vpn，找找别的源，找一个换上用。 macOS的command line tool不符合要求，使用xcode-select --install重装，或者注册个开发者账号自行下载安装对应版本。 修改host，不建议使用该方法，或者你记得改回去。 修改dns，也不建议，或者记得改回去。 Homebrew 神器. brew everything brew install [xxx] brew cask install [xxx] ... brew services # 列出所有 brew 管理的服务 brew services # 帮助，省的记其他命令 brew services -h"
 }
     </script>
 
@@ -206,7 +98,7 @@
     </script> -->
 
     <meta name="generator" content="Jekyll 3.6.2" />
-    <link rel="alternate" type="application/rss+xml" title="2019年终总结" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="好用的工具们(一)" href="/feed.xml" />
 
 
 </head>
@@ -232,15 +124,6 @@ into the {body} of the default.hbs template -->
             
         
         
-            <ul class="nav" role="menu">
-    <li class="nav-home" role="menuitem"><a href="/">主页</a></li>
-    <li class="nav-magical-index" role="menuitem"><a href="/tag/magical-index/">魔法禁书目录</a></li>
-    <li class="nav-alchemy-lab" role="menuitem"><a href="/tag/alchemy-lab/">炼金实验室</a></li>
-    <li class="nav-scroll" role="menuitem"><a href="/tag/scroll/">流水账</a></li>
-    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
-</ul>
-
-        
     </div>
     <div class="site-nav-right">
         <div class="social-links">
@@ -262,63 +145,230 @@ into the {body} of the default.hbs template -->
 <main id="site-main" class="site-main outer" role="main">
     <div class="inner">
 
-        <article class="post-full post tag-scroll no-image">
+        <article class="post-full post tag-alchemy-lab no-image">
 
             <header class="post-full-header">
                 <section class="post-full-meta">
-                    <time class="post-full-meta-date" datetime="31 December 2019">31 December 2019</time>
+                    <time class="post-full-meta-date" datetime="23 July 2020">23 July 2020</time>
                     
                         <span class="date-divider">/</span>
                         
                             
-                               <a href='/tag/scroll/'>SCROLL</a>
+                               <a href='/tag/alchemy-lab/'>ALCHEMY-LAB</a>
                             
                         
                     
                 </section>
-                <h1 class="post-full-title">2019年终总结</h1>
+                <h1 class="post-full-title">好用的工具们(一)</h1>
             </header>
 
             
 
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    <blockquote>
-  <blockquote>
-    <blockquote>
+                    <h1 id="好用的工具们">好用的工具们</h1>
 
-      <p>这个博客17年更新了没几次然后就没更了。 <br />
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  <br />
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。</p>
-    </blockquote>
-  </blockquote>
-</blockquote>
+<h2 id="notice">NOTICE</h2>
 
-<p>言归正传，总结一下自己的2019.</p>
+<p>这个系列主要是罗列一些我很喜欢的工具们（多数为开发时使用的工具），进行简单的介绍，并分享一些自己的使用心得。</p>
 
-<p>年初的时候我给自己定的2019年的目标浓缩为一个词，休息。</p>
+<p>大部分工具都有详细的文档，所以关于安装啥的不会详细列出，仅涉及一些常见的坑点和我认为需要记住的点。</p>
 
-<p>现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。</p>
+<p>无特殊说明系统环境均为 macOS Catalina Version 10.15.4。</p>
 
-<p>头三个月完成了生活环境的变化，并且把作息时间正常化。</p>
+<h3 id="port-443-connection-refused--其他连接失败">port 443: Connection refused || 其他连接失败</h3>
 
-<p>然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。</p>
+<p>这个会是国内用户非常常见的错误。基本上就是网络相关的问题，有以下几种解决方案:</p>
 
-<p>养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。</p>
+<ol>
+  <li>
+    <p>直接在浏览器中访问脚本文件，下载到本地然后安装。</p>
+  </li>
+  <li>
+    <p>浏览器中都打不开，挂vpn</p>
+  </li>
+  <li>
+    <p>没有vpn，找找别的源，找一个换上用。</p>
+  </li>
+  <li>
+    <p>macOS的command line tool不符合要求，使用<code class="highlighter-rouge">xcode-select --install</code>重装，或者注册个开发者账号自行下载安装对应版本。</p>
+  </li>
+  <li>
+    <p>修改host，不建议使用该方法，或者你记得改回去。</p>
+  </li>
+  <li>
+    <p>修改dns，也不建议，或者记得改回去。</p>
+  </li>
+</ol>
 
-<p>戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。</p>
+<h2 id="homebrew"><a href="https://brew.sh/">Homebrew</a></h2>
 
-<p>今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。</p>
+<p>神器.</p>
 
-<p>另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。</p>
+<h3 id="brew-everything">brew everything</h3>
 
-<p>计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  brew install [xxx]
+  brew cask install [xxx]
+  ...
+</code></pre></div></div>
 
-<p>考研的总结已经写了，发在了我专门用来记录<a href="https://ms.lament-z.com">考研的blog</a>下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。</p>
+<h3 id="brew-services">brew services</h3>
 
-<p>总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # 列出所有 brew 管理的服务
+  brew services
 
-<p>好了流水账写完了，出门跟朋友们跨年咯～</p>
+  # 帮助，省的记其他命令
+  brew services -h
+</code></pre></div></div>
+
+<h3 id="其他tips">其他tips</h3>
+
+<p>Homebrew 会将软件包安装到独立目录，并将其文件软链接至 <code class="highlighter-rouge">/usr/local</code>。 这个官网首页就写着。</p>
+
+<p>这些软件包默认安装在 <code class="highlighter-rouge">/usr/local/Cellar or /usr/local/Caskroom or /usr/local/...</code>,你也可以自己指定安装位置。</p>
+
+<p>避免使用sudo.</p>
+
+<p><a href="https://docs.brew.sh/">更多请查询文档</a></p>
+
+<h2 id="oh-my-zsh"><a href="https://ohmyz.sh/">oh-my-zsh</a></h2>
+
+<p>神器！</p>
+
+<p>oh-my-zsh相对于zsh已经非常人性化了，但实际上对于新手来说还是会遇到很多问题。</p>
+
+<h3 id="新人上手">新人上手</h3>
+
+<p>根据我安利别人之后的反馈，我总结了一下新人上手的流程：</p>
+
+<ol>
+  <li>
+    <p>主题不要太过花里胡哨。</p>
+  </li>
+  <li>
+    <p>插件一个一个往里添加，不要一次性看着好像哪个插件都想用就直接添加一堆。</p>
+
+    <p>阅读插件的<a href="https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins">文档</a>可以帮你几分钟内了解插件的功能和用法，比你百度乱搜强得多。</p>
+  </li>
+  <li>
+    <p>活用别名</p>
+
+    <p>至于是否“滥用”，就见仁见智了，反正我自己是已经滥用了，很多命令原本长啥样都不记得了，缺点是面试的时候别人问起来只记得别名，或者切换到服务器上的时候想不起来命令。</p>
+  </li>
+</ol>
+
+<h3 id="卡slow">卡/slow</h3>
+
+<p>对于国内用户而言，卡主要是网络问题。</p>
+
+<p>然而zsh卡的原因很多，尤其是你一万个插件一起加载，那卡的原因简直花里胡哨了，对于我这个不太了解bash的人来说，调试这东西简直就是噩梦。</p>
+
+<h4 id="自行调试">自行调试</h4>
+
+<ol>
+  <li>zsh调试命令
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># x = xtrace  v = verbose
+zsh -xv
+
+# 查看启动时间
+/usr/bin/time zsh -i ic exit;
+
+# 查看zsh启动时都干了啥，并且每一步花费多少时间
+# 在.zshrc 的头尾分别添加 zmodload zsh/zprof | zprof
+# 这样每次打开一个新终端的时候会以列表的形式展示启动信息。
+</code></pre></div>    </div>
+  </li>
+  <li>调试流程</li>
+</ol>
+
+<p>可以参考这篇<a href="https://blog.jonlu.ca/posts/speeding-up-zsh">blog</a>，我就不献丑了。</p>
+
+<h4 id="插件管理器">插件管理器</h4>
+
+<p>zsh慢主要是: 1.启动慢，2.prompt慢</p>
+
+<p>为了解决情况1，所以又出现了管理器。</p>
+
+<p>然而管理器又是一个大坑。</p>
+
+<p>这里只推荐一款<a href="https://github.com/zdharma/zinit">Zinit</a>，因为这款插件有延时加载的实现，就比如<strong><em>thefuck</em></strong>（这个后面会推荐）插件，并不需要一打开终端就启动他。</p>
+
+<p>然而Zinit自己本身因为功能太多了，也是个巨坑，学到够用即可，不是时间特别充裕不建议深挖。</p>
+
+<h4 id="异步主题">异步主题</h4>
+
+<p>非要花里胡哨的主题，又不想很慢，那就只能用异步主题了。</p>
+
+<p>异步主题会把git信息统计之类比较耗时的操作丢到后台异步处理，处理完了再刷新prompt，就不用等了。</p>
+
+<p>oh-my-zsh自带的所有主题都不是异步主题…真的换了的话，主题文件夹就可以全删了。</p>
+
+<p>这里只推荐一个<a href="https://github.com/romkatv/powerlevel10k#oh-my-zsh">
+powerlevel10k</a>，因为这个有国内源，中文分享也多。</p>
+
+<h4 id="其他">其他</h4>
+
+<ol>
+  <li>烂大街方法:主要解决prompt慢
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  git config --global oh-my-zsh.hide-status 1
+</code></pre></div>    </div>
+  </li>
+  <li>incr插件补全慢</li>
+</ol>
+
+<p>自动补全速度慢，这个上面两种方法都解决不了这个问题(大概?)。</p>
+
+<p>并且我个人不适应 incr 插件的一些操作习惯，尤其是复制粘贴命令的时候。</p>
+
+<p>这里给出一个<a href="https://raw.githubusercontent.com/ggggle/myEnv/master/ubuntu/.oh-my-zsh/plugins/incr/incr-0.2.zsh">别人的魔改版</a></p>
+
+<p>这个魔改版我用了很久了，我自己的就不放了，bug略多，每次玩坏了我都是用这个恢复的。</p>
+
+<p>替换掉原来的 incr-0.2.zsh 即可。目录在 <code class="highlighter-rouge">~/.oh-my-zsh/plugins/incr</code> 。</p>
+
+<h3 id="插件推荐">插件推荐</h3>
+
+<p>只推一个<a href="https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/thefuck">thefuck</a>，非常好用。</p>
+
+<p>毕竟每个人使用场景不同，oh-my-zsh 这类用到最后一定会越来越私人化的工具，我个人观点从来都是适合自己就好，所以其他插件不做推荐。</p>
+
+<h2 id="iterm-2"><a href="https://www.iterm2.com/">iTerm 2</a></h2>
+
+<p>由于之前误操作把文件洗了，我也不记得关于iTerm2我要说啥了。</p>
+
+<p>多屏幕的花记得Command+D快捷键 配合 <a href="https://www.spectacleapp.com/">Spectacle</a> 非常方便。</p>
+
+<h2 id="sdkman"><a href="https://sdkman.io/">sdkman</a></h2>
+
+<p>好歹我是个java后端，最后推荐个sdkman，也是神器级命令行工具。</p>
+
+<h3 id="命令解释">命令解释</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sdk install &lt;candidate&gt; [version] [local-path]
+
+  # 其中 &lt;candidate&gt; 的可选项可通过如下命令获取 ,按Q可退出。
+  sdk list
+
+  # 其中 version 的可选项通过如下命令获取，不写则下载最新版本，以java为例
+  sdk java list
+
+  # 安装位置就不解释了，不写就默认
+</code></pre></div></div>
+
+<h3 id="use">use</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # use可以在 *当前终端* 临时切换某个jdk，即使该jdk不存在，他也会自动去下载并切换过去。
+  sdk use &lt;candidate&gt; [version]
+
+</code></pre></div></div>
+
+<h3 id="jdk版本不认识">JDK版本不认识</h3>
+
+<p><a href="https://sdkman.io/jdks">看这里</a></p>
+
+<h3 id="文档找不到">文档找不到</h3>
+
+<p><a href="https://sdkman.io/usage">他只是换了个单词叫Usage</a></p>
 
                 </div>
             </section>
@@ -375,6 +425,9 @@ into the {body} of the default.hbs template -->
 
             <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
             
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
                 
 
     <article class="post-card post-template no-image">
@@ -416,9 +469,6 @@ into the {body} of the default.hbs template -->
 
             
 
-            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
-            
-
         </div>
     </div>
 </aside>
@@ -434,18 +484,18 @@ into the {body} of the default.hbs template -->
         </a>
     </div>
     <span class="floating-header-divider">&mdash;</span>
-    <div class="floating-header-title">2019年终总结</div>
+    <div class="floating-header-title">好用的工具们(一)</div>
     <div class="floating-header-share">
         <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
 </svg>
 </div>
-        <a class="floating-header-share-tw" href="https://twitter.com/share?text=2019%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93&amp;url=https://lament-z.comin-the-end"
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=%E5%A5%BD%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7%E4%BB%AC%28%E4%B8%80%29&amp;url=https://lament-z.comdev-tools-1"
             onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
 
         </a>
-        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comin-the-end"
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comdev-tools-1"
             onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
 
