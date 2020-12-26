@@ -17,7 +17,8 @@ logo_dark: assets/images/favicon.png
 favicon: assets/images/favicon.png
 production_url: https://github.com/LamentWy/lamentWy.github.io
 source_url: https://github.com/LamentWy/lamentWy.github.io
-CNAME: lament-z.com #add cname for website to be created
+CNAME: lament-z.com
+#add cname for website to be created
 
 # Social info
 navigation: True # show the navbar links
@@ -74,6 +75,7 @@ lsi: False
 #username: jekyller
 #repo: jasper2
 #branch: master
+keep_files: ['CNAME']
 relative_source: ../
 destination: ./docs
 production_url:  https://lament-z.com

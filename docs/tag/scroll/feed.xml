@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
-  <link href="http://localhost:4000/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
-  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
-  <updated>2020-12-27T07:04:53+08:00</updated>
-  <id>http://localhost:4000/tag/scroll/feed.xml</id>
+  <link href="/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="/" rel="alternate" type="text/html" />
+  <updated>2020-12-27T07:16:10+08:00</updated>
+  <id>/tag/scroll/feed.xml</id>
 
   
   
@@ -35,11 +35,11 @@
   
     <entry>
       <title type="html">JVM Overview</title>
-      <link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" />
+      <link href="/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" />
       <published>2020-12-26T00:00:00+08:00</published>
       <updated>2020-12-26T00:00:00+08:00</updated>
-      <id>http://localhost:4000/JVM-Overview</id>
-      <content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+      <id>/JVM-Overview</id>
+      <content type="html" xml:base="/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
 
 &lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
 
@@ -128,11 +128,11 @@
   
     <entry>
       <title type="html">2019年终总结</title>
-      <link href="http://localhost:4000/in-the-end" rel="alternate" type="text/html" title="2019年终总结" />
+      <link href="/in-the-end" rel="alternate" type="text/html" title="2019年终总结" />
       <published>2019-12-31T00:00:00+08:00</published>
       <updated>2019-12-31T00:00:00+08:00</updated>
-      <id>http://localhost:4000/in-the-end</id>
-      <content type="html" xml:base="http://localhost:4000/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
+      <id>/in-the-end</id>
+      <content type="html" xml:base="/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;blockquote&gt;

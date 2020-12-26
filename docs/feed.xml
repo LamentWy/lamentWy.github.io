@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-27T07:04:53+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM Overview</title><link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" /><published>2020-12-26T00:00:00+08:00</published><updated>2020-12-26T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Overview</id><content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2020-12-27T07:16:10+08:00</updated><id>/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM Overview</title><link href="/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" /><published>2020-12-26T00:00:00+08:00</published><updated>2020-12-26T00:00:00+08:00</updated><id>/JVM-Overview</id><content type="html" xml:base="/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
 
 &lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
 
@@ -57,7 +57,7 @@
 
 &lt;p&gt;不然你很可能看到两个true XD。&lt;/p&gt;
 
-&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">前一阵微信提醒我不要浪费订阅号资源。</summary></entry><entry><title type="html">好用的工具们(一)</title><link href="http://localhost:4000/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" /><published>2020-07-23T00:00:00+08:00</published><updated>2020-07-23T00:00:00+08:00</updated><id>http://localhost:4000/dev-tools-1</id><content type="html" xml:base="http://localhost:4000/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
+&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">前一阵微信提醒我不要浪费订阅号资源。</summary></entry><entry><title type="html">好用的工具们(一)</title><link href="/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" /><published>2020-07-23T00:00:00+08:00</published><updated>2020-07-23T00:00:00+08:00</updated><id>/dev-tools-1</id><content type="html" xml:base="/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
 
 &lt;h2 id=&quot;notice&quot;&gt;NOTICE&lt;/h2&gt;
 
@@ -259,7 +259,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;h3 id=&quot;文档找不到&quot;&gt;文档找不到&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://sdkman.io/usage&quot;&gt;他只是换了个单词叫Usage&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="alchemy-lab" /><summary type="html">好用的工具们</summary></entry><entry><title type="html">2019读过的书</title><link href="http://localhost:4000/2019booklist" rel="alternate" type="text/html" title="2019读过的书" /><published>2020-01-02T00:00:00+08:00</published><updated>2020-01-02T00:00:00+08:00</updated><id>http://localhost:4000/2019booklist</id><content type="html" xml:base="http://localhost:4000/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://sdkman.io/usage&quot;&gt;他只是换了个单词叫Usage&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="alchemy-lab" /><summary type="html">好用的工具们</summary></entry><entry><title type="html">2019读过的书</title><link href="/2019booklist" rel="alternate" type="text/html" title="2019读过的书" /><published>2020-01-02T00:00:00+08:00</published><updated>2020-01-02T00:00:00+08:00</updated><id>/2019booklist</id><content type="html" xml:base="/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
 
 &lt;p&gt;2019之前真的很久没有读书了，之前的阅读基本都是在飞机上完成的，其他时间除了用来催眠的网络小说之外几乎什么都没读。&lt;/p&gt;
 
@@ -339,7 +339,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;其他的想不太起来了，然后像什么数学分析这种。。又一下子写不完还是单独来吧，回头想到了再补充就好了&lt;/p&gt;</content><author><name></name></author><category term="magical-index" /><summary type="html">小野不是妹纸的2019书单</summary></entry><entry><title type="html">2019年终总结</title><link href="http://localhost:4000/in-the-end" rel="alternate" type="text/html" title="2019年终总结" /><published>2019-12-31T00:00:00+08:00</published><updated>2019-12-31T00:00:00+08:00</updated><id>http://localhost:4000/in-the-end</id><content type="html" xml:base="http://localhost:4000/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
+&lt;p&gt;其他的想不太起来了，然后像什么数学分析这种。。又一下子写不完还是单独来吧，回头想到了再补充就好了&lt;/p&gt;</content><author><name></name></author><category term="magical-index" /><summary type="html">小野不是妹纸的2019书单</summary></entry><entry><title type="html">2019年终总结</title><link href="/in-the-end" rel="alternate" type="text/html" title="2019年终总结" /><published>2019-12-31T00:00:00+08:00</published><updated>2019-12-31T00:00:00+08:00</updated><id>/in-the-end</id><content type="html" xml:base="/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;blockquote&gt;
