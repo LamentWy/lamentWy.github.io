@@ -1,4 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2020-07-25T18:30:09+08:00</updated><id>/</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">好用的工具们(一)</title><link href="/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" /><published>2020-07-23T00:00:00+08:00</published><updated>2020-07-23T00:00:00+08:00</updated><id>/dev-tools-1</id><content type="html" xml:base="/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-27T05:11:09+08:00</updated><id>http://localhost:4000/</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM Overview</title><link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" /><published>2020-12-26T00:00:00+08:00</published><updated>2020-12-26T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Overview</id><content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+
+&lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
+
+&lt;p&gt;因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;JVM Overview&quot; alt=&quot;https://lament-z.com/assets/images/JVM/JVM-Overview.jpg&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;** 绿色部分：共享内存区域 **&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;用法&quot;&gt;用法&lt;/h2&gt;
+
+&lt;p&gt;我特别不擅长背东西，通常需要借助一些手段来帮助记忆。&lt;/p&gt;
+
+&lt;p&gt;对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。&lt;/p&gt;
+
+&lt;p&gt;当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。&lt;/p&gt;
+
+&lt;p&gt;当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。&lt;/p&gt;
+
+&lt;p&gt;每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。&lt;/p&gt;
+
+&lt;p&gt;这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。&lt;/p&gt;
+
+&lt;p&gt;当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。&lt;/p&gt;
+
+&lt;p&gt;不至于重演之前用完就忘了的尴尬。&lt;/p&gt;
+
+&lt;h2 id=&quot;一个面试题告诉你什么叫鱼的记忆&quot;&gt;一个面试题告诉你什么叫鱼的记忆&lt;/h2&gt;
+
+&lt;p&gt;这简直就是我鱼的记忆一个典型例子。&lt;/p&gt;
+
+&lt;p&gt;我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+        String str1 = new StringBuilder(&quot;lament&quot;).append(&quot;z&quot;).toString();
+        System.out.println(str1);
+        System.out.println(str1.intern());
+        System.out.println(str1 == str1.intern());
+
+
+        System.out.println();
+
+        String str2 = new StringBuilder(&quot;ja&quot;).append(&quot;va&quot;).toString();
+        System.out.println(str2);
+        System.out.println(str2.intern());
+        System.out.println(str2 == str2.intern());
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。&lt;/p&gt;
+
+&lt;p&gt;这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。&lt;/p&gt;
+
+&lt;p&gt;需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 &lt;em&gt;** Oracle JDK7u / OpenJDK7u HotSpot VM **&lt;/em&gt; 。&lt;/p&gt;
+
+&lt;p&gt;不然你很可能看到两个true XD。&lt;/p&gt;
+
+&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">前一阵微信提醒我不要浪费订阅号资源。</summary></entry><entry><title type="html">好用的工具们(一)</title><link href="http://localhost:4000/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" /><published>2020-07-23T00:00:00+08:00</published><updated>2020-07-23T00:00:00+08:00</updated><id>http://localhost:4000/dev-tools-1</id><content type="html" xml:base="http://localhost:4000/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
 
 &lt;h2 id=&quot;notice&quot;&gt;NOTICE&lt;/h2&gt;
 
@@ -200,7 +259,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;h3 id=&quot;文档找不到&quot;&gt;文档找不到&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://sdkman.io/usage&quot;&gt;他只是换了个单词叫Usage&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="alchemy-lab" /><summary type="html">好用的工具们</summary></entry><entry><title type="html">2019读过的书</title><link href="/2019booklist" rel="alternate" type="text/html" title="2019读过的书" /><published>2020-01-02T00:00:00+08:00</published><updated>2020-01-02T00:00:00+08:00</updated><id>/2019booklist</id><content type="html" xml:base="/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://sdkman.io/usage&quot;&gt;他只是换了个单词叫Usage&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="alchemy-lab" /><summary type="html">好用的工具们</summary></entry><entry><title type="html">2019读过的书</title><link href="http://localhost:4000/2019booklist" rel="alternate" type="text/html" title="2019读过的书" /><published>2020-01-02T00:00:00+08:00</published><updated>2020-01-02T00:00:00+08:00</updated><id>http://localhost:4000/2019booklist</id><content type="html" xml:base="http://localhost:4000/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
 
 &lt;p&gt;2019之前真的很久没有读书了，之前的阅读基本都是在飞机上完成的，其他时间除了用来催眠的网络小说之外几乎什么都没读。&lt;/p&gt;
 
@@ -280,7 +339,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;其他的想不太起来了，然后像什么数学分析这种。。又一下子写不完还是单独来吧，回头想到了再补充就好了&lt;/p&gt;</content><author><name></name></author><category term="magical-index" /><summary type="html">小野不是妹纸的2019书单</summary></entry><entry><title type="html">2019年终总结</title><link href="/in-the-end" rel="alternate" type="text/html" title="2019年终总结" /><published>2019-12-31T00:00:00+08:00</published><updated>2019-12-31T00:00:00+08:00</updated><id>/in-the-end</id><content type="html" xml:base="/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
+&lt;p&gt;其他的想不太起来了，然后像什么数学分析这种。。又一下子写不完还是单独来吧，回头想到了再补充就好了&lt;/p&gt;</content><author><name></name></author><category term="magical-index" /><summary type="html">小野不是妹纸的2019书单</summary></entry><entry><title type="html">2019年终总结</title><link href="http://localhost:4000/in-the-end" rel="alternate" type="text/html" title="2019年终总结" /><published>2019-12-31T00:00:00+08:00</published><updated>2019-12-31T00:00:00+08:00</updated><id>http://localhost:4000/in-the-end</id><content type="html" xml:base="http://localhost:4000/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;blockquote&gt;
