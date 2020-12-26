@@ -191,7 +191,7 @@ into the {body} of the default.hbs template -->
     <p>没有vpn，找找别的源，找一个换上用。</p>
   </li>
   <li>
-    <p>macOS的command line tool不符合要求，使用<code class="highlighter-rouge">xcode-select --install</code>重装，或者注册个开发者账号自行下载安装对应版本。</p>
+    <p>macOS的command line tool不符合要求，使用<code class="language-plaintext highlighter-rouge">xcode-select --install</code>重装，或者注册个开发者账号自行下载安装对应版本。</p>
   </li>
   <li>
     <p>修改host，不建议使用该方法，或者你记得改回去。</p>
@@ -207,14 +207,14 @@ into the {body} of the default.hbs template -->
 
 <h3 id="brew-everything">brew everything</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  brew install [xxx]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  brew install [xxx]
   brew cask install [xxx]
   ...
 </code></pre></div></div>
 
 <h3 id="brew-services">brew services</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # 列出所有 brew 管理的服务
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # 列出所有 brew 管理的服务
   brew services
 
   # 帮助，省的记其他命令
@@ -223,9 +223,9 @@ into the {body} of the default.hbs template -->
 
 <h3 id="其他tips">其他tips</h3>
 
-<p>Homebrew 会将软件包安装到独立目录，并将其文件软链接至 <code class="highlighter-rouge">/usr/local</code>。 这个官网首页就写着。</p>
+<p>Homebrew 会将软件包安装到独立目录，并将其文件软链接至 <code class="language-plaintext highlighter-rouge">/usr/local</code>。 这个官网首页就写着。</p>
 
-<p>这些软件包默认安装在 <code class="highlighter-rouge">/usr/local/Cellar or /usr/local/Caskroom or /usr/local/...</code>,你也可以自己指定安装位置。</p>
+<p>这些软件包默认安装在 <code class="language-plaintext highlighter-rouge">/usr/local/Cellar or /usr/local/Caskroom or /usr/local/...</code>,你也可以自己指定安装位置。</p>
 
 <p>避免使用sudo.</p>
 
@@ -267,7 +267,7 @@ into the {body} of the default.hbs template -->
 
 <ol>
   <li>zsh调试命令
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># x = xtrace  v = verbose
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># x = xtrace  v = verbose
 zsh -xv
 
 # 查看启动时间
@@ -310,7 +310,7 @@ powerlevel10k</a>，因为这个有国内源，中文分享也多。</p>
 
 <ol>
   <li>烂大街方法:主要解决prompt慢
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  git config --global oh-my-zsh.hide-status 1
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  git config --global oh-my-zsh.hide-status 1
 </code></pre></div>    </div>
   </li>
   <li>incr插件补全慢</li>
@@ -324,7 +324,7 @@ powerlevel10k</a>，因为这个有国内源，中文分享也多。</p>
 
 <p>这个魔改版我用了很久了，我自己的就不放了，bug略多，每次玩坏了我都是用这个恢复的。</p>
 
-<p>替换掉原来的 incr-0.2.zsh 即可。目录在 <code class="highlighter-rouge">~/.oh-my-zsh/plugins/incr</code> 。</p>
+<p>替换掉原来的 incr-0.2.zsh 即可。目录在 <code class="language-plaintext highlighter-rouge">~/.oh-my-zsh/plugins/incr</code> 。</p>
 
 <h3 id="插件推荐">插件推荐</h3>
 
@@ -344,7 +344,7 @@ powerlevel10k</a>，因为这个有国内源，中文分享也多。</p>
 
 <h3 id="命令解释">命令解释</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sdk install &lt;candidate&gt; [version] [local-path]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sdk install &lt;candidate&gt; [version] [local-path]
 
   # 其中 &lt;candidate&gt; 的可选项可通过如下命令获取 ,按Q可退出。
   sdk list
@@ -357,7 +357,7 @@ powerlevel10k</a>，因为这个有国内源，中文分享也多。</p>
 
 <h3 id="use">use</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # use可以在 *当前终端* 临时切换某个jdk，即使该jdk不存在，他也会自动去下载并切换过去。
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # use可以在 *当前终端* 临时切换某个jdk，即使该jdk不存在，他也会自动去下载并切换过去。
   sdk use &lt;candidate&gt; [version]
 
 </code></pre></div></div>

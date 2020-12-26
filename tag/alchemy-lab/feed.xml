@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
-  <generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator>
+  <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
   <link href="http://localhost:4000/tag/alchemy-lab/feed.xml" rel="self" type="application/atom+xml" />
   <link href="http://localhost:4000/" rel="alternate" type="text/html" />
-  <updated>2020-12-27T05:11:09+08:00</updated>
+  <updated>2020-12-27T06:19:48+08:00</updated>
   <id>http://localhost:4000/tag/alchemy-lab/feed.xml</id>
 
   
@@ -64,7 +64,7 @@
     &lt;p&gt;没有vpn，找找别的源，找一个换上用。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;macOS的command line tool不符合要求，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;xcode-select --install&lt;/code&gt;重装，或者注册个开发者账号自行下载安装对应版本。&lt;/p&gt;
+    &lt;p&gt;macOS的command line tool不符合要求，使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xcode-select --install&lt;/code&gt;重装，或者注册个开发者账号自行下载安装对应版本。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;修改host，不建议使用该方法，或者你记得改回去。&lt;/p&gt;
@@ -80,14 +80,14 @@
 
 &lt;h3 id=&quot;brew-everything&quot;&gt;brew everything&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  brew install [xxx]
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  brew install [xxx]
   brew cask install [xxx]
   ...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;brew-services&quot;&gt;brew services&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  # 列出所有 brew 管理的服务
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  # 列出所有 brew 管理的服务
   brew services
 
   # 帮助，省的记其他命令
@@ -96,9 +96,9 @@
 
 &lt;h3 id=&quot;其他tips&quot;&gt;其他tips&lt;/h3&gt;
 
-&lt;p&gt;Homebrew 会将软件包安装到独立目录，并将其文件软链接至 &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local&lt;/code&gt;。 这个官网首页就写着。&lt;/p&gt;
+&lt;p&gt;Homebrew 会将软件包安装到独立目录，并将其文件软链接至 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local&lt;/code&gt;。 这个官网首页就写着。&lt;/p&gt;
 
-&lt;p&gt;这些软件包默认安装在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/Cellar or /usr/local/Caskroom or /usr/local/...&lt;/code&gt;,你也可以自己指定安装位置。&lt;/p&gt;
+&lt;p&gt;这些软件包默认安装在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/usr/local/Cellar or /usr/local/Caskroom or /usr/local/...&lt;/code&gt;,你也可以自己指定安装位置。&lt;/p&gt;
 
 &lt;p&gt;避免使用sudo.&lt;/p&gt;
 
@@ -140,7 +140,7 @@
 
 &lt;ol&gt;
   &lt;li&gt;zsh调试命令
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# x = xtrace  v = verbose
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# x = xtrace  v = verbose
 zsh -xv
 
 # 查看启动时间
@@ -183,7 +183,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;ol&gt;
   &lt;li&gt;烂大街方法:主要解决prompt慢
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  git config --global oh-my-zsh.hide-status 1
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  git config --global oh-my-zsh.hide-status 1
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;incr插件补全慢&lt;/li&gt;
@@ -197,7 +197,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;p&gt;这个魔改版我用了很久了，我自己的就不放了，bug略多，每次玩坏了我都是用这个恢复的。&lt;/p&gt;
 
-&lt;p&gt;替换掉原来的 incr-0.2.zsh 即可。目录在 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.oh-my-zsh/plugins/incr&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;替换掉原来的 incr-0.2.zsh 即可。目录在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.oh-my-zsh/plugins/incr&lt;/code&gt; 。&lt;/p&gt;
 
 &lt;h3 id=&quot;插件推荐&quot;&gt;插件推荐&lt;/h3&gt;
 
@@ -217,7 +217,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;h3 id=&quot;命令解释&quot;&gt;命令解释&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  sdk install &amp;lt;candidate&amp;gt; [version] [local-path]
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  sdk install &amp;lt;candidate&amp;gt; [version] [local-path]
 
   # 其中 &amp;lt;candidate&amp;gt; 的可选项可通过如下命令获取 ,按Q可退出。
   sdk list
@@ -230,7 +230,7 @@ powerlevel10k&lt;/a&gt;，因为这个有国内源，中文分享也多。&lt;/p
 
 &lt;h3 id=&quot;use&quot;&gt;use&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  # use可以在 *当前终端* 临时切换某个jdk，即使该jdk不存在，他也会自动去下载并切换过去。
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  # use可以在 *当前终端* 临时切换某个jdk，即使该jdk不存在，他也会自动去下载并切换过去。
   sdk use &amp;lt;candidate&amp;gt; [version]
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
