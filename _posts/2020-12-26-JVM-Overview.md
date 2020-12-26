@@ -15,7 +15,7 @@ subclass: 'post tag-scroll'
 
 因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。
 
-![https://lament-z.com/assets/images/JVM/JVM-Overview.jpg](JVM Overview)
+![JVM Overview](https://lament-z.com/assets/images/JVM/JVM-Overview.jpg)
 
 *** 绿色部分：共享内存区域 ***
 
