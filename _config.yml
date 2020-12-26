@@ -75,7 +75,7 @@ lsi: False
 #repo: jasper2
 #branch: master
 relative_source: ../
-destination: ../lament_site/
+destination: ./docs
 production_url:  https://lament-z.com
 source_url:  https://github.com/LamentWy/lamentWy.github.io
 
