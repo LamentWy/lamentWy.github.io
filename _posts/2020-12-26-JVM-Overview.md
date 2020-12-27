@@ -17,8 +17,6 @@ subclass: 'post tag-scroll'
 
 ![JVM Overview](https://lament-z.com/assets/images/JVM/JVM-Overview.jpg)
 
-*** 绿色部分：共享内存区域 ***
-
 ## 用法  
 
 我特别不擅长背东西，通常需要借助一些手段来帮助记忆。
