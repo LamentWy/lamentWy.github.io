@@ -68,3 +68,8 @@ subclass: 'post tag-scroll'
 不然你很可能看到两个true XD。
 
 当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇[解析](https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html).
+
+## 参考资料
+
+1. [深入理解JAVA虚拟机(第三版)](https://book.douban.com/subject/34907497/)
+2. [The Java® Virtual Machine Specification](https://docs.oracle.com/javase/specs/jvms/se8/html/index.html)
