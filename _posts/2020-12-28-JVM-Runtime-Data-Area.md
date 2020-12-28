@@ -9,7 +9,6 @@ class: post-template
 subclass: 'post tag-scroll'
 ---
 
-# 运行时数据区 Runtime Data Areas  
 
 ## 概述
 
@@ -56,12 +55,14 @@ subclass: 'post tag-scroll'
 ### 虚拟机栈 (JVM Stack)
 
 ***
+
   这部分摘自《深入理解JAVA虚拟机(第三版)》。
   虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:
 
   每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。
 
   每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。
+
 ***
 
   啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。
@@ -92,12 +93,18 @@ subclass: 'post tag-scroll'
   异常情况也是类似。
 
 
-***
+***   
+
   说完了线程隔离的区域，来看看共享的区域：Heap & Method Area。
+
 ***
+
 ### 堆 (Heap)
+
 ***
-The heap is the run-time data area from which memory for all class instances and arrays is allocated.   -- From JVMS.
+
+  The heap is the run-time data area from which memory for all class instances and arrays is allocated.   -- From JVMS.
+
 ***
 
   所有的类的实例，数组啥的都在堆(Heap)上分配。
@@ -133,12 +140,13 @@ The heap is the run-time data area from which memory for all class instances and
 
   5. 类变量 Class Variables   
 
-  鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
-  举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
+    鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+    举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
 
-  6. 各种引用
+  6. 各种引用等等
 
-  具体细节单独展开
+  具体细节单独展开。
+
   这里的部分翻译参考了[Java 中 field 和 variable 区别及相关术语解释](https://www.ituring.com.cn/article/491755).
 
 #### 内存  
@@ -179,7 +187,6 @@ The heap is the run-time data area from which memory for all class instances and
   比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.
 
 #### NIO
-
 ***
   这部分摘自《深入理解JAVA虚拟机(第三版)》。
 
@@ -187,8 +194,7 @@ The heap is the run-time data area from which memory for all class instances and
 
   它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。
 
-  这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。
-
+  这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。   
 ***
 
 
