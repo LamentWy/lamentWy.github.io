@@ -43,7 +43,7 @@
     <meta property="og:site_name" content="Lament's Mage Tower" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="JVM-RuntimeDataArea" />
-    <meta property="og:description" content="运行时数据区 Runtime Data Areas 概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable" />
+    <meta property="og:description" content="概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张" />
     <meta property="og:url" content="/JVM-Runtime-Data-Area" />
     <meta property="og:image" content="/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
@@ -53,7 +53,7 @@
     <meta property="article:tag" content="Scroll" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="JVM-RuntimeDataArea" />
-    <meta name="twitter:description" content="运行时数据区 Runtime Data Areas 概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable" />
+    <meta name="twitter:description" content="概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张" />
     <meta name="twitter:url" content="/" />
     <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -85,7 +85,7 @@
         "@type": "WebPage",
         "@id": "/JVM-Runtime-Data-Area"
     },
-    "description": "运行时数据区 Runtime Data Areas 概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable"
+    "description": "概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张"
 }
     </script>
 
@@ -175,9 +175,7 @@ into the {body} of the default.hbs template -->
 
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    <h1 id="运行时数据区-runtime-data-areas">运行时数据区 Runtime Data Areas</h1>
-
-<h2 id="概述">概述</h2>
+                    <h2 id="概述">概述</h2>
 
 <p>《Java虚拟机规范》定义了如下几个运行时数据区：</p>
 
@@ -222,13 +220,15 @@ into the {body} of the default.hbs template -->
 <h3 id="虚拟机栈-jvm-stack">虚拟机栈 (JVM Stack)</h3>
 
 <hr />
+
 <p>这部分摘自《深入理解JAVA虚拟机(第三版)》。
   虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:</p>
 
 <p>每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。</p>
 
-<p>每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。
-***</p>
+<p>每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+
+<hr />
 
 <p>啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。</p>
 
@@ -263,12 +263,18 @@ into the {body} of the default.hbs template -->
   异常情况也是类似。</p>
 
 <hr />
-<p>说完了线程隔离的区域，来看看共享的区域：Heap &amp; Method Area。
-***</p>
-<h3 id="堆-heap">堆 (Heap)</h3>
+
+<p>说完了线程隔离的区域，来看看共享的区域：Heap &amp; Method Area。</p>
+
 <hr />
-<p>The heap is the run-time data area from which memory for all class instances and arrays is allocated.   – From JVMS.
-***</p>
+
+<h3 id="堆-heap">堆 (Heap)</h3>
+
+<hr />
+
+<p>The heap is the run-time data area from which memory for all class instances and arrays is allocated.   – From JVMS.</p>
+
+<hr />
 
 <p>所有的类的实例，数组啥的都在堆(Heap)上分配。
   提到Heap就免不了说一嘴分代，什么新生代老年代永久代，包括元空间blabla，这些是基于“分代收集理论”or某些JVM具体实现引出的说法，Heap在本篇仅限于“JVMS中规定的Heap”这么一个抽象模型。</p>
@@ -312,15 +318,17 @@ into the {body} of the default.hbs template -->
   </li>
 </ol>
 
-<p>鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
-  举个例子，比如<code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>中的<code class="language-plaintext highlighter-rouge">MAX_VALUE</code>这种作为类属性之一，并且被<code class="language-plaintext highlighter-rouge">static</code>修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
+</code></pre></div></div>
 
 <ol>
-  <li>各种引用</li>
+  <li>各种引用等等</li>
 </ol>
 
-<p>具体细节单独展开
-  这里的部分翻译参考了<a href="https://www.ituring.com.cn/article/491755">Java 中 field 和 variable 区别及相关术语解释</a>.</p>
+<p>具体细节单独展开。</p>
+
+<p>这里的部分翻译参考了<a href="https://www.ituring.com.cn/article/491755">Java 中 field 和 variable 区别及相关术语解释</a>.</p>
 
 <h4 id="内存-3">内存</h4>
 
@@ -364,7 +372,6 @@ into the {body} of the default.hbs template -->
   比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.</p>
 
 <h4 id="nio">NIO</h4>
-
 <hr />
 <p>这部分摘自《深入理解JAVA虚拟机(第三版)》。</p>
 
@@ -372,9 +379,8 @@ into the {body} of the default.hbs template -->
 
 <p>它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
 
-<p>这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。</p>
-
-<hr />
+<p>这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。 <br />
+***</p>
 
 <h2 id="references">References</h2>
 
