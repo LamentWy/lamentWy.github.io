@@ -4,7 +4,7 @@
   <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
   <link href="/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
   <link href="/" rel="alternate" type="text/html" />
-  <updated>2020-12-28T01:31:53+08:00</updated>
+  <updated>2020-12-28T08:57:58+08:00</updated>
   <id>/tag/scroll/feed.xml</id>
 
   
@@ -25,13 +25,264 @@
     
       
     
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">JVM-RuntimeDataArea</title>
+      <link href="/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" />
+      <published>2020-12-28T00:00:00+08:00</published>
+      <updated>2020-12-28T00:00:00+08:00</updated>
+      <id>/JVM-Runtime-Data-Area</id>
+      <content type="html" xml:base="/JVM-Runtime-Data-Area">&lt;h1 id=&quot;运行时数据区-runtime-data-areas&quot;&gt;运行时数据区 Runtime Data Areas&lt;/h1&gt;
+
+&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+
+&lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/runtime-data-area-v1.jpg&quot; alt=&quot;RT Data Areas Overview&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。&lt;/p&gt;
+
+&lt;h2 id=&quot;使用方法&quot;&gt;使用方法&lt;/h2&gt;
+
+&lt;p&gt;一边画图一边看，画一块看一块。
+  过完一遍之后，擦了重来，哪里忘了看哪里。&lt;/p&gt;
+
+&lt;h2 id=&quot;详解&quot;&gt;详解&lt;/h2&gt;
+
+&lt;p&gt;下图可以更直观的区分不同数据区域:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/runtime-data-area-v2.jpg&quot; alt=&quot;RT Data Areas with Thread&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。&lt;/p&gt;
+
+&lt;p&gt;而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。&lt;/p&gt;
+
+&lt;p&gt;接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。&lt;/p&gt;
+
+&lt;h3 id=&quot;程序计数器-the-program-counter-register&quot;&gt;程序计数器 (The Program Counter Register)&lt;/h3&gt;
+
+&lt;p&gt;程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。&lt;/p&gt;
+
+&lt;p&gt;JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。&lt;/p&gt;
+
+&lt;p&gt;PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。
+  程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常&quot;&gt;异常&lt;/h4&gt;
+
+&lt;p&gt;唯一一个“规范”中没有定义内存异常的区域。&lt;/p&gt;
+
+&lt;h3 id=&quot;虚拟机栈-jvm-stack&quot;&gt;虚拟机栈 (JVM Stack)&lt;/h3&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;这部分摘自《深入理解JAVA虚拟机(第三版)》。
+  虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:&lt;/p&gt;
+
+&lt;p&gt;每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。&lt;/p&gt;
+
+&lt;p&gt;每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。
+***&lt;/p&gt;
+
+&lt;p&gt;啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/RuntimeDataArea-details.jpg&quot; alt=&quot;RT Data Areas with vm stack details&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每当一个新线程启动的时候，JVM就会给这个线程创建一个 VM Stack，而VM Stack把线程的状态存储在栈帧(Stack Frame)中，JVM对 VM Stack 的直接操作就俩：入栈，出栈（Because the Java Virtual Machine stack is never manipulated directly except to push and pop frames, frames may be heap allocated.）。&lt;/p&gt;
+
+&lt;p&gt;无论是我们写的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;System.out.println(&quot;Hello World&quot;);&lt;/code&gt; 还是别的什么方法，都是基于这个模型完成的。&lt;/p&gt;
+
+&lt;p&gt;”Stack Frame“ ，包括“JVM执行方法时都发生了啥”这里暂时不展开，回头单独开一篇顺便打包上“递归”一起说。&lt;/p&gt;
+
+&lt;p&gt;万一我鸽太久，也可以先看看《Inside the Java Virtual Machine》中的&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm8.html&quot;&gt;The Java Stack&lt;/a&gt;这一节，讲述的非常清晰。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-1&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;该区域中内存无需连续。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-1&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;当线程申请 VM Stack 的深度超过的规定时，抛 &lt;strong&gt;&lt;em&gt;StackOverflowError&lt;/em&gt;&lt;/strong&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当 VM Stack 为可拓展型时，线程需要动态扩展自己的 VM Stack，但空余内存不足时；或者当空余内存不足以初始化线程的 VM Stack 时，抛 &lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;本地方法栈-native-stack&quot;&gt;本地方法栈 (Native Stack)&lt;/h3&gt;
+
+&lt;p&gt;跟VM Stack作用差不多，只不过是调用Native方法。
+  异常情况也是类似。&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;说完了线程隔离的区域，来看看共享的区域：Heap &amp;amp; Method Area。
+***&lt;/p&gt;
+&lt;h3 id=&quot;堆-heap&quot;&gt;堆 (Heap)&lt;/h3&gt;
+&lt;hr /&gt;
+&lt;p&gt;The heap is the run-time data area from which memory for all class instances and arrays is allocated.   – From JVMS.
+***&lt;/p&gt;
+
+&lt;p&gt;所有的类的实例，数组啥的都在堆(Heap)上分配。
+  提到Heap就免不了说一嘴分代，什么新生代老年代永久代，包括元空间blabla，这些是基于“分代收集理论”or某些JVM具体实现引出的说法，Heap在本篇仅限于“JVMS中规定的Heap”这么一个抽象模型。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-2&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;Heap可以是固定大小，也可以是可扩展式的。
+  通常遇到的都是可扩展的，通过-Xmx(maximum heap size ) -Xms(minimum heap size，也称为初始 Heap size)来设定其大小。&lt;/p&gt;
+
+&lt;p&gt;关于某些特定的JVM的这类参数啦、这类参数选项都有啥啦、它们的含义啥的可以参考Oracle的&lt;a href=&quot;https://docs.oracle.com/cd/E21764_01/web.1111/e13814/jvm_tuning.htm#PERFM150&quot;&gt;Tuning Java Virtual Machines&lt;/a&gt;文档。&lt;/p&gt;
+
+&lt;p&gt;关于TLAB(Thread Local Allocation Buffer):&lt;/p&gt;
+
+&lt;p&gt;《深入理解JAVA虚拟机(第三版)》里面提到了，为了提升对象分配时效率，Heap中会划分出多个被线程私有的分配缓冲区，这个缓冲区就是TLAB，里面存的依然是对象的实例或Array。说白了就是从大Heap里分几个小Heap给Thread们拿去用，只是优化的手段，Heap还是Heap。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-2&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果Heap中剩余内存不够分配给实例or数组，并且也没更多的内存让Heap完成扩展时，抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;方法区-method-area&quot;&gt;方法区 (Method Area)&lt;/h3&gt;
+
+&lt;p&gt;方法区 (Method Area，很多资料也用非堆来将它与堆进行区分)用来存储被JVM加载的：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;类型信息 TypeInformation&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;常量池 The Constant Pool&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;域信息 Field Information&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;方法信息 Method Information&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;类变量 Class Variables&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+  举个例子，比如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer.MAX_VALUE&lt;/code&gt;中的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAX_VALUE&lt;/code&gt;这种作为类属性之一，并且被&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static&lt;/code&gt;修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;各种引用&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;具体细节单独展开
+  这里的部分翻译参考了&lt;a href=&quot;https://www.ituring.com.cn/article/491755&quot;&gt;Java 中 field 和 variable 区别及相关术语解释&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-3&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;规范中对该区域规定也比较宽松，不需要内存连续，可以是固定大小的也可以是可扩展的。&lt;/p&gt;
+
+&lt;p&gt;还有之前提到的“分代理论”，以前一些JVM按照他们自己的分代设计，用永久代实现了方法区。
+  叫永久可能是这部分存贮的都是些比较”固定”的东西，但是不代表&lt;strong&gt;&lt;em&gt;永久代 == 方法区&lt;/em&gt;&lt;/strong&gt;，也不代表该区域就绝对不进行内存回收。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-3&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;无法满足新的内存分配需求时,抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;运行时常量区-run-time-constant-pool&quot;&gt;运行时常量区 (Run-Time Constant Pool)&lt;/h3&gt;
+
+&lt;p&gt;它是方法区的一部分，规范规定当JVM创建一个类或者接口时，就为该类或对象构建一个运行时常量池。&lt;/p&gt;
+
+&lt;p&gt;写了半天都不太满意，要么不够清楚，要么不够简洁，先挂着&lt;a href=&quot;https://blog.jamesdbloom.com/JVMInternals.html#constant_pool&quot;&gt;别人的吧&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-4&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;它的内存是从方法区的内存里分配的，受到方法区本身内存大小的限制。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-4&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;当创建类(Class)或者接口(Interface)时，运行时常量池需要的内存大于方法区剩余的空余内存,抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;补充说明&quot;&gt;补充说明&lt;/h3&gt;
+
+&lt;h4 id=&quot;heap-和-method-area-的逻辑关系&quot;&gt;Heap 和 Method Area 的逻辑关系。&lt;/h4&gt;
+
+&lt;p&gt;可以看看&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm6.html&quot;&gt;The Heap&lt;/a&gt;下面画的几种关系图。
+  我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。&lt;/p&gt;
+
+&lt;h4 id=&quot;直接内存-direct-memory&quot;&gt;直接内存 (Direct Memory)&lt;/h4&gt;
+
+&lt;p&gt;该内存区域不属于运行时数据区(Runtime Data Areas)，也不在《Java虚拟机规范》的定义中。
+  比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.&lt;/p&gt;
+
+&lt;h4 id=&quot;nio&quot;&gt;NIO&lt;/h4&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;这部分摘自《深入理解JAVA虚拟机(第三版)》。&lt;/p&gt;
+
+&lt;p&gt;NIO(New Input/Output)类，引入了一种基于通道(Channel)与缓冲区 (Buffer)的I/O方式。&lt;/p&gt;
+
+&lt;p&gt;它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。&lt;/p&gt;
+
+&lt;p&gt;这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.geeksforgeeks.org/java-virtual-machine-jvm-stack-area/&quot;&gt;Java Virtual Machine (JVM) Stack Area&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5&quot;&gt;JVMS-Run-Time Data Areas&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://book.douban.com/subject/34907497/&quot;&gt;深入理解JAVA虚拟机(第三版)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.baeldung.com/native-memory-tracking-in-jvm&quot;&gt;Native Memory Tracking in JVM&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/index.html&quot;&gt;Inside the Java Virtual Machine&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content>
+
       
-    
-  
+      
+      
+      
+      
 
-  
-  
+      <author>
+          <name></name>
+        
+        
+      </author>
 
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">运行时数据区 Runtime Data Areas</summary>
+      
+
+      
+      
+    </entry>
   
     <entry>
       <title type="html">JVM Overview</title>
@@ -46,8 +297,6 @@
 &lt;p&gt;因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/JVM-Overview.jpg&quot; alt=&quot;JVM Overview&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;** 绿色部分：共享内存区域 **&lt;/em&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;用法&quot;&gt;用法&lt;/h2&gt;
 
@@ -98,7 +347,14 @@
 
 &lt;p&gt;不然你很可能看到两个true XD。&lt;/p&gt;
 
-&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;</content>
+&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;参考资料&quot;&gt;参考资料&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://book.douban.com/subject/34907497/&quot;&gt;深入理解JAVA虚拟机(第三版)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se8/html/index.html&quot;&gt;The Java® Virtual Machine Specification&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content>
 
       
       

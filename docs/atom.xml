@@ -8,6 +8,21 @@
     
       
       <item>
+        <title>JVM-RuntimeDataArea</title>
+        
+          <description>&lt;h1 id=&quot;运行时数据区-runtime-data-areas&quot;&gt;运行时数据区 Runtime Data Areas&lt;/h1&gt;
+
+</description>
+        
+        <pubDate>Mon, 28 Dec 2020 00:00:00 +0800</pubDate>
+        <link>
+        /JVM-Runtime-Data-Area</link>
+        <guid isPermaLink="true">/JVM-Runtime-Data-Area</guid>
+      </item>
+      
+    
+      
+      <item>
         <title>JVM Overview</title>
         
           <description>&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
