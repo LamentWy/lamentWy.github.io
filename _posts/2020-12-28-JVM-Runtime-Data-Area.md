@@ -54,16 +54,10 @@ subclass: 'post tag-scroll'
 
 ### 虚拟机栈 (JVM Stack)
 
-***
-
-  这部分摘自《深入理解JAVA虚拟机(第三版)》。
-  虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:
-
-  每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。
-
-  每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。
-
-***
+>  这部分摘自《深入理解JAVA虚拟机(第三版)》。   
+>  虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:    
+>  每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。
+>  每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。
 
   啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。
 
@@ -93,19 +87,17 @@ subclass: 'post tag-scroll'
   异常情况也是类似。
 
 
-***   
+***  
 
-  说完了线程隔离的区域，来看看共享的区域：Heap & Method Area。
-
-***
+  *说完了线程隔离的区域，来看看共享的区域：Heap & Method Area。*
 
 ### 堆 (Heap)
 
-***
 
-  The heap is the run-time data area from which memory for all class instances and arrays is allocated.   -- From JVMS.
 
-***
+>  The heap is the run-time data area from which memory for all class instances and arrays is allocated.   -- From JVMS.
+
+
 
   所有的类的实例，数组啥的都在堆(Heap)上分配。
   提到Heap就免不了说一嘴分代，什么新生代老年代永久代，包括元空间blabla，这些是基于“分代收集理论”or某些JVM具体实现引出的说法，Heap在本篇仅限于“JVMS中规定的Heap”这么一个抽象模型。
@@ -187,16 +179,17 @@ subclass: 'post tag-scroll'
   比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.
 
 #### NIO
+
+>  这部分摘自《深入理解JAVA虚拟机(第三版)》。
+
+>  NIO(New Input/Output)类，引入了一种基于通道(Channel)与缓冲区 (Buffer)的I/O方式。
+
+>  它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。
+
+>  这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。   
+
+
 ***
-  这部分摘自《深入理解JAVA虚拟机(第三版)》。
-
-  NIO(New Input/Output)类，引入了一种基于通道(Channel)与缓冲区 (Buffer)的I/O方式。
-
-  它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。
-
-  这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。   
-***
-
 
 ## References
 
