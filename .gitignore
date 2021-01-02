@@ -15,6 +15,7 @@ Gemfile.lock
 *.gem
 npm-debug.log
 
+atom.xml
 
 *.sh
 .vscode

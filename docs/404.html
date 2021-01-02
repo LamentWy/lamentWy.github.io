@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+---
+layout: error
+current: error
+title: "404 - Page Not Found"
+permalink: 404.html
+---
+=======
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
 <!--
 This error template is used for all 404 errors, which might occur on your site.
 It's a good idea to keep this template as minimal as possible in terms of both file size and complexity.
@@ -8,6 +17,15 @@ It's a good idea to keep this template as minimal as possible in terms of both f
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<<<<<<< HEAD
+    <title>{{ page.title }}</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}assets/built/screen.edited.css" />
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    {% include head.html %}
+=======
     <title>404 - Page Not Found</title>
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,8 +33,8 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
     <!-- This tag outputs SEO meta+structured data and other important settings -->
     <meta name="description" content="Neutral, sometimes chaotic neutral" />
-    <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="/404.html" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/404.html" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
@@ -24,14 +42,14 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     <meta property="og:type" content="website" />
     <meta property="og:title" content="404 - Page Not Found" />
     <meta property="og:description" content="Neutral, sometimes chaotic neutral" />
-    <meta property="og:url" content="/404.html" />
-    <meta property="og:image" content="/assets/images/blog-cover.jpg" />
+    <meta property="og:url" content="http://localhost:4000/404.html" />
+    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="404 - Page Not Found" />
     <meta name="twitter:description" content="Neutral, sometimes chaotic neutral" />
-    <meta name="twitter:url" content="/" />
-    <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Lament's Mage Tower" />
     <meta name="twitter:site" content="@" />
@@ -46,18 +64,18 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     "publisher": {
         "@type": "Organization",
         "name": "Lament's Mage Tower",
-        "logo": "/assets/images/blog-icon.png"
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
     },
-    "url": "/404.html",
+    "url": "http://localhost:4000/404.html",
     "image": {
         "@type": "ImageObject",
-        "url": "/assets/images/blog-cover.jpg",
+        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
         "width": 2000,
         "height": 666
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "/404.html"
+        "@id": "http://localhost:4000/404.html"
     },
     "description": "Neutral, sometimes chaotic neutral"
 }
@@ -74,10 +92,24 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     <meta name="generator" content="Jekyll 3.6.2" />
     <link rel="alternate" type="application/rss+xml" title="404 - Page Not Found" href="/feed.xml" />
 
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
 </head>
 <body class="error-template">
     <div class="site-wrapper">
 
+<<<<<<< HEAD
+        <header class="site-header outer {% if page.cover %}" style="background-image: url({{ site.baseurl }}{{ page.cover }})){% else %}no-cover{% endif %}">
+            <div class="inner">
+                <nav class="site-nav-center">
+                    {% if site.logo %}
+                        <a class="site-nav-logo" href="{{ site.baseurl }}">
+                          <!-- <img src="{{site.baseurl}}{{ site.logo }}" alt="{{ site.title }}" /> -->
+                          Lament
+                        </a>
+                    {% else %}
+                        <a class="site-nav-logo" href="{{ site.baseurl }}">{{ site.title }}</a>
+                    {% endif %}
+=======
         <header class="site-header outer no-cover">
             <div class="inner">
                 <nav class="site-nav-center">
@@ -87,6 +119,7 @@ It's a good idea to keep this template as minimal as possible in terms of both f
                           Lament
                         </a>
                     
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
                 </nav>
             </div>
         </header>
@@ -97,7 +130,11 @@ It's a good idea to keep this template as minimal as possible in terms of both f
                 <section class="error-message">
                     <h1 class="error-code">404</h1>
                     <p class="error-description">Page not found</p>
+<<<<<<< HEAD
+                    <a class="error-link" href="{{ site.baseurl }}">Go to the front page →</a>
+=======
                     <a class="error-link" href="/">Go to the front page →</a>
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
                 </section>
             </div>
         </main>
@@ -107,49 +144,12 @@ It's a good idea to keep this template as minimal as possible in terms of both f
             <div class="inner">
                 <div class="post-feed">
                     <!-- The tag below includes the markup for each post - partials/post-card.hbs -->
+<<<<<<< HEAD
+                    {%  include post-card-error.html %}
+=======
                     
 
 
-
-    
-    
-        <article class="post-card  no-image">
-            
-            <div class="post-card-content">
-                <a class="post-card-content-link" href="/JVM-Runtime-Data-Area">
-                    <header class="post-card-header">
-                        
-                            
-                                
-                                    <span class="post-card-tags">Scroll</span>
-                                
-                            
-                        
-
-                        <h2 class="post-card-title">JVM-RuntimeDataArea</h2>
-                    </header>
-                    <section class="post-card-excerpt">
-                        
-                            <p>概述
-
-</p>
-                        
-                    </section>
-                </a>
-                <footer class="post-card-meta">
-                    
-                        
-                    
-                    <span class="reading-time">
-                        
-                        
-                          1 min read
-                        
-                    </span>
-                </footer>
-            </div>
-        </article>
-    
 
     
     
@@ -177,6 +177,8 @@ It's a good idea to keep this template as minimal as possible in terms of both f
                     </section>
                 </a>
                 <footer class="post-card-meta">
+                    
+                        
                     
                         
                     
@@ -220,6 +222,50 @@ It's a good idea to keep this template as minimal as possible in terms of both f
                     
                         
                     
+                        
+                    
+                    <span class="reading-time">
+                        
+                        
+                          1 min read
+                        
+                    </span>
+                </footer>
+            </div>
+        </article>
+    
+
+    
+    
+        <article class="post-card  no-image">
+            
+            <div class="post-card-content">
+                <a class="post-card-content-link" href="/2019booklist">
+                    <header class="post-card-header">
+                        
+                            
+                                
+                                    <span class="post-card-tags">Magical-index</span>
+                                
+                            
+                        
+
+                        <h2 class="post-card-title">2019读过的书</h2>
+                    </header>
+                    <section class="post-card-excerpt">
+                        
+                            <p>小野不是妹纸的2019书单
+
+</p>
+                        
+                    </section>
+                </a>
+                <footer class="post-card-meta">
+                    
+                        
+                    
+                        
+                    
                     <span class="reading-time">
                         
                         
@@ -234,10 +280,8 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     
     
 
-    
-    
 
-
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
                 </div>
             </div>
         </aside>
@@ -246,4 +290,7 @@ It's a good idea to keep this template as minimal as possible in terms of both f
     </div>
 </body>
 </html>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e

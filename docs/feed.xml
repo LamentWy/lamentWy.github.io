@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2020-12-28T09:18:28+08:00</updated><id>/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM-RuntimeDataArea</title><link href="/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>/JVM-Runtime-Data-Area</id><content type="html" xml:base="/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-01-02T16:59:32+08:00</updated><id>/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM-RuntimeDataArea</title><link href="/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>/JVM-Runtime-Data-Area</id><content type="html" xml:base="/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 
 &lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
 
@@ -129,16 +129,13 @@
     &lt;p&gt;方法信息 Method Information&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;类变量 Class Variables&lt;/p&gt;
+    &lt;p&gt;类变量 Class Variables  &lt;br /&gt;
+  鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+  举个例子，比如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer.MAX_VALUE&lt;/code&gt;中的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAX_VALUE&lt;/code&gt;这种作为类属性之一，并且被&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static&lt;/code&gt;修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
-举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;各种引用等等&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;各种引用等等&lt;/p&gt;
+  &lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;具体细节单独展开。&lt;/p&gt;
@@ -178,8 +175,7 @@
 
 &lt;h4 id=&quot;heap-和-method-area-的逻辑关系&quot;&gt;Heap 和 Method Area 的逻辑关系。&lt;/h4&gt;
 
-&lt;p&gt;可以看看&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm6.html&quot;&gt;The Heap&lt;/a&gt;下面画的几种关系图。
-  我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。&lt;/p&gt;
+&lt;p&gt;可以看看&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm6.html&quot;&gt;The Heap&lt;/a&gt;下面画的几种关系图。 我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。&lt;/p&gt;
 
 &lt;h4 id=&quot;直接内存-direct-memory&quot;&gt;直接内存 (Direct Memory)&lt;/h4&gt;
 

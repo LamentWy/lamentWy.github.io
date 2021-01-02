@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
-  <link href="/tag/alchemy-lab/feed.xml" rel="self" type="application/atom+xml" />
-  <link href="/" rel="alternate" type="text/html" />
-  <updated>2020-12-28T09:18:28+08:00</updated>
-  <id>/tag/alchemy-lab/feed.xml</id>
+  <link href="http://localhost:4000/tag/alchemy-lab/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
+  <updated>2020-12-27T06:30:28+08:00</updated>
+  <id>http://localhost:4000/tag/alchemy-lab/feed.xml</id>
 
   
   
@@ -25,6 +25,8 @@
     
       
     
+      
+    
   
 
   
@@ -33,11 +35,11 @@
   
     <entry>
       <title type="html">好用的工具们(一)</title>
-      <link href="/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" />
+      <link href="http://localhost:4000/dev-tools-1" rel="alternate" type="text/html" title="好用的工具们(一)" />
       <published>2020-07-23T00:00:00+08:00</published>
       <updated>2020-07-23T00:00:00+08:00</updated>
-      <id>/dev-tools-1</id>
-      <content type="html" xml:base="/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
+      <id>http://localhost:4000/dev-tools-1</id>
+      <content type="html" xml:base="http://localhost:4000/dev-tools-1">&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
 
 &lt;h2 id=&quot;notice&quot;&gt;NOTICE&lt;/h2&gt;
 
