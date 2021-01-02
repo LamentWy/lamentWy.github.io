@@ -130,10 +130,9 @@ subclass: 'post tag-scroll'
 
   4. 方法信息 Method Information
 
-  5. 类变量 Class Variables   
-
-    鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
-    举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
+  5. 类变量 Class Variables    
+  鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+  举个例子，比如```Integer.MAX_VALUE```中的```MAX_VALUE```这种作为类属性之一，并且被```static```修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。
 
   6. 各种引用等等
 
@@ -170,8 +169,7 @@ subclass: 'post tag-scroll'
 
 #### Heap 和 Method Area 的逻辑关系。
 
-  可以看看[The Heap](https://www.artima.com/insidejvm/ed2/jvm6.html)下面画的几种关系图。
-  我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。
+  可以看看[The Heap](https://www.artima.com/insidejvm/ed2/jvm6.html)下面画的几种关系图。 我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。
 
 #### 直接内存 (Direct Memory)
 

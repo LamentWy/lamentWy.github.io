@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 layout: null
 ---
@@ -24,5 +25,75 @@ layout: null
       </item>
       {% endunless %}
     {% endfor %}
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title> - Articles</title>
+    <description>Neutral, sometimes chaotic neutral</description>
+    <link>
+    http://localhost:4000</link>
+    
+      
+      <item>
+        <title>JVM Overview</title>
+        
+          <description>&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+
+</description>
+        
+        <pubDate>Sat, 26 Dec 2020 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/JVM-Overview</link>
+        <guid isPermaLink="true">http://localhost:4000/JVM-Overview</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>好用的工具们(一)</title>
+        
+          <description>&lt;h1 id=&quot;好用的工具们&quot;&gt;好用的工具们&lt;/h1&gt;
+
+</description>
+        
+        <pubDate>Thu, 23 Jul 2020 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/dev-tools-1</link>
+        <guid isPermaLink="true">http://localhost:4000/dev-tools-1</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>2019读过的书</title>
+        
+          <description>&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
+
+</description>
+        
+        <pubDate>Thu, 02 Jan 2020 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/2019booklist</link>
+        <guid isPermaLink="true">http://localhost:4000/2019booklist</guid>
+      </item>
+      
+    
+      
+      <item>
+        <title>2019年终总结</title>
+        
+          <description>&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
+
+</description>
+        
+        <pubDate>Tue, 31 Dec 2019 00:00:00 +0800</pubDate>
+        <link>
+        http://localhost:4000/in-the-end</link>
+        <guid isPermaLink="true">http://localhost:4000/in-the-end</guid>
+      </item>
+      
+    
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
   </channel>
 </rss>

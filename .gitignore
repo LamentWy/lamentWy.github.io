@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 _posts/214.md
 
@@ -75,3 +76,39 @@ target/
 .idea
 
 *.iml
+=======
+# OS X
+.DS_Store
+
+# script
+*.sh
+
+# Jekyll build
+/_site/
+.jekyll-metadata
+#Gemfile.lock
+
+# webstorm
+.idea/
+
+# others
+*.swp
+
+# site build
+*.gem
+*.rbc
+.bundle
+.config
+coverage
+InstalledFiles
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+vendor
+Gemfile.lock
+node_modules
+>>>>>>> 8af590efba30f1ab7d7bb20d437af72600bd9d0e
