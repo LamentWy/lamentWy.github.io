@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
-  <link href="/tag/magical-index/feed.xml" rel="self" type="application/atom+xml" />
-  <link href="/" rel="alternate" type="text/html" />
-  <updated>2021-01-21T17:47:56+08:00</updated>
-  <id>/tag/magical-index/feed.xml</id>
+  <link href="http://localhost:4000/tag/magical-index/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
+  <updated>2021-02-26T18:17:02+08:00</updated>
+  <id>http://localhost:4000/tag/magical-index/feed.xml</id>
 
   
   
@@ -33,11 +33,11 @@
   
     <entry>
       <title type="html">2019读过的书</title>
-      <link href="/2019booklist" rel="alternate" type="text/html" title="2019读过的书" />
+      <link href="http://localhost:4000/2019booklist" rel="alternate" type="text/html" title="2019读过的书" />
       <published>2020-01-02T00:00:00+08:00</published>
       <updated>2020-01-02T00:00:00+08:00</updated>
-      <id>/2019booklist</id>
-      <content type="html" xml:base="/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
+      <id>http://localhost:4000/2019booklist</id>
+      <content type="html" xml:base="http://localhost:4000/2019booklist">&lt;h2 id=&quot;小野不是妹纸的2019书单&quot;&gt;小野不是妹纸的2019书单&lt;/h2&gt;
 
 &lt;p&gt;2019之前真的很久没有读书了，之前的阅读基本都是在飞机上完成的，其他时间除了用来催眠的网络小说之外几乎什么都没读。&lt;/p&gt;
 
