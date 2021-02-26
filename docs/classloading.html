@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>JVM-类加载笔记-草稿</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="/assets/built/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="Neutral, sometimes chaotic neutral" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/classloading" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Lament's Mage Tower" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="JVM-类加载笔记-草稿" />
+    <meta property="og:description" content="笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an" />
+    <meta property="og:url" content="http://localhost:4000/classloading" />
+    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2021-01-17T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2021-01-17T00:00:00+08:00" />
+    <meta property="article:tag" content="Scroll" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JVM-类加载笔记-草稿" />
+    <meta name="twitter:description" content="笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Lament's Mage Tower" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Scroll" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Lament's Mage Tower",
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+    },
+    "url": "http://localhost:4000/classloading",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/classloading"
+    },
+    "description": "笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="JVM-类加载笔记-草稿" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/">
+                  <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
+                  Lament
+                </a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-magical-index" role="menuitem"><a href="/tag/magical-index/">Magical Index</a></li>
+    <li class="nav-alchemy-lab" role="menuitem"><a href="/tag/alchemy-lab/">Alchemy Lab</a></li>
+    <li class="nav-scroll" role="menuitem"><a href="/tag/scroll/">Scroll</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+</ul>
+
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full post tag-scroll no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="17 January 2021">17 January 2021</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/scroll/'>SCROLL</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">JVM-类加载笔记-草稿</h1>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="笔记">笔记</h1>
+
+<p>Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。</p>
+
+<h2 id="类加载的整个生命周期">类加载的整个生命周期</h2>
+
+<p><img src="https://lament-z.com/assets/images/JVM/class-life-circle.jpg" alt="pic of class life circle" /></p>
+
+<p>其中验证、准备、解析三个阶段统称为：连接 Linking。</p>
+
+<p>图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。</p>
+
+<h3 id="加载-loading">加载 Loading</h3>
+
+<p>加载阶段JVM要完成三件事：</p>
+<ol>
+  <li>
+    <p>通过类的全限定名拿到这个类的二进制字节流。</p>
+  </li>
+  <li>
+    <p>把这个字节流转化成方法区的运行时数据结构。</p>
+  </li>
+  <li>
+    <p>内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。</p>
+  </li>
+</ol>
+
+<p>说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。</p>
+
+<p>这一步就有很多方式:</p>
+
+<p>比如从jar,war中读取</p>
+
+<p>运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。</p>
+
+<p>从其他文件中生成类，比如jsp。</p>
+
+<p>不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。</p>
+
+<p>加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。</p>
+
+<p>数组又不太一样。</p>
+
+<p>数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。
+首先它有俩类型，一个element type ,一个component type.</p>
+
+<p>component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。</p>
+
+<p>这个element type就很绕了，但实际麻烦的是component type，先上原文。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The component type of an array may itself be an array type.
+The components of such an array may contain references to subarrays.
+If, starting from any array type, one considers its component type, and then (if that is also an array type) the component type of that type, and so on, eventually one must reach a component type that is not an array type; this is called the element type of the original array, and the components at this level of the data structure are called the elements of the original array.
+</code></pre></div></div>
+<p>这也是《深入》一书中所说的去掉所有维度的类型。</p>
+
+<p>就是数组中的元素可以是数组，而且这个嵌套可以一直往下套，一直套到最后这个数组它的元素不是数组为止，这个不是数组的元素的类型就叫元素类型。说白了就是数组套娃套完之后的类型。数组的元素类型最终依然需要类加载器来加载。</p>
+
+<p>而数组的组件类型如果是引用类型的话，就要通过递归的方式加载组件类型，然后标识在对应的类加载器的 类命名空间上。
+不是引用类型，则是把标识与引导类加载器关联。</p>
+
+<p>加载阶段开始进行之后，就会有linking中的动作要开始执行了，比如校验：检查字节码文件的格式等。</p>
+
+<p>但是开始的顺序肯定是 加载先开始，然后校验再开始。</p>
+
+<h3 id="linking---1-校验-verification">Linking - 1 校验 Verification</h3>
+
+<p>说加载的时候说了一万次二进制字节流，通过对加载阶段的了解，我们可以知道在字节码这个环节我们多少还是可以皮一下的。
+所以JVM一定会对这些个二进制字节流进行校验。</p>
+
+<p>瞄了一眼jvms 校验这块真的好长啊，大致可以分为以下四类校验。</p>
+
+<p>挑几个好玩的记录一下。</p>
+
+<ol>
+  <li>文件格式校验</li>
+</ol>
+
+<p>该验证阶段的主要目的是保证输入的字节流能正确地解析并存储于方法区之内，格式上符合描述一个Java类型信息的要求。</p>
+
+<p>这阶段的验证是基于二进制字节流进行的，只有通过了这个阶段的验证之后，这段字节流才被允许进入Java虚拟机内存的方法区中进行存储，所以后面的三个验证阶段 全部是基于方法区的存储结构上进行的，不会再直接读取、操作字节流了。</p>
+
+<p>比如：是否以魔数<strong>0xCAFEBABE</strong>开头</p>
+
+<ol>
+  <li>元数据校验</li>
+</ol>
+
+<p>第二阶段是对字节码描述的信息进行语义分析。
+有点像检查语法错误一样，主要是保证这些信息符合jls。</p>
+
+<ol>
+  <li>字节码校验</li>
+</ol>
+
+<p>简单的说就是“检查代码”。</p>
+
+<p>主要目的是通过数据流分析和控制流分析，确定程序语义是合法的、符合逻辑的。
+这阶段要对类的方法体(Class文件中的Code属性)进行校验分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的行为。</p>
+
+<p>然后这事儿就很麻烦（“停机问题”(Halting Problem)），最终在JDK 6之后的Javac编译器和Java虚拟机里进行了一项联合优化，把尽可能多的校验辅助措施挪到Javac编译器里进行。</p>
+
+<p>具体做法是给方法体Code属性的属性表中新增加了一项名为“StackMapTable”的新属性，这项属性描述了方法体所有的基本块(Basic Block，指按照控制流拆分的代码块)开始时本地变量表和操作栈应有的状态。</p>
+
+<p>在字节码验证期间，Java虚拟机就不需要根据程序推导这些状态的合法性，只需要检查StackMapTable属性中的记录是否合法即可。</p>
+
+<p>将字节码验证的类型推导转变为类型检查，从而节省了大量校验时间。</p>
+
+<ol>
+  <li>符号引用校验<br />
+这个校验发生在 JVM 将符号引用转化为直接引用的时候，而这个转化行为发生在解析阶段。</li>
+</ol>
+
+<h3 id="linking---准备-preparation">linking - 准备 Preparation</h3>
+
+<p>准备阶段是正式为类变量(the static fields for a class or interface)分配内存并设置类变量初始值的阶段.</p>
+
+<p>这些变量所使用的内存都应当在方法区中进行分配，但是方法区本身是个抽象概念，Java8之前是永久代实现方法区，所以分配在永久代（假设有），Java8开始用元空间替换永久代，以前永久代的一部分数据现在被安排去了Heap中，这里面就包括类变量。</p>
+
+<p>并且这里设置类变量的初始值的时候，设置的是这个变量所属类型的0值。
+例如 <code class="language-plaintext highlighter-rouge">public static int i = 123;</code> 在这个阶段就是i=0，123这个值要等到类初始化阶段，类构造器<clinet>()方法里面，putstatic指令把123给到i.</clinet></p>
+
+<p>但是像<code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>这种则会直接赋值为<code class="language-plaintext highlighter-rouge">0x7fffffff</code>，因为它的定义是<code class="language-plaintext highlighter-rouge">public static final int   MAX_VALUE = 0x7fffffff;</code> 多了个final，这个值不可变，那么在编译阶段，也就是javac干活的时候会给 MAX_VALUE 生成 ConstantValue 属性，等到准备阶段，JVM 会根据 ConstantValue 来初始化 MAX_VALUE 的值。</p>
+
+<h3 id="解析-resolution">解析 Resolution</h3>
+
+<p>解析阶段是Java虚拟机将常量池内的符号引用替换为直接引用的过程.</p>
+
+<p>符号引用(Symbolic References):</p>
+
+<p>符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。</p>
+
+<p>直接引用(Direct References):</p>
+
+<p>直接引用是可以直接指向目标的指针、相对偏移量或者是一个能间接定位到目标的句柄。</p>
+
+<hr />
+<p>TODO 需要重新思考这部分内容。</p>
+
+<p>直接引用是和虚拟机实现的内存布局直接相关的，同一个符号引用在不同虚拟机实现上翻译出来的直接引用一般不会相同。如果有了直接引用，那引用的目标必定已经在虚拟机的内存中存在。</p>
+
+<p>JVMS只规定了解析发生的时间需要在执行操作符号引用的字节码指令之前，具体是类加载时就解析还是要用的时候再解析要根据不同JVM自身实现来看。</p>
+
+<p>对同一个符号引用进行多次解析 和 一次解析之后缓存解析结果 这两种情况都是存在的。</p>
+
+<p>比如对于invokedynamic这种用于动态语言支持的指令，就肯定每次都要重新解析。</p>
+
+<p>解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符这7 类符号引用进行，分别对应于常量池的CONSTANT_Class_info、CONSTANT_Fieldref_info、 CONSTANT_M ethodref_info、CONSTANT_InterfaceM ethodref_info、 CONSTANT_MethodType_info、CONSTANT_MethodHandle_info、CONSTANT_Dyna-mic_info和
+CONSTANT_InvokeDynamic_info 8种常量类型。</p>
+
+<hr />
+
+<h3 id="初始化--initialization">初始化  initialization</h3>
+<p>初始化阶段就是执行类构造器<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法的过程。</p>
+
+<p>除了通过自定义类加载器的方式局部参与之外，其他的动作全部由JVM控制。</p>
+
+<h4 id="类构造器方法-clinit">类构造器方法 <code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code></h4>
+<p>这个方法是编译阶段javac根据源代码自动生成的。</p>
+
+<p>·<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法是由编译器自动收集类中的所有<strong>类变量的赋值动作</strong>和<strong>静态语句块</strong><code class="language-plaintext highlighter-rouge">(static{})</code>中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序决定的。</p>
+
+<hr />
+
+<p>TODO  考虑移除这个种阻塞的描述</p>
+
+<p>JVM必须保证一个类的<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法在多线程环境中被正确地加锁同步，如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法，其他线程都需要阻塞等待，直到活动线程执行完毕<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法。如果在一个类的<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法中有耗时很长的操作，那就可能造成多个进程阻塞，在实际应用中这种阻塞往往是很隐蔽的。</p>
+
+<p>同一个类加载器下，一个类型就初始化一次，虽然其他线程会被阻塞，但是只要干活儿的那个线程退出<code class="language-plaintext highlighter-rouge">&lt;clinit&gt;()</code>方法之后，其他阻塞线程唤醒后不会再进入该方法。
+___</p>
+
+<h4 id="必须执行初始化的六种情况">必须执行初始化的六种情况</h4>
+
+<p>TODO 很明显这六种必须初始化的情况都属于 类可能是第一次被使用的情况。 考虑移除。</p>
+
+<ol>
+  <li>遇到这四种字节码指令时：new getstatic putstatic invokestatic。</li>
+</ol>
+
+<p>如果遇到这些字节码指令，但是类型还没有初始化时，要先初始化。</p>
+
+<p>对应的代码场景为：</p>
+
+<p>new 对象的时候。</p>
+
+<p>读取或设置一个类型的静态字段(被final修饰、已在编译期把结果放入常量池的静态字段除外，如Integet.MAX_VALUE)
+的时候。</p>
+
+<p>调用一个类型的静态方法的时候。</p>
+
+<ol>
+  <li>使用java.lang.reflect包的方法对类型进行反射调用的时候</li>
+</ol>
+
+<p>如果类型没有进行过初始化，则需要先触发其初始化。</p>
+
+<ol>
+  <li>
+    <p>当初始化类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+  </li>
+  <li>
+    <p>当虚拟机启动时，用户需要指定一个要执行的主类(包含main()方法的那个类)，虚拟机会先
+初始化这个主类。</p>
+  </li>
+  <li>
+    <p>当使用JDK 7新加入的动态语言支持时。
+如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic、REF_newInvokeSpecial四种类型的方法句柄，并且这个方法句柄对应的类没有进行过初始化，则需要先触发其初始化。</p>
+  </li>
+  <li>
+    <p>当一个接口中定义了JDK 8新加入的默认方法(被default关键字修饰的接口方法)时，如果有 这个接口的实现类发生了初始化，那该接口要在其之前被初始化。</p>
+  </li>
+</ol>
+
+<p>以上场景中的行为统称为对一个类型进行<strong>主动引用</strong>。</p>
+
+<p>有主动肯定还有<strong>被动引用</strong>。</p>
+
+<h2 id="类加载器">类加载器</h2>
+
+<p>能实现 <strong>通过一个类的全限定名来获取描述该类的二进制字节流</strong> 这个功能的代码，都叫类加载器。</p>
+
+<h3 id="类和类加载器">类和类加载器</h3>
+
+<p>对于任意一个类，都必须由加载它的类加载器和这个类本身一起共同确立其在Java虚拟机中的唯一性。</p>
+
+<p>每一个类加载器，都拥有一个独立的类名称空间。</p>
+
+<p>两个类是否相等必须是处于同一个类加载器下面，否则哪怕是同一个class文件被同一个VM加载，只要加载器不同，这俩类就不一样，equals() isAssignableFrom(),isInstance()等都受到类加载器的影响。</p>
+
+<p>这个验证也很好验证，自己创建一个类A和一个类加载器CL，然后用CL加载一个A出来，去跟直接new的比。</p>
+
+<h3 id="双亲委派-parents-delegation-model">双亲委派 parents delegation model</h3>
+<p>翻译导致误解的又一个例子，歧义有点多，反正我第一次看到这个词以为是从双亲向下递归，结果它是反着来的。</p>
+
+<p>在JVM的视角，只存在两种不同的类加载器.</p>
+
+<p>启动类加载器（Bootstrap ClassLoader)，由C++实现（也有java写的关机方法通过JNI回调c），是JVM自身的一部分；</p>
+
+<p>另一种就是其他类加载器，独立于JVM之外，由java语言实现的，全部继承自抽象类java.lang.ClassLoader。</p>
+
+<p>Extension ClassLoader</p>
+
+<p>Application ClassLoader</p>
+
+<p>双亲委派模型的工作过程是:</p>
+
+<p>如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求(它的搜索范围中没有找到所需的类)时，子加载器才会尝试自己去完成加载。</p>
+
+<p>但它不是一个强制性约束。</p>
+
+<h3 id="破坏双亲委派模型">破坏双亲委派模型</h3>
+
+<p>Java发展的历史上出现过三次大规模破坏双亲委派模型的情况。
+Java9之后顺便发生了第四次。</p>
+
+<ol>
+  <li>
+    <p>第一次导致模型被破坏是双亲委派模型诞生之前。
+java.lang.ClassLoader在Java第一个版本就存在了，搞出来好多自定义的classLoader，但是双亲委派模型从Jdk1.2开始引入，为了向前兼容，无法用技术手段避免loadClass()被子类覆盖的可能性，只能在JDK 1.2之后的java.lang.ClassLoader中添加一个新的 protected方法findClass()，并引导用户编写的类加载逻辑时尽可能去重写这个方法，而不是在 loadClass()中编写代码。</p>
+  </li>
+  <li>
+    <p>第二次被破坏是由于模型自身的短板</p>
+  </li>
+</ol>
+
+<p>双亲委派很好地解决了各个类 加载器协作时基础类型的一致性问题(越基础的类由越上层的加载器进行加载)，基础类型之所以被称为“基础”，是因为它们总是作为被用户代码继承、调用的API存在。</p>
+
+<p>但是还存在基础类型又要调用回用户的代码的情况。</p>
+
+<p>然后Java设计团队引入了一个可以逆向的加载器，线程上下文类加载器 (Thread Context ClassLoader)。这个类加载器可以通过java.lang.Thread类的setContext-ClassLoader()方 法进行设置，如果创建线程时还未设置，它将会从父线程中继承一个，如果在应用程序的全局范围内都没有设置过的话，那这个类加载器默认就是应用程序类加载器。</p>
+
+<p>有了这个加载器，就可以做出父类加载器去请求子类加载器完成类加载的行为。</p>
+
+<p>Java中涉及SPI的加载基本上都采用这种方式来完成，例如JNDI、 JDBC、JCE、JAXB和JBI等。不过，当SPI的服务提供者多于一个的时候，代码就只能根据具体提供 者的类型来硬编码判断，为了消除这种极不优雅的实现方式，在JDK 6时，JDK提供了 java.util.ServiceLoader类，以M ETA-INF/services中的配置信息，辅以责任链模式，这才算是给SPI的加 载提供了一种相对合理的解决方案。</p>
+
+<ol>
+  <li>热部署</li>
+</ol>
+
+<p>OSGi模块化热部署。 核心就是自定义的类加载机制，每个bundle都有自己的类加载器，需要热替换的时候，连bunlde带它的类加载器一起替换。</p>
+
+<ol>
+  <li>模块化</li>
+</ol>
+
+<p>双亲委派模型基本还存在，但是发生了一丢丢变化，委派给父加载器之前要先判断下能不能归属到某个系统模块，如果可以就优先委派给负责该模块的加载器。</p>
+
+<blockquote>
+  <p><strong>Run-time Built-in Class Loaders</strong> <br />
+The Java run-time has the following built-in class loaders:<br /><br />
+<strong><em>Bootstrap class loader</em></strong> <br /> It is the virtual machine’s built-in class loader, typically represented as null, and does not have a parent.<br />
+<strong><em>Platform class loader</em></strong> <br />All platform classes are visible to the platform class loader that can be used as the parent of a ClassLoader instance. Platform classes include Java SE platform APIs, their implementation classes and JDK-specific run-time classes that are defined by the platform class loader or its ancestors.<br />
+To allow for upgrading/overriding of modules defined to the platform class loader, and where upgraded modules read modules defined to class loaders other than the platform class loader and its ancestors, then the platform class loader may have to delegate to other class loaders, the application class loader for example. In other words, classes in named modules defined to class loaders other than the platform class loader and its ancestors may be visible to the platform class loader.<br />
+<strong><em>System class loader</em></strong> <br />It is also known as application class loader and is distinct from the platform class loader. The system class loader is typically used to define classes on the application class path, module path, and JDK-specific tools. The platform class loader is a parent or an ancestor of the system class loader that all platform classes are visible to it.</p>
+</blockquote>
+
+<p>更多细节参考：
+<a href="https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html">JDK9-Docs-ClassLoader</a></p>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/images/blog-cover.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; Lament's Mage Tower &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/scroll/">Scroll</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/JVM-Runtime-Data-Area">JVM-RuntimeDataArea</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/JVM-Overview">JVM Overview</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/in-the-end">2019年终总结</a></li>
+                                        
+                                    
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/scroll/">
+                                
+                                    See all 3 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/JVM-Runtime-Data-Area">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM-RuntimeDataArea</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+                <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
+            
+            <span>Lament's Mage Tower</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">JVM-类加载笔记-草稿</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%AC%94%E8%AE%B0-%E8%8D%89%E7%A8%BF&amp;url=https://lament-z.comclassloading"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comclassloading"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="/assets/js/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B47LPLXBQP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B47LPLXBQP');
+</script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>

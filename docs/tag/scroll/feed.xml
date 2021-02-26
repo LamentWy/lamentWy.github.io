@@ -1,0 +1,789 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom" >
+  <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
+  <link href="http://localhost:4000/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
+  <updated>2021-02-26T18:17:02+08:00</updated>
+  <id>http://localhost:4000/tag/scroll/feed.xml</id>
+
+  
+  
+  
+
+  
+    <title type="html">Lament’s Mage Tower | </title>
+  
+
+  
+    <subtitle>Neutral, sometimes chaotic neutral</subtitle>
+  
+
+  
+
+  
+    
+      
+    
+  
+
+  
+  
+
+  
+    <entry>
+      <title type="html">JVM-类加载笔记-草稿</title>
+      <link href="http://localhost:4000/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" />
+      <published>2021-01-17T00:00:00+08:00</published>
+      <updated>2021-01-17T00:00:00+08:00</updated>
+      <id>http://localhost:4000/classloading</id>
+      <content type="html" xml:base="http://localhost:4000/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
+
+&lt;p&gt;Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。&lt;/p&gt;
+
+&lt;h2 id=&quot;类加载的整个生命周期&quot;&gt;类加载的整个生命周期&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/class-life-circle.jpg&quot; alt=&quot;pic of class life circle&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中验证、准备、解析三个阶段统称为：连接 Linking。&lt;/p&gt;
+
+&lt;p&gt;图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。&lt;/p&gt;
+
+&lt;h3 id=&quot;加载-loading&quot;&gt;加载 Loading&lt;/h3&gt;
+
+&lt;p&gt;加载阶段JVM要完成三件事：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;通过类的全限定名拿到这个类的二进制字节流。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把这个字节流转化成方法区的运行时数据结构。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。&lt;/p&gt;
+
+&lt;p&gt;这一步就有很多方式:&lt;/p&gt;
+
+&lt;p&gt;比如从jar,war中读取&lt;/p&gt;
+
+&lt;p&gt;运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。&lt;/p&gt;
+
+&lt;p&gt;从其他文件中生成类，比如jsp。&lt;/p&gt;
+
+&lt;p&gt;不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。&lt;/p&gt;
+
+&lt;p&gt;加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。&lt;/p&gt;
+
+&lt;p&gt;数组又不太一样。&lt;/p&gt;
+
+&lt;p&gt;数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。
+首先它有俩类型，一个element type ,一个component type.&lt;/p&gt;
+
+&lt;p&gt;component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。&lt;/p&gt;
+
+&lt;p&gt;这个element type就很绕了，但实际麻烦的是component type，先上原文。&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The component type of an array may itself be an array type.
+The components of such an array may contain references to subarrays.
+If, starting from any array type, one considers its component type, and then (if that is also an array type) the component type of that type, and so on, eventually one must reach a component type that is not an array type; this is called the element type of the original array, and the components at this level of the data structure are called the elements of the original array.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这也是《深入》一书中所说的去掉所有维度的类型。&lt;/p&gt;
+
+&lt;p&gt;就是数组中的元素可以是数组，而且这个嵌套可以一直往下套，一直套到最后这个数组它的元素不是数组为止，这个不是数组的元素的类型就叫元素类型。说白了就是数组套娃套完之后的类型。数组的元素类型最终依然需要类加载器来加载。&lt;/p&gt;
+
+&lt;p&gt;而数组的组件类型如果是引用类型的话，就要通过递归的方式加载组件类型，然后标识在对应的类加载器的 类命名空间上。
+不是引用类型，则是把标识与引导类加载器关联。&lt;/p&gt;
+
+&lt;p&gt;加载阶段开始进行之后，就会有linking中的动作要开始执行了，比如校验：检查字节码文件的格式等。&lt;/p&gt;
+
+&lt;p&gt;但是开始的顺序肯定是 加载先开始，然后校验再开始。&lt;/p&gt;
+
+&lt;h3 id=&quot;linking---1-校验-verification&quot;&gt;Linking - 1 校验 Verification&lt;/h3&gt;
+
+&lt;p&gt;说加载的时候说了一万次二进制字节流，通过对加载阶段的了解，我们可以知道在字节码这个环节我们多少还是可以皮一下的。
+所以JVM一定会对这些个二进制字节流进行校验。&lt;/p&gt;
+
+&lt;p&gt;瞄了一眼jvms 校验这块真的好长啊，大致可以分为以下四类校验。&lt;/p&gt;
+
+&lt;p&gt;挑几个好玩的记录一下。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;文件格式校验&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;该验证阶段的主要目的是保证输入的字节流能正确地解析并存储于方法区之内，格式上符合描述一个Java类型信息的要求。&lt;/p&gt;
+
+&lt;p&gt;这阶段的验证是基于二进制字节流进行的，只有通过了这个阶段的验证之后，这段字节流才被允许进入Java虚拟机内存的方法区中进行存储，所以后面的三个验证阶段 全部是基于方法区的存储结构上进行的，不会再直接读取、操作字节流了。&lt;/p&gt;
+
+&lt;p&gt;比如：是否以魔数&lt;strong&gt;0xCAFEBABE&lt;/strong&gt;开头&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;元数据校验&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;第二阶段是对字节码描述的信息进行语义分析。
+有点像检查语法错误一样，主要是保证这些信息符合jls。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;字节码校验&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;简单的说就是“检查代码”。&lt;/p&gt;
+
+&lt;p&gt;主要目的是通过数据流分析和控制流分析，确定程序语义是合法的、符合逻辑的。
+这阶段要对类的方法体(Class文件中的Code属性)进行校验分析，保证被校验类的方法在运行时不会做出危害虚拟机安全的行为。&lt;/p&gt;
+
+&lt;p&gt;然后这事儿就很麻烦（“停机问题”(Halting Problem)），最终在JDK 6之后的Javac编译器和Java虚拟机里进行了一项联合优化，把尽可能多的校验辅助措施挪到Javac编译器里进行。&lt;/p&gt;
+
+&lt;p&gt;具体做法是给方法体Code属性的属性表中新增加了一项名为“StackMapTable”的新属性，这项属性描述了方法体所有的基本块(Basic Block，指按照控制流拆分的代码块)开始时本地变量表和操作栈应有的状态。&lt;/p&gt;
+
+&lt;p&gt;在字节码验证期间，Java虚拟机就不需要根据程序推导这些状态的合法性，只需要检查StackMapTable属性中的记录是否合法即可。&lt;/p&gt;
+
+&lt;p&gt;将字节码验证的类型推导转变为类型检查，从而节省了大量校验时间。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;符号引用校验&lt;br /&gt;
+这个校验发生在 JVM 将符号引用转化为直接引用的时候，而这个转化行为发生在解析阶段。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;linking---准备-preparation&quot;&gt;linking - 准备 Preparation&lt;/h3&gt;
+
+&lt;p&gt;准备阶段是正式为类变量(the static fields for a class or interface)分配内存并设置类变量初始值的阶段.&lt;/p&gt;
+
+&lt;p&gt;这些变量所使用的内存都应当在方法区中进行分配，但是方法区本身是个抽象概念，Java8之前是永久代实现方法区，所以分配在永久代（假设有），Java8开始用元空间替换永久代，以前永久代的一部分数据现在被安排去了Heap中，这里面就包括类变量。&lt;/p&gt;
+
+&lt;p&gt;并且这里设置类变量的初始值的时候，设置的是这个变量所属类型的0值。
+例如 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;public static int i = 123;&lt;/code&gt; 在这个阶段就是i=0，123这个值要等到类初始化阶段，类构造器&lt;clinet&gt;()方法里面，putstatic指令把123给到i.&lt;/clinet&gt;&lt;/p&gt;
+
+&lt;p&gt;但是像&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer.MAX_VALUE&lt;/code&gt;这种则会直接赋值为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0x7fffffff&lt;/code&gt;，因为它的定义是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;public static final int   MAX_VALUE = 0x7fffffff;&lt;/code&gt; 多了个final，这个值不可变，那么在编译阶段，也就是javac干活的时候会给 MAX_VALUE 生成 ConstantValue 属性，等到准备阶段，JVM 会根据 ConstantValue 来初始化 MAX_VALUE 的值。&lt;/p&gt;
+
+&lt;h3 id=&quot;解析-resolution&quot;&gt;解析 Resolution&lt;/h3&gt;
+
+&lt;p&gt;解析阶段是Java虚拟机将常量池内的符号引用替换为直接引用的过程.&lt;/p&gt;
+
+&lt;p&gt;符号引用(Symbolic References):&lt;/p&gt;
+
+&lt;p&gt;符号引用以一组符号来描述所引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。&lt;/p&gt;
+
+&lt;p&gt;直接引用(Direct References):&lt;/p&gt;
+
+&lt;p&gt;直接引用是可以直接指向目标的指针、相对偏移量或者是一个能间接定位到目标的句柄。&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;TODO 需要重新思考这部分内容。&lt;/p&gt;
+
+&lt;p&gt;直接引用是和虚拟机实现的内存布局直接相关的，同一个符号引用在不同虚拟机实现上翻译出来的直接引用一般不会相同。如果有了直接引用，那引用的目标必定已经在虚拟机的内存中存在。&lt;/p&gt;
+
+&lt;p&gt;JVMS只规定了解析发生的时间需要在执行操作符号引用的字节码指令之前，具体是类加载时就解析还是要用的时候再解析要根据不同JVM自身实现来看。&lt;/p&gt;
+
+&lt;p&gt;对同一个符号引用进行多次解析 和 一次解析之后缓存解析结果 这两种情况都是存在的。&lt;/p&gt;
+
+&lt;p&gt;比如对于invokedynamic这种用于动态语言支持的指令，就肯定每次都要重新解析。&lt;/p&gt;
+
+&lt;p&gt;解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符这7 类符号引用进行，分别对应于常量池的CONSTANT_Class_info、CONSTANT_Fieldref_info、 CONSTANT_M ethodref_info、CONSTANT_InterfaceM ethodref_info、 CONSTANT_MethodType_info、CONSTANT_MethodHandle_info、CONSTANT_Dyna-mic_info和
+CONSTANT_InvokeDynamic_info 8种常量类型。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;初始化--initialization&quot;&gt;初始化  initialization&lt;/h3&gt;
+&lt;p&gt;初始化阶段就是执行类构造器&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法的过程。&lt;/p&gt;
+
+&lt;p&gt;除了通过自定义类加载器的方式局部参与之外，其他的动作全部由JVM控制。&lt;/p&gt;
+
+&lt;h4 id=&quot;类构造器方法-clinit&quot;&gt;类构造器方法 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;&lt;/h4&gt;
+&lt;p&gt;这个方法是编译阶段javac根据源代码自动生成的。&lt;/p&gt;
+
+&lt;p&gt;·&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法是由编译器自动收集类中的所有&lt;strong&gt;类变量的赋值动作&lt;/strong&gt;和&lt;strong&gt;静态语句块&lt;/strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(static{})&lt;/code&gt;中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序决定的。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;TODO  考虑移除这个种阻塞的描述&lt;/p&gt;
+
+&lt;p&gt;JVM必须保证一个类的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法在多线程环境中被正确地加锁同步，如果多个线程同时去初始化一个类，那么只会有其中一个线程去执行这个类的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法，其他线程都需要阻塞等待，直到活动线程执行完毕&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法。如果在一个类的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法中有耗时很长的操作，那就可能造成多个进程阻塞，在实际应用中这种阻塞往往是很隐蔽的。&lt;/p&gt;
+
+&lt;p&gt;同一个类加载器下，一个类型就初始化一次，虽然其他线程会被阻塞，但是只要干活儿的那个线程退出&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;clinit&amp;gt;()&lt;/code&gt;方法之后，其他阻塞线程唤醒后不会再进入该方法。
+___&lt;/p&gt;
+
+&lt;h4 id=&quot;必须执行初始化的六种情况&quot;&gt;必须执行初始化的六种情况&lt;/h4&gt;
+
+&lt;p&gt;TODO 很明显这六种必须初始化的情况都属于 类可能是第一次被使用的情况。 考虑移除。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;遇到这四种字节码指令时：new getstatic putstatic invokestatic。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果遇到这些字节码指令，但是类型还没有初始化时，要先初始化。&lt;/p&gt;
+
+&lt;p&gt;对应的代码场景为：&lt;/p&gt;
+
+&lt;p&gt;new 对象的时候。&lt;/p&gt;
+
+&lt;p&gt;读取或设置一个类型的静态字段(被final修饰、已在编译期把结果放入常量池的静态字段除外，如Integet.MAX_VALUE)
+的时候。&lt;/p&gt;
+
+&lt;p&gt;调用一个类型的静态方法的时候。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;使用java.lang.reflect包的方法对类型进行反射调用的时候&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果类型没有进行过初始化，则需要先触发其初始化。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;当初始化类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当虚拟机启动时，用户需要指定一个要执行的主类(包含main()方法的那个类)，虚拟机会先
+初始化这个主类。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当使用JDK 7新加入的动态语言支持时。
+如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic、REF_newInvokeSpecial四种类型的方法句柄，并且这个方法句柄对应的类没有进行过初始化，则需要先触发其初始化。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当一个接口中定义了JDK 8新加入的默认方法(被default关键字修饰的接口方法)时，如果有 这个接口的实现类发生了初始化，那该接口要在其之前被初始化。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;以上场景中的行为统称为对一个类型进行&lt;strong&gt;主动引用&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;有主动肯定还有&lt;strong&gt;被动引用&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;类加载器&quot;&gt;类加载器&lt;/h2&gt;
+
+&lt;p&gt;能实现 &lt;strong&gt;通过一个类的全限定名来获取描述该类的二进制字节流&lt;/strong&gt; 这个功能的代码，都叫类加载器。&lt;/p&gt;
+
+&lt;h3 id=&quot;类和类加载器&quot;&gt;类和类加载器&lt;/h3&gt;
+
+&lt;p&gt;对于任意一个类，都必须由加载它的类加载器和这个类本身一起共同确立其在Java虚拟机中的唯一性。&lt;/p&gt;
+
+&lt;p&gt;每一个类加载器，都拥有一个独立的类名称空间。&lt;/p&gt;
+
+&lt;p&gt;两个类是否相等必须是处于同一个类加载器下面，否则哪怕是同一个class文件被同一个VM加载，只要加载器不同，这俩类就不一样，equals() isAssignableFrom(),isInstance()等都受到类加载器的影响。&lt;/p&gt;
+
+&lt;p&gt;这个验证也很好验证，自己创建一个类A和一个类加载器CL，然后用CL加载一个A出来，去跟直接new的比。&lt;/p&gt;
+
+&lt;h3 id=&quot;双亲委派-parents-delegation-model&quot;&gt;双亲委派 parents delegation model&lt;/h3&gt;
+&lt;p&gt;翻译导致误解的又一个例子，歧义有点多，反正我第一次看到这个词以为是从双亲向下递归，结果它是反着来的。&lt;/p&gt;
+
+&lt;p&gt;在JVM的视角，只存在两种不同的类加载器.&lt;/p&gt;
+
+&lt;p&gt;启动类加载器（Bootstrap ClassLoader)，由C++实现（也有java写的关机方法通过JNI回调c），是JVM自身的一部分；&lt;/p&gt;
+
+&lt;p&gt;另一种就是其他类加载器，独立于JVM之外，由java语言实现的，全部继承自抽象类java.lang.ClassLoader。&lt;/p&gt;
+
+&lt;p&gt;Extension ClassLoader&lt;/p&gt;
+
+&lt;p&gt;Application ClassLoader&lt;/p&gt;
+
+&lt;p&gt;双亲委派模型的工作过程是:&lt;/p&gt;
+
+&lt;p&gt;如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求(它的搜索范围中没有找到所需的类)时，子加载器才会尝试自己去完成加载。&lt;/p&gt;
+
+&lt;p&gt;但它不是一个强制性约束。&lt;/p&gt;
+
+&lt;h3 id=&quot;破坏双亲委派模型&quot;&gt;破坏双亲委派模型&lt;/h3&gt;
+
+&lt;p&gt;Java发展的历史上出现过三次大规模破坏双亲委派模型的情况。
+Java9之后顺便发生了第四次。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;第一次导致模型被破坏是双亲委派模型诞生之前。
+java.lang.ClassLoader在Java第一个版本就存在了，搞出来好多自定义的classLoader，但是双亲委派模型从Jdk1.2开始引入，为了向前兼容，无法用技术手段避免loadClass()被子类覆盖的可能性，只能在JDK 1.2之后的java.lang.ClassLoader中添加一个新的 protected方法findClass()，并引导用户编写的类加载逻辑时尽可能去重写这个方法，而不是在 loadClass()中编写代码。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;第二次被破坏是由于模型自身的短板&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;双亲委派很好地解决了各个类 加载器协作时基础类型的一致性问题(越基础的类由越上层的加载器进行加载)，基础类型之所以被称为“基础”，是因为它们总是作为被用户代码继承、调用的API存在。&lt;/p&gt;
+
+&lt;p&gt;但是还存在基础类型又要调用回用户的代码的情况。&lt;/p&gt;
+
+&lt;p&gt;然后Java设计团队引入了一个可以逆向的加载器，线程上下文类加载器 (Thread Context ClassLoader)。这个类加载器可以通过java.lang.Thread类的setContext-ClassLoader()方 法进行设置，如果创建线程时还未设置，它将会从父线程中继承一个，如果在应用程序的全局范围内都没有设置过的话，那这个类加载器默认就是应用程序类加载器。&lt;/p&gt;
+
+&lt;p&gt;有了这个加载器，就可以做出父类加载器去请求子类加载器完成类加载的行为。&lt;/p&gt;
+
+&lt;p&gt;Java中涉及SPI的加载基本上都采用这种方式来完成，例如JNDI、 JDBC、JCE、JAXB和JBI等。不过，当SPI的服务提供者多于一个的时候，代码就只能根据具体提供 者的类型来硬编码判断，为了消除这种极不优雅的实现方式，在JDK 6时，JDK提供了 java.util.ServiceLoader类，以M ETA-INF/services中的配置信息，辅以责任链模式，这才算是给SPI的加 载提供了一种相对合理的解决方案。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;热部署&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;OSGi模块化热部署。 核心就是自定义的类加载机制，每个bundle都有自己的类加载器，需要热替换的时候，连bunlde带它的类加载器一起替换。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;模块化&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;双亲委派模型基本还存在，但是发生了一丢丢变化，委派给父加载器之前要先判断下能不能归属到某个系统模块，如果可以就优先委派给负责该模块的加载器。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Run-time Built-in Class Loaders&lt;/strong&gt; &lt;br /&gt;
+The Java run-time has the following built-in class loaders:&lt;br /&gt;&lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;Bootstrap class loader&lt;/em&gt;&lt;/strong&gt; &lt;br /&gt; It is the virtual machine’s built-in class loader, typically represented as null, and does not have a parent.&lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;Platform class loader&lt;/em&gt;&lt;/strong&gt; &lt;br /&gt;All platform classes are visible to the platform class loader that can be used as the parent of a ClassLoader instance. Platform classes include Java SE platform APIs, their implementation classes and JDK-specific run-time classes that are defined by the platform class loader or its ancestors.&lt;br /&gt;
+To allow for upgrading/overriding of modules defined to the platform class loader, and where upgraded modules read modules defined to class loaders other than the platform class loader and its ancestors, then the platform class loader may have to delegate to other class loaders, the application class loader for example. In other words, classes in named modules defined to class loaders other than the platform class loader and its ancestors may be visible to the platform class loader.&lt;br /&gt;
+&lt;strong&gt;&lt;em&gt;System class loader&lt;/em&gt;&lt;/strong&gt; &lt;br /&gt;It is also known as application class loader and is distinct from the platform class loader. The system class loader is typically used to define classes on the application class path, module path, and JDK-specific tools. The platform class loader is a parent or an ancestor of the system class loader that all platform classes are visible to it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;更多细节参考：
+&lt;a href=&quot;https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html&quot;&gt;JDK9-Docs-ClassLoader&lt;/a&gt;&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">笔记</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">JVM-RuntimeDataArea</title>
+      <link href="http://localhost:4000/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" />
+      <published>2020-12-28T00:00:00+08:00</published>
+      <updated>2020-12-28T00:00:00+08:00</updated>
+      <id>http://localhost:4000/JVM-Runtime-Data-Area</id>
+      <content type="html" xml:base="http://localhost:4000/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+
+&lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/runtime-data-area-v1.jpg&quot; alt=&quot;RT Data Areas Overview&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。&lt;/p&gt;
+
+&lt;h2 id=&quot;使用方法&quot;&gt;使用方法&lt;/h2&gt;
+
+&lt;p&gt;一边画图一边看，画一块看一块。
+  过完一遍之后，擦了重来，哪里忘了看哪里。&lt;/p&gt;
+
+&lt;h2 id=&quot;详解&quot;&gt;详解&lt;/h2&gt;
+
+&lt;p&gt;下图可以更直观的区分不同数据区域:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/runtime-data-area-v2.jpg&quot; alt=&quot;RT Data Areas with Thread&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。&lt;/p&gt;
+
+&lt;p&gt;而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。&lt;/p&gt;
+
+&lt;p&gt;接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。&lt;/p&gt;
+
+&lt;h3 id=&quot;程序计数器-the-program-counter-register&quot;&gt;程序计数器 (The Program Counter Register)&lt;/h3&gt;
+
+&lt;p&gt;程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。&lt;/p&gt;
+
+&lt;p&gt;JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。&lt;/p&gt;
+
+&lt;p&gt;PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。
+  程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常&quot;&gt;异常&lt;/h4&gt;
+
+&lt;p&gt;唯一一个“规范”中没有定义内存异常的区域。&lt;/p&gt;
+
+&lt;h3 id=&quot;虚拟机栈-jvm-stack&quot;&gt;虚拟机栈 (JVM Stack)&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;这部分摘自《深入理解JAVA虚拟机(第三版)》。 &lt;br /&gt;
+ 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:  &lt;br /&gt;
+ 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。
+ 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/RuntimeDataArea-details.jpg&quot; alt=&quot;RT Data Areas with vm stack details&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每当一个新线程启动的时候，JVM就会给这个线程创建一个 VM Stack，而VM Stack把线程的状态存储在栈帧(Stack Frame)中，JVM对 VM Stack 的直接操作就俩：入栈，出栈（Because the Java Virtual Machine stack is never manipulated directly except to push and pop frames, frames may be heap allocated.）。&lt;/p&gt;
+
+&lt;p&gt;无论是我们写的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;System.out.println(&quot;Hello World&quot;);&lt;/code&gt; 还是别的什么方法，都是基于这个模型完成的。&lt;/p&gt;
+
+&lt;p&gt;”Stack Frame“ ，包括“JVM执行方法时都发生了啥”这里暂时不展开，回头单独开一篇顺便打包上“递归”一起说。&lt;/p&gt;
+
+&lt;p&gt;万一我鸽太久，也可以先看看《Inside the Java Virtual Machine》中的&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm8.html&quot;&gt;The Java Stack&lt;/a&gt;这一节，讲述的非常清晰。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-1&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;该区域中内存无需连续。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-1&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;当线程申请 VM Stack 的深度超过的规定时，抛 &lt;strong&gt;&lt;em&gt;StackOverflowError&lt;/em&gt;&lt;/strong&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当 VM Stack 为可拓展型时，线程需要动态扩展自己的 VM Stack，但空余内存不足时；或者当空余内存不足以初始化线程的 VM Stack 时，抛 &lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;本地方法栈-native-stack&quot;&gt;本地方法栈 (Native Stack)&lt;/h3&gt;
+
+&lt;p&gt;跟VM Stack作用差不多，只不过是调用Native方法。
+  异常情况也是类似。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;em&gt;说完了线程隔离的区域，来看看共享的区域：Heap &amp;amp; Method Area。&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;堆-heap&quot;&gt;堆 (Heap)&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The heap is the run-time data area from which memory for all class instances and arrays is allocated.   – From JVMS.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;所有的类的实例，数组啥的都在堆(Heap)上分配。
+  提到Heap就免不了说一嘴分代，什么新生代老年代永久代，包括元空间blabla，这些是基于“分代收集理论”or某些JVM具体实现引出的说法，Heap在本篇仅限于“JVMS中规定的Heap”这么一个抽象模型。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-2&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;Heap可以是固定大小，也可以是可扩展式的。
+  通常遇到的都是可扩展的，通过-Xmx(maximum heap size ) -Xms(minimum heap size，也称为初始 Heap size)来设定其大小。&lt;/p&gt;
+
+&lt;p&gt;关于某些特定的JVM的这类参数啦、这类参数选项都有啥啦、它们的含义啥的可以参考Oracle的&lt;a href=&quot;https://docs.oracle.com/cd/E21764_01/web.1111/e13814/jvm_tuning.htm#PERFM150&quot;&gt;Tuning Java Virtual Machines&lt;/a&gt;文档。&lt;/p&gt;
+
+&lt;p&gt;关于TLAB(Thread Local Allocation Buffer):&lt;/p&gt;
+
+&lt;p&gt;《深入理解JAVA虚拟机(第三版)》里面提到了，为了提升对象分配时效率，Heap中会划分出多个被线程私有的分配缓冲区，这个缓冲区就是TLAB，里面存的依然是对象的实例或Array。说白了就是从大Heap里分几个小Heap给Thread们拿去用，只是优化的手段，Heap还是Heap。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-2&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如果Heap中剩余内存不够分配给实例or数组，并且也没更多的内存让Heap完成扩展时，抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;方法区-method-area&quot;&gt;方法区 (Method Area)&lt;/h3&gt;
+
+&lt;p&gt;方法区 (Method Area，很多资料也用非堆来将它与堆进行区分)用来存储被JVM加载的：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;类型信息 TypeInformation&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;常量池 The Constant Pool&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;域信息 Field Information&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;方法信息 Method Information&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;类变量 Class Variables  &lt;br /&gt;
+  鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+  举个例子，比如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Integer.MAX_VALUE&lt;/code&gt;中的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MAX_VALUE&lt;/code&gt;这种作为类属性之一，并且被&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static&lt;/code&gt;修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;各种引用等等&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;具体细节单独展开。&lt;/p&gt;
+
+&lt;p&gt;这里的部分翻译参考了&lt;a href=&quot;https://www.ituring.com.cn/article/491755&quot;&gt;Java 中 field 和 variable 区别及相关术语解释&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-3&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;规范中对该区域规定也比较宽松，不需要内存连续，可以是固定大小的也可以是可扩展的。&lt;/p&gt;
+
+&lt;p&gt;还有之前提到的“分代理论”，以前一些JVM按照他们自己的分代设计，用永久代实现了方法区。
+  叫永久可能是这部分存贮的都是些比较”固定”的东西，但是不代表&lt;strong&gt;&lt;em&gt;永久代 == 方法区&lt;/em&gt;&lt;/strong&gt;，也不代表该区域就绝对不进行内存回收。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-3&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;无法满足新的内存分配需求时,抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;运行时常量区-run-time-constant-pool&quot;&gt;运行时常量区 (Run-Time Constant Pool)&lt;/h3&gt;
+
+&lt;p&gt;它是方法区的一部分，规范规定当JVM创建一个类或者接口时，就为该类或对象构建一个运行时常量池。&lt;/p&gt;
+
+&lt;p&gt;写了半天都不太满意，要么不够清楚，要么不够简洁，先挂着&lt;a href=&quot;https://blog.jamesdbloom.com/JVMInternals.html#constant_pool&quot;&gt;别人的吧&lt;/a&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;内存-4&quot;&gt;内存&lt;/h4&gt;
+
+&lt;p&gt;它的内存是从方法区的内存里分配的，受到方法区本身内存大小的限制。&lt;/p&gt;
+
+&lt;h4 id=&quot;异常-4&quot;&gt;异常&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;当创建类(Class)或者接口(Interface)时，运行时常量池需要的内存大于方法区剩余的空余内存,抛&lt;strong&gt;&lt;em&gt;OutOfMemoryError&lt;/em&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;补充说明&quot;&gt;补充说明&lt;/h3&gt;
+
+&lt;h4 id=&quot;heap-和-method-area-的逻辑关系&quot;&gt;Heap 和 Method Area 的逻辑关系。&lt;/h4&gt;
+
+&lt;p&gt;可以看看&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/jvm6.html&quot;&gt;The Heap&lt;/a&gt;下面画的几种关系图。 我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。&lt;/p&gt;
+
+&lt;h4 id=&quot;直接内存-direct-memory&quot;&gt;直接内存 (Direct Memory)&lt;/h4&gt;
+
+&lt;p&gt;该内存区域不属于运行时数据区(Runtime Data Areas)，也不在《Java虚拟机规范》的定义中。
+  比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.&lt;/p&gt;
+
+&lt;h4 id=&quot;nio&quot;&gt;NIO&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;这部分摘自《深入理解JAVA虚拟机(第三版)》。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;NIO(New Input/Output)类，引入了一种基于通道(Channel)与缓冲区 (Buffer)的I/O方式。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.geeksforgeeks.org/java-virtual-machine-jvm-stack-area/&quot;&gt;Java Virtual Machine (JVM) Stack Area&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5&quot;&gt;JVMS-Run-Time Data Areas&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://book.douban.com/subject/34907497/&quot;&gt;深入理解JAVA虚拟机(第三版)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.baeldung.com/native-memory-tracking-in-jvm&quot;&gt;Native Memory Tracking in JVM&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/index.html&quot;&gt;Inside the Java Virtual Machine&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">概述</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">JVM Overview</title>
+      <link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" />
+      <published>2020-12-26T00:00:00+08:00</published>
+      <updated>2020-12-26T00:00:00+08:00</updated>
+      <id>http://localhost:4000/JVM-Overview</id>
+      <content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+
+&lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
+
+&lt;p&gt;因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/JVM-Overview.jpg&quot; alt=&quot;JVM Overview&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;用法&quot;&gt;用法&lt;/h2&gt;
+
+&lt;p&gt;我特别不擅长背东西，通常需要借助一些手段来帮助记忆。&lt;/p&gt;
+
+&lt;p&gt;对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。&lt;/p&gt;
+
+&lt;p&gt;当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。&lt;/p&gt;
+
+&lt;p&gt;当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。&lt;/p&gt;
+
+&lt;p&gt;每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。&lt;/p&gt;
+
+&lt;p&gt;这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。&lt;/p&gt;
+
+&lt;p&gt;当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。&lt;/p&gt;
+
+&lt;p&gt;不至于重演之前用完就忘了的尴尬。&lt;/p&gt;
+
+&lt;h2 id=&quot;一个面试题告诉你什么叫鱼的记忆&quot;&gt;一个面试题告诉你什么叫鱼的记忆&lt;/h2&gt;
+
+&lt;p&gt;这简直就是我鱼的记忆一个典型例子。&lt;/p&gt;
+
+&lt;p&gt;我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+        String str1 = new StringBuilder(&quot;lament&quot;).append(&quot;z&quot;).toString();
+        System.out.println(str1);
+        System.out.println(str1.intern());
+        System.out.println(str1 == str1.intern());
+
+
+        System.out.println();
+
+        String str2 = new StringBuilder(&quot;ja&quot;).append(&quot;va&quot;).toString();
+        System.out.println(str2);
+        System.out.println(str2.intern());
+        System.out.println(str2 == str2.intern());
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。&lt;/p&gt;
+
+&lt;p&gt;这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。&lt;/p&gt;
+
+&lt;p&gt;需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 &lt;em&gt;** Oracle JDK7u / OpenJDK7u HotSpot VM **&lt;/em&gt; 。&lt;/p&gt;
+
+&lt;p&gt;不然你很可能看到两个true XD。&lt;/p&gt;
+
+&lt;p&gt;当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇&lt;a href=&quot;https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html&quot;&gt;解析&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;参考资料&quot;&gt;参考资料&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://book.douban.com/subject/34907497/&quot;&gt;深入理解JAVA虚拟机(第三版)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/specs/jvms/se8/html/index.html&quot;&gt;The Java® Virtual Machine Specification&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">前一阵微信提醒我不要浪费订阅号资源。</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">2019年终总结</title>
+      <link href="http://localhost:4000/in-the-end" rel="alternate" type="text/html" title="2019年终总结" />
+      <published>2019-12-31T00:00:00+08:00</published>
+      <updated>2019-12-31T00:00:00+08:00</updated>
+      <id>http://localhost:4000/in-the-end</id>
+      <content type="html" xml:base="http://localhost:4000/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;blockquote&gt;
+    &lt;blockquote&gt;
+
+      &lt;p&gt;这个博客17年更新了没几次然后就没更了。 &lt;br /&gt;
+当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  &lt;br /&gt;
+短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。&lt;/p&gt;
+    &lt;/blockquote&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;言归正传，总结一下自己的2019.&lt;/p&gt;
+
+&lt;p&gt;年初的时候我给自己定的2019年的目标浓缩为一个词，休息。&lt;/p&gt;
+
+&lt;p&gt;现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。&lt;/p&gt;
+
+&lt;p&gt;头三个月完成了生活环境的变化，并且把作息时间正常化。&lt;/p&gt;
+
+&lt;p&gt;然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。&lt;/p&gt;
+
+&lt;p&gt;养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。&lt;/p&gt;
+
+&lt;p&gt;戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。&lt;/p&gt;
+
+&lt;p&gt;今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。&lt;/p&gt;
+
+&lt;p&gt;另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。&lt;/p&gt;
+
+&lt;p&gt;计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。&lt;/p&gt;
+
+&lt;p&gt;考研的总结已经写了，发在了我专门用来记录&lt;a href=&quot;https://ms.lament-z.com&quot;&gt;考研的blog&lt;/a&gt;下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。&lt;/p&gt;
+
+&lt;p&gt;总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～&lt;/p&gt;
+
+&lt;p&gt;好了流水账写完了，出门跟朋友们跨年咯～&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">小野不是妹纸的2019的反思</summary>
+      
+
+      
+      
+    </entry>
+  
+</feed>

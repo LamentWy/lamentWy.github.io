@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>JVM-RuntimeDataArea</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="/assets/built/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="二" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/JVM-Runtime-Data-Area" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Lament's Mage Tower" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="JVM-RuntimeDataArea" />
+    <meta property="og:description" content="概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张" />
+    <meta property="og:url" content="http://localhost:4000/JVM-Runtime-Data-Area" />
+    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2020-12-28T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2020-12-28T00:00:00+08:00" />
+    <meta property="article:tag" content="Scroll" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JVM-RuntimeDataArea" />
+    <meta name="twitter:description" content="概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Lament's Mage Tower" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Scroll" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Lament's Mage Tower",
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+    },
+    "url": "http://localhost:4000/JVM-Runtime-Data-Area",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/JVM-Runtime-Data-Area"
+    },
+    "description": "概述 《Java虚拟机规范》定义了如下几个运行时数据区： 其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。 使用方法 一边画图一边看，画一块看一块。 过完一遍之后，擦了重来，哪里忘了看哪里。 详解 下图可以更直观的区分不同数据区域: 从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。 而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。 接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。 程序计数器 (The Program Counter Register) 程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。 JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。 PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。 程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。 内存 其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。 异常 唯一一个“规范”中没有定义内存异常的区域。 虚拟机栈 (JVM Stack) 这部分摘自《深入理解JAVA虚拟机(第三版)》。 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型: 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。 啥意思呢，先看下图，主要是右半部分，懒得单独做一张"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="JVM-RuntimeDataArea" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/">
+                  <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
+                  Lament
+                </a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-magical-index" role="menuitem"><a href="/tag/magical-index/">Magical Index</a></li>
+    <li class="nav-alchemy-lab" role="menuitem"><a href="/tag/alchemy-lab/">Alchemy Lab</a></li>
+    <li class="nav-scroll" role="menuitem"><a href="/tag/scroll/">Scroll</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+</ul>
+
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full post tag-scroll no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="28 December 2020">28 December 2020</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/scroll/'>SCROLL</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">JVM-RuntimeDataArea</h1>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h2 id="概述">概述</h2>
+
+<p>《Java虚拟机规范》定义了如下几个运行时数据区：</p>
+
+<p><img src="https://lament-z.com/assets/images/JVM/runtime-data-area-v1.jpg" alt="RT Data Areas Overview" /></p>
+
+<p>其中一些区域随着线程的启动和结束而创建和销毁，另一部分则随着JVM的启动而一直存在到JVM关闭。</p>
+
+<h2 id="使用方法">使用方法</h2>
+
+<p>一边画图一边看，画一块看一块。
+  过完一遍之后，擦了重来，哪里忘了看哪里。</p>
+
+<h2 id="详解">详解</h2>
+
+<p>下图可以更直观的区分不同数据区域:</p>
+
+<p><img src="https://lament-z.com/assets/images/JVM/runtime-data-area-v2.jpg" alt="RT Data Areas with Thread" /></p>
+
+<p>从第二张图可以清晰的看出，虚拟机栈(JVM Stack)、本地方法栈(Native Stack)、以及程序计数器(The Program Counter Register)与线程共生共灭。</p>
+
+<p>而堆（Heap）和方法区（Method Area 也被称作非堆）则被所以线程共享。</p>
+
+<p>接下来逐个介绍每个区域的功能，按照是否线程隔离，先从与线程共生共灭的几种说起。</p>
+
+<h3 id="程序计数器-the-program-counter-register">程序计数器 (The Program Counter Register)</h3>
+
+<p>程序计数器，之后简称为PC Register，简单的说就是记录当前线程执行的字节码所在行号的一小块内存，如果线程执行的是本地方法(Native Method)则记录undefined，其生命周期与线程相同。</p>
+
+<p>JVM的多线程是“分片”式实现：在任意确定时刻，一个处理器(多核CPU则是其中一个核)只都只执行一个线程中的指令（看作一个片）。并发只是不断在各个分片上切换的”假象”。而每个线程的PC Register就是用来保证线程切换后可以正确恢复的关键。</p>
+
+<p>PC Register的工作就是通过改变PC Register存储的值来选取需要执行的下一条字节码指令。
+  程序控制流，如分支、循环、跳转、异常处理、线程恢复等等都依赖这个指示器。</p>
+
+<h4 id="内存">内存</h4>
+
+<p>其内存大小足够持有一个”return Address”或者是一个指定系统的Native pointer，具体到不同版本JVM的实现里是多大没关心过。</p>
+
+<h4 id="异常">异常</h4>
+
+<p>唯一一个“规范”中没有定义内存异常的区域。</p>
+
+<h3 id="虚拟机栈-jvm-stack">虚拟机栈 (JVM Stack)</h3>
+
+<blockquote>
+  <p>这部分摘自《深入理解JAVA虚拟机(第三版)》。 <br />
+ 虚拟机栈(VM Stack)描述的是Java方法执行的线程内存模型:  <br />
+ 每个方法被执行的时候，Java虚拟机都会同步创建一个帧(StackFrame)用于存储局部变量表(Local Variable Array)、操作数栈(Operand Stack)、动态连接、方法出口等信息。
+ 每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+</blockquote>
+
+<p>啥意思呢，先看下图，主要是右半部分，懒得单独做一张 VM Stack 的图了。</p>
+
+<p><img src="https://lament-z.com/assets/images/JVM/RuntimeDataArea-details.jpg" alt="RT Data Areas with vm stack details" /></p>
+
+<p>每当一个新线程启动的时候，JVM就会给这个线程创建一个 VM Stack，而VM Stack把线程的状态存储在栈帧(Stack Frame)中，JVM对 VM Stack 的直接操作就俩：入栈，出栈（Because the Java Virtual Machine stack is never manipulated directly except to push and pop frames, frames may be heap allocated.）。</p>
+
+<p>无论是我们写的<code class="language-plaintext highlighter-rouge">System.out.println("Hello World");</code> 还是别的什么方法，都是基于这个模型完成的。</p>
+
+<p>”Stack Frame“ ，包括“JVM执行方法时都发生了啥”这里暂时不展开，回头单独开一篇顺便打包上“递归”一起说。</p>
+
+<p>万一我鸽太久，也可以先看看《Inside the Java Virtual Machine》中的<a href="https://www.artima.com/insidejvm/ed2/jvm8.html">The Java Stack</a>这一节，讲述的非常清晰。</p>
+
+<h4 id="内存-1">内存</h4>
+
+<p>该区域中内存无需连续。</p>
+
+<h4 id="异常-1">异常</h4>
+
+<ol>
+  <li>
+    <p>当线程申请 VM Stack 的深度超过的规定时，抛 <strong><em>StackOverflowError</em></strong>。</p>
+  </li>
+  <li>
+    <p>当 VM Stack 为可拓展型时，线程需要动态扩展自己的 VM Stack，但空余内存不足时；或者当空余内存不足以初始化线程的 VM Stack 时，抛 <strong><em>OutOfMemoryError</em></strong>。</p>
+  </li>
+</ol>
+
+<h3 id="本地方法栈-native-stack">本地方法栈 (Native Stack)</h3>
+
+<p>跟VM Stack作用差不多，只不过是调用Native方法。
+  异常情况也是类似。</p>
+
+<hr />
+
+<p><em>说完了线程隔离的区域，来看看共享的区域：Heap &amp; Method Area。</em></p>
+
+<h3 id="堆-heap">堆 (Heap)</h3>
+
+<blockquote>
+  <p>The heap is the run-time data area from which memory for all class instances and arrays is allocated.   – From JVMS.</p>
+</blockquote>
+
+<p>所有的类的实例，数组啥的都在堆(Heap)上分配。
+  提到Heap就免不了说一嘴分代，什么新生代老年代永久代，包括元空间blabla，这些是基于“分代收集理论”or某些JVM具体实现引出的说法，Heap在本篇仅限于“JVMS中规定的Heap”这么一个抽象模型。</p>
+
+<h4 id="内存-2">内存</h4>
+
+<p>Heap可以是固定大小，也可以是可扩展式的。
+  通常遇到的都是可扩展的，通过-Xmx(maximum heap size ) -Xms(minimum heap size，也称为初始 Heap size)来设定其大小。</p>
+
+<p>关于某些特定的JVM的这类参数啦、这类参数选项都有啥啦、它们的含义啥的可以参考Oracle的<a href="https://docs.oracle.com/cd/E21764_01/web.1111/e13814/jvm_tuning.htm#PERFM150">Tuning Java Virtual Machines</a>文档。</p>
+
+<p>关于TLAB(Thread Local Allocation Buffer):</p>
+
+<p>《深入理解JAVA虚拟机(第三版)》里面提到了，为了提升对象分配时效率，Heap中会划分出多个被线程私有的分配缓冲区，这个缓冲区就是TLAB，里面存的依然是对象的实例或Array。说白了就是从大Heap里分几个小Heap给Thread们拿去用，只是优化的手段，Heap还是Heap。</p>
+
+<h4 id="异常-2">异常</h4>
+
+<ol>
+  <li>如果Heap中剩余内存不够分配给实例or数组，并且也没更多的内存让Heap完成扩展时，抛<strong><em>OutOfMemoryError</em></strong>。</li>
+</ol>
+
+<h3 id="方法区-method-area">方法区 (Method Area)</h3>
+
+<p>方法区 (Method Area，很多资料也用非堆来将它与堆进行区分)用来存储被JVM加载的：</p>
+
+<ol>
+  <li>
+    <p>类型信息 TypeInformation</p>
+  </li>
+  <li>
+    <p>常量池 The Constant Pool</p>
+  </li>
+  <li>
+    <p>域信息 Field Information</p>
+  </li>
+  <li>
+    <p>方法信息 Method Information</p>
+  </li>
+  <li>
+    <p>类变量 Class Variables  <br />
+  鉴于我接触的很多人都不这么叫，很多书上也不这么写，稍微解释下啥是类变量。
+  举个例子，比如<code class="language-plaintext highlighter-rouge">Integer.MAX_VALUE</code>中的<code class="language-plaintext highlighter-rouge">MAX_VALUE</code>这种作为类属性之一，并且被<code class="language-plaintext highlighter-rouge">static</code>修饰(是不是public无所谓)，当然还自带初始值的，就是类变量。</p>
+  </li>
+  <li>
+    <p>各种引用等等</p>
+  </li>
+</ol>
+
+<p>具体细节单独展开。</p>
+
+<p>这里的部分翻译参考了<a href="https://www.ituring.com.cn/article/491755">Java 中 field 和 variable 区别及相关术语解释</a>.</p>
+
+<h4 id="内存-3">内存</h4>
+
+<p>规范中对该区域规定也比较宽松，不需要内存连续，可以是固定大小的也可以是可扩展的。</p>
+
+<p>还有之前提到的“分代理论”，以前一些JVM按照他们自己的分代设计，用永久代实现了方法区。
+  叫永久可能是这部分存贮的都是些比较”固定”的东西，但是不代表<strong><em>永久代 == 方法区</em></strong>，也不代表该区域就绝对不进行内存回收。</p>
+
+<h4 id="异常-3">异常</h4>
+
+<ol>
+  <li>无法满足新的内存分配需求时,抛<strong><em>OutOfMemoryError</em></strong>。</li>
+</ol>
+
+<h3 id="运行时常量区-run-time-constant-pool">运行时常量区 (Run-Time Constant Pool)</h3>
+
+<p>它是方法区的一部分，规范规定当JVM创建一个类或者接口时，就为该类或对象构建一个运行时常量池。</p>
+
+<p>写了半天都不太满意，要么不够清楚，要么不够简洁，先挂着<a href="https://blog.jamesdbloom.com/JVMInternals.html#constant_pool">别人的吧</a>。</p>
+
+<h4 id="内存-4">内存</h4>
+
+<p>它的内存是从方法区的内存里分配的，受到方法区本身内存大小的限制。</p>
+
+<h4 id="异常-4">异常</h4>
+
+<ol>
+  <li>当创建类(Class)或者接口(Interface)时，运行时常量池需要的内存大于方法区剩余的空余内存,抛<strong><em>OutOfMemoryError</em></strong>。</li>
+</ol>
+
+<h3 id="补充说明">补充说明</h3>
+
+<h4 id="heap-和-method-area-的逻辑关系">Heap 和 Method Area 的逻辑关系。</h4>
+
+<p>可以看看<a href="https://www.artima.com/insidejvm/ed2/jvm6.html">The Heap</a>下面画的几种关系图。 我就先不画了，偷个懒，后面单独写Heap和MethodArea的时候再说。</p>
+
+<h4 id="直接内存-direct-memory">直接内存 (Direct Memory)</h4>
+
+<p>该内存区域不属于运行时数据区(Runtime Data Areas)，也不在《Java虚拟机规范》的定义中。
+  比如开发者可以通过JNI或者NIO的ByteBuffer来调用malloc.</p>
+
+<h4 id="nio">NIO</h4>
+
+<blockquote>
+  <p>这部分摘自《深入理解JAVA虚拟机(第三版)》。</p>
+</blockquote>
+
+<blockquote>
+  <p>NIO(New Input/Output)类，引入了一种基于通道(Channel)与缓冲区 (Buffer)的I/O方式。</p>
+</blockquote>
+
+<blockquote>
+  <p>它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆里面的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
+</blockquote>
+
+<blockquote>
+  <p>这么做避免了在Java堆和Native堆中来回复制数据，能在一些场景中显著提高性能。</p>
+</blockquote>
+
+<hr />
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>
+    <p><a href="https://www.geeksforgeeks.org/java-virtual-machine-jvm-stack-area/">Java Virtual Machine (JVM) Stack Area</a></p>
+  </li>
+  <li>
+    <p><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.5">JVMS-Run-Time Data Areas</a></p>
+  </li>
+  <li>
+    <p><a href="https://book.douban.com/subject/34907497/">深入理解JAVA虚拟机(第三版)</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.baeldung.com/native-memory-tracking-in-jvm">Native Memory Tracking in JVM</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.artima.com/insidejvm/ed2/index.html">Inside the Java Virtual Machine</a></p>
+  </li>
+</ol>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/images/blog-cover.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; Lament's Mage Tower &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/scroll/">Scroll</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/classloading">JVM-类加载笔记-草稿</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/JVM-Overview">JVM Overview</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/in-the-end">2019年终总结</a></li>
+                                        
+                                    
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/scroll/">
+                                
+                                    See all 3 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/classloading">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM-类加载笔记-草稿</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/JVM-Overview">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM Overview</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+                <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
+            
+            <span>Lament's Mage Tower</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">JVM-RuntimeDataArea</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=JVM-RuntimeDataArea&amp;url=https://lament-z.comJVM-Runtime-Data-Area"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comJVM-Runtime-Data-Area"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="/assets/js/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B47LPLXBQP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B47LPLXBQP');
+</script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>
