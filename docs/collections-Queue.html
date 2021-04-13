@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>Java集合类系列:Queue</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="/assets/built/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="Queue" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/collections-Queue" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Lament's Mage Tower" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Java集合类系列:Queue" />
+    <meta property="og:description" content="Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作" />
+    <meta property="og:url" content="http://localhost:4000/collections-Queue" />
+    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2021-02-01T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2021-02-01T00:00:00+08:00" />
+    <meta property="article:tag" content="Scroll" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Java集合类系列:Queue" />
+    <meta name="twitter:description" content="Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Lament's Mage Tower" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Scroll" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Lament's Mage Tower",
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+    },
+    "url": "http://localhost:4000/collections-Queue",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/collections-Queue"
+    },
+    "description": "Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="Java集合类系列:Queue" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/">
+                  <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
+                  Lament
+                </a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-magical-index" role="menuitem"><a href="/tag/magical-index/">Magical Index</a></li>
+    <li class="nav-alchemy-lab" role="menuitem"><a href="/tag/alchemy-lab/">Alchemy Lab</a></li>
+    <li class="nav-scroll" role="menuitem"><a href="/tag/scroll/">Scroll</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+</ul>
+
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full post tag-scroll no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime=" 1 February 2021"> 1 February 2021</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/scroll/'>SCROLL</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">Java集合类系列:Queue</h1>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="queue-笔记">Queue 笔记</h1>
+
+<h2 id="几种不同场景下的队列">几种不同场景下的队列</h2>
+
+<p>数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。</p>
+
+<p>但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。</p>
+
+<h2 id="queue-in-java">Queue In Java</h2>
+
+<p>Queue 在Java中是作为接口出现的，它的文档也提现了这一点。</p>
+
+<p>FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Summary of Queue methods</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ops</td>
+      <td>Throws exception</td>
+      <td>Returns special value</td>
+    </tr>
+    <tr>
+      <td>Insert</td>
+      <td>add(e)</td>
+      <td>offer(e)</td>
+    </tr>
+    <tr>
+      <td>remove</td>
+      <td>remove()</td>
+      <td>poll()</td>
+    </tr>
+    <tr>
+      <td>Examine</td>
+      <td>element()</td>
+      <td>peek()</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="deque">Deque</h3>
+
+<p>Deque is short for “double ended queue”.</p>
+
+<p>它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。
+同时它可以用作传统的FIFO “队列” ，也可以用作 “FILO” “栈”。 Java为这两种”场景”都提供了对应的方法。</p>
+
+<ul>
+  <li>作为双端队列时，提供了12个方法</li>
+</ul>
+
+<p><strong><em>Summary of Deque methods</em></strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ops</th>
+      <th>Head</th>
+      <th> </th>
+      <th>Tail</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><em>Throws exception</em></td>
+      <td><em>Special value</em></td>
+      <td><em>Throws exception</em></td>
+      <td><em>Special value</em></td>
+    </tr>
+    <tr>
+      <td>Insert</td>
+      <td>addFrist(e)</td>
+      <td>offerFirst(e)</td>
+      <td>addLast(e)</td>
+      <td>offerLast(e)</td>
+    </tr>
+    <tr>
+      <td>Remove</td>
+      <td>removeFirst()</td>
+      <td>pollFirst()</td>
+      <td>removeLast()</td>
+      <td>pollLast()</td>
+    </tr>
+    <tr>
+      <td>Examine</td>
+      <td>getFirst()</td>
+      <td>peekFirst()</td>
+      <td>getLast()</td>
+      <td>peekLast()</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>作为 FIFO Queue 时，提供如下方法</li>
+</ul>
+
+<p><strong><em>Comparison of Queue and Deque methods</em></strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Queue Method</th>
+      <th>Equivalent Deque Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>add(e)</td>
+      <td>addLast(e)</td>
+    </tr>
+    <tr>
+      <td>offer(e)</td>
+      <td>offerLast(e)</td>
+    </tr>
+    <tr>
+      <td>remove()</td>
+      <td>removeFirst()</td>
+    </tr>
+    <tr>
+      <td>poll()</td>
+      <td>pollFirst()</td>
+    </tr>
+    <tr>
+      <td>element()</td>
+      <td>getFirst()</td>
+    </tr>
+    <tr>
+      <td>peek()</td>
+      <td>peekFirst()</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>作为 FILO Stack时，提供如下方法</li>
+</ul>
+
+<p><strong><em>Comparison of Stack and Deque methods</em></strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stack Method</th>
+      <th>Equivalent Deque Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>push(e)</td>
+      <td>addFirst(e)</td>
+    </tr>
+    <tr>
+      <td>pop()</td>
+      <td>removeFirst()</td>
+    </tr>
+    <tr>
+      <td>peek()</td>
+      <td>peekFirst()</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="arraydeque">ArrayDeque</h3>
+
+<p>ArrayDeque 是基于变长数组对 Deque 的实现。</p>
+
+<h4 id="性质">性质</h4>
+<p>可自动扩容，具备双端队列的能力，非线程安全，具备快速失败的能力。</p>
+
+<h4 id="源码分析">源码分析</h4>
+
+<h5 id="基于数组">基于数组</h5>
+
+<p>就是个 Object 数组。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  transient Object[] elements; // non-private to simplify nested class access
+</code></pre></div></div>
+
+<p>不过由于这个场景是双端队列，所以要看作是循环数组，在普通数组的基础上添加了头尾的标记，数组的头尾不再是array[0] 和 array[size-1]，而是由 head / tail 来决定，其中tail永远指向数组中的一个未被占用的元素。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  transient int head;
+
+  transient int tail;
+</code></pre></div></div>
+<h5 id="安全性非线程安全">安全性：非线程安全</h5>
+
+<p>快速失败，根据索引删除方法<code class="language-plaintext highlighter-rouge">delete(int index)</code>和遍历元素的代码中都可以看到。</p>
+
+<h5 id="遍历">遍历</h5>
+
+<p>俩迭代器实现，一个从head遍历到tail，一个从tail到head。</p>
+
+<h5 id="构造方法3个-无论使用哪个构造方法其容量一定是2的幂">构造方法：3个 无论使用哪个构造方法，其容量一定是2的幂。</h5>
+<ol>
+  <li>无参，默认数组容量为16
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ArrayDeque() {
+    elements = new Object[16];
+}
+</code></pre></div>    </div>
+  </li>
+  <li>指定数组容量 ,但数组真实容量永远是正好比 numElements 大的2的n次幂
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ArrayDeque(int numElements) {
+    allocateElements(numElements);
+}
+</code></pre></div>    </div>
+
+    <p>其中的<code class="language-plaintext highlighter-rouge">allocateElements(numElements);</code>的逻辑很简单就是<code class="language-plaintext highlighter-rouge">new Object[calculateSize(numElements)]</code></p>
+
+    <p>主要看一下计算数组容量，如何让数组的真实容量永远是正好比 numElements 大的2的n次幂</p>
+
+    <p>当传入数组容量的参数不是2的幂时</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> private static int calculateSize(int numElements) {
+        int initialCapacity = MIN_INITIAL_CAPACITY; //这个值为 8
+
+        // Find the best power of two to hold elements.
+        // Tests "&lt;=" because arrays aren't kept full.
+        if (numElements &gt;= initialCapacity) { //如果我们指定的值大于8
+           initialCapacity = numElements;
+           initialCapacity |= (initialCapacity &gt;&gt;&gt;  1);
+           initialCapacity |= (initialCapacity &gt;&gt;&gt;  2);
+           initialCapacity |= (initialCapacity &gt;&gt;&gt;  4);
+           initialCapacity |= (initialCapacity &gt;&gt;&gt;  8);
+           initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);
+           initialCapacity++;
+
+       if (initialCapacity &lt; 0)   // Too many elements, must back off
+           initialCapacity &gt;&gt;&gt;= 1;// Good luck allocating 2 ^ 30 elements
+            }
+            return initialCapacity;
+        }
+</code></pre></div>    </div>
+    <p>以上代码的逻辑是：</p>
+
+    <p>如果我们给定的数组容量小于8，则按8创建。
+如果比8大，则找到 正好大于给定值的2^n幂。
+如果这个值大到INT越界，那它就是个负数，»&gt;=1 可以把它变成一个至少 2 ^ 30 级别的整数</p>
+
+    <p>这里分析下计算容量的代码：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>initialCapacity |= (initialCapacity &gt;&gt;&gt;  1);
+initialCapacity |= (initialCapacity &gt;&gt;&gt;  2);
+initialCapacity |= (initialCapacity &gt;&gt;&gt;  4);
+initialCapacity |= (initialCapacity &gt;&gt;&gt;  8);
+initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);
+</code></pre></div>    </div>
+
+    <p>5行代码都非常相似，它的功能是找到比 numElements 大的那个 2^n .</p>
+
+    <p>原理如下：
+首先，所有 2^n 的值，转化成二进制之后，肯定长这样： 1000000…0000。
+然后减去1 ，变成 01111111….1111这样，高位的0忽略，就是 11111111…11111。</p>
+
+    <p>那怎么把 任意一个整数变成 1111…1111这样呢，就是代码里的办法了。</p>
+
+    <p>任意整数的二进制表示，忽略掉高位的0之后，他左边的第一位肯定是1，也就是长这样：
+1xxxxxxx。
+当它向右移动一位并补0之后，就变成01xxxxx</p>
+
+    <p>1xxxxxxx
+01xxxxxx
+–或运算–
+11xxxxxx</p>
+
+    <p>这个时候，initialCapacity = 11xxxxxx 了</p>
+
+    <p>后面无论移动多少位都是这个原理，因为或操作代表只要不同时为0，都是1，而»&gt;是一个右移补0的操作，意味着高位永远是1。
+一共最多移动 1 + 2 + 4 + 8 + 16 = 31位，
+如果这个数字非常大，也就是当31位移动完之后，才填满所有的1，一个填满了31位 111…111，再加1妥妥的越界啦。</p>
+
+    <p>同时这个操作还有个好处是，当你得到想要的结果后，后面的重复计算不会改变结果。</p>
+
+    <p>假设<code class="language-plaintext highlighter-rouge">numElements=9</code>:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>第一次运行
+1001  aka initialCapacity = 9
+0100  aka initialCapacity &gt;&gt;&gt; 1
+-或运算-
+1100
+
+第二次运行
+1100
+0011 aka initialCapacity &gt;&gt;&gt;  2
+----
+1111 到这里其实已经拿到结果了
+
+第三次运行
+1111
+0000 aka initialCapacity  &gt;&gt;&gt;  4
+----
+1111
+
+后两次略
+</code></pre></div>    </div>
+
+    <p>同时这个过程可以看出来为什么 移动的位数 是 1 2 4 …这个序列。
+移动第一次之后，头两位肯定是11xxxx，所以第二次直接右移动2补俩0，下一次自然就是1111xxx，以此类推。</p>
+  </li>
+  <li>
+    <p>把集合类的实例转化成对应的Deque的实例</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public ArrayDeque(Collection&lt;? extends E&gt; c) {
+    allocateElements(c.size());
+    addAll(c);
+}
+</code></pre></div>    </div>
+    <h5 id="arraydeque-中操作元素的几个主要方法">ArrayDeque 中操作元素的几个主要方法</h5>
+  </li>
+</ol>
+
+<p>ArrayDeque 是 Deque 的实现类，而前面介绍 Deque 时罗列的那么多方法它都得实现，打开源码能看到一万个方法，但是实际上主要的新增和删除元素的方法就四个：addFirst，addLast，pollFirst，pollLast。它源码里有三行单行注释说的就是这个。</p>
+
+<p>其他方法是根据这些定义的，基本不用看。</p>
+
+<ol>
+  <li>addFirst()</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  public void addFirst(E e) {
+            if (e == null)
+       throw new NullPointerException();
+            elements[head = (head - 1) &amp; (elements.length - 1)] = e; //主要看这句
+            if (head == tail) //数组已满需要扩容
+            doubleCapacity(); //这个后面展开
+  }
+</code></pre></div></div>
+
+<p>重点说addFirst，这个看明白了剩下3个都不难，而且这个跟自动扩容也有点关系。</p>
+
+<p>这个方法的作用是在 head 之前插入一个元素，并且把这个元素作为新的 head。</p>
+
+<p>完成这个操作需要考虑容量溢出和下标越界两种情况：</p>
+
+<ol>
+  <li>
+    <p>容量溢出<br />
+    在 addFirst() 方法中一定不会出现容量溢出，因为在 ArrayDeque 的实现中，tail 永远指向一个可插入数据的空数组元素，所以 head最少也可以占用这个空，此时也正好满足插入完成后，head == tail 从而触发扩容。</p>
+  </li>
+  <li>
+    <p>数组下标越界<br />
+    下标越界是指，由于是双端链表，头尾位置不固定，对于这个方法而言就是发生在 head = 0 时，此时 head = head -1 ,也就是 -1。</p>
+
+    <p>下面来详细分析下<code class="language-plaintext highlighter-rouge">head = (head - 1) &amp; (elements.length - 1)</code>这段代码 ,它即完成了计算head新值的功能，又解决了-1越界的问题。</p>
+
+    <p>先从功能上分析，addFirst 时，head 的新值只需要考虑两种可能，head 是否为0，我们自己写代码时可能就会写出如下逻辑：</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> //伪代码
+ if (head == 0){
+   head = length -1;
+ }else{
+   head = head -1;
+ }
+</code></pre></div>    </div>
+
+    <p>而源码中则利用”与”运算的几个小技巧（tips的验证和推导在最后）：</p>
+    <blockquote>
+      <p>Tips1: n为任意整数，-1 &amp; n 等价于 求n的补码，我们用的都是补码，说白了就是n， -1 &amp; n === n</p>
+    </blockquote>
+
+    <blockquote>
+      <p>Tips2: 任意正整数 m,n ,当 m &lt;= 2^n-1时, m &amp; (2^n - 1) ==  m mod (2^n -1) 文字描述： m 对 2^n - 1 进行与操作，等价于 m 对 2^n - 1 取模。</p>
+    </blockquote>
+
+    <p>这俩技巧有啥用呢，我们回到前面 head 求值那行代码。</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> head = (head - 1) &amp; (elements.length - 1);
+
+ //当head = 0时，容量甭管是多少，反正肯定是2^n ,上面的代码实际上变成了
+ head = （-1 &amp; elements.length - 1） = elements.length - 1 // 运用了tips1
+
+ //当head != 0 时，head的取值范围是 1 ～ (length -1) ，head - 1 的范围就是 0 ~ (length -1 -1 )。
+ // 也就是说 head - 1 &lt; length - 1 恒成立 。
+ // 俩正整数 n&lt;m 时，n mod m 恒等于 n ，这里如果一下想不明白的话，可以套用数学里面的求余。
+ head = (head -1) &amp; (elements.length - 1) = head -1 ; //tips2
+</code></pre></div>    </div>
+    <p>源码用一行代码替换了我们前面写的if/else逻辑，并且提供了一些性能上的优势。</p>
+
+    <p>这也是为什么数组的实际容量 (elements.length) 一定是2的幂次，这是因为可以方便这里的取模(mod)操作，注意 mod (取模) 跟 % (取余) 对于计算机而言是有区别的，主要是返回结果的取舍上，比如 4 &amp; 3 == 0 ，4 % 3 == 1。</p>
+  </li>
+  <li>
+    <p>addLast()</p>
+  </li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  public void addLast(E e) {
+      if (e == null)
+        throw new NullPointerException();
+        elements[tail] = e;
+      if ( (tail = (tail + 1) &amp; (elements.length - 1)) == head)
+        doubleCapacity();
+  }
+</code></pre></div></div>
+<p>这个方法的作用是在 Tail 处直接添加新元素，然后 Tail 指向下一个空的数组元素，如果没有空的就进行扩容。与<code class="language-plaintext highlighter-rouge">addFirst()</code>基本类似，区别在于要保证 Tail 永远要指向一个空的数组元素。</p>
+
+<p>还是老样子，根据这个需求我们先自己尝试实现一下。尾部同样是容量溢出和数组下标越界两个问题需要解决。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //伪代码  
+    elements[tail] = newElement; //这一步是一定能完成的
+    //判断数组此时是否已满，如果满了则扩容，如果没满，则tail +1
+
+  if(isFull()){
+    grow(); //扩容
+    tail= tail + 1;
+  }else{
+    tail = tail + 1;
+  }
+  //由于是双端队列，判断数组是不是满了分为两种情况
+  // head &gt; tail 时，tail + 1 =head 则满了
+  // head &lt; tail 时，head + tail + 1 = length 就满了
+
+  isFull(){
+      if(head &gt; tail){
+        return tail +1 == head;
+      }else{
+        return head + tail + 1 == length;
+      }
+  }
+</code></pre></div></div>
+<p>上面的伪代码只解决了容量溢出的问题，没有解决数组下标越界的问题。</p>
+
+<p>比如情况1： head=4 ，tail=6，length=7，按照双端队列 tail 之后应该为 0，而不是 7；</p>
+
+<p>或者情况2： 如果head是1，tail是0，触发扩容，扩容之后，tail+1指到head头上去了。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //伪代码 moveTail只能解决情况1.
+    moveTail(){
+      if (tail + 1 == length){
+        tail = 0;
+      }else{
+        tail = tail + 1;
+      }
+    }
+
+    //为了解决情况2，我们需要在扩容时把双端数组规整一下。让head在新数组中回到0的位置去，其他的按照顺序依次填充。
+    grow(){
+      newArrary[length*2];
+      //遍历旧数组，把head放到newArray[0]，其他的按顺序排列。
+      head = 0;
+      tail = length -1; //因为我们的伪代码里 grow()之后tail 还要+1
+    }
+</code></pre></div></div>
+
+<p>是不是特别麻烦，下面来看源码里为什么这么短。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  elements[tail] = e; //向空的数组元素中插入数据
+  if ( (tail = (tail + 1) &amp; (elements.length - 1)) == head) //即完成了tail的赋值工作，又完成了数组是否已满的判断。
+    doubleCapacity();
+</code></pre></div></div>
+
+<p>由于 tail 永远指向一个可插入数据的空数组元素，所以插入数据这一步<code class="language-plaintext highlighter-rouge">elements[tail] = e;</code>是一定会完成的，如果满了就进行扩容，除非扩容失败，比如数组的容量超过数组允许的最大值会<code class="language-plaintext highlighter-rouge">throw new IllegalStateException("Sorry, deque too big");</code>。扩容解决了，但是 tail 如何指向空的数组元素，这个在<code class="language-plaintext highlighter-rouge">doubleCapacity();</code>中进行保证，逻辑大体跟我们伪代码里一样，只不过它的tail = length，细节在扩容部分再说。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //拆分代码
+    tail = (tail + 1) &amp; (elements.length - 1);
+
+    if(tail == head){
+      doubleCapacity();
+    }
+</code></pre></div></div>
+
+<p>根据前面 addFirst()中学到的技巧，当 (tail + 1) &lt;= (elements.length - 1) 时，tail = tail + 1。但是 tail = length-1 时， 很明显 tail + 1 就是 length , 这时候代码转化为 tail = length &amp; （length -1）= 0, 由于length一定是2^n所以，tail一定为0(这里不明白拉到最后看一眼tips3)。</p>
+
+<p>由于先计算了tail的新值，所以判断数组是否满了也不需要我们之前伪代码演示的那么麻烦了，直接判断 head == tail即可，并且也不存在tail 指向head这种情况发生，因为扩容之后head会重新回到0，tail则为length。</p>
+
+<ol>
+  <li>pollFirst()</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    public E pollFirst() {
+        int h = head;
+        @SuppressWarnings("unchecked")
+        E result = (E) elements[h];
+        // Element is null if deque empty
+        if (result == null)
+            return null;
+        elements[h] = null;     // Must null out slot
+        head = (h + 1) &amp; (elements.length - 1);
+        return result;
+    }
+</code></pre></div></div>
+
+<p>这方法就简单多了，把 elements[head] 取出来，然后把这个数组元素置为空，移动head。需要注意的是<code class="language-plaintext highlighter-rouge">elements[h] = null;     // Must null out slot</code> 注释也说了，必须null掉。虽然好像不null掉也问题不大，判断扩容啥的都是根据下标来的，实际上问题很大，比如<code class="language-plaintext highlighter-rouge">contains(Object o)</code>方法就会出现poll完了，怎么还在的情况。</p>
+
+<ol>
+  <li>pollLast
+    同上，略。</li>
+</ol>
+
+<h5 id="自动扩容">自动扩容</h5>
+<p>当队列满了，或者说数组填充满元素时会触发自动扩容。</p>
+
+<ul>
+  <li>
+    <p>触发扩容的条件</p>
+
+    <p>只有添加元素时才会触发自动扩容，也就是<code class="language-plaintext highlighter-rouge">addFirst()</code>、<code class="language-plaintext highlighter-rouge">addLast()</code> 这俩方法。</p>
+  </li>
+  <li>
+    <p>自动扩容：</p>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> private void doubleCapacity() {
+        assert head == tail;
+        int p = head;
+        int n = elements.length;
+        int r = n - p; // number of elements to the right of p
+        int newCapacity = n &lt;&lt; 1;
+        if (newCapacity &lt; 0)
+            throw new IllegalStateException("Sorry, deque too big");
+        Object[] a = new Object[newCapacity];
+        System.arraycopy(elements, p, a, 0, r);
+        System.arraycopy(elements, 0, a, r, p);
+        elements = a;
+        head = 0;
+        tail = n;
+ }        
+</code></pre></div></div>
+
+<p>大体逻辑跟我们在伪代码中写的一样。
+ 通过 doubleCapacity() ，直接将原数组扩为2倍大小， int newCapacity = n « 1;
+ 如果这个值超过了数组允许的最大值，则throw new IllegalStateException(“Sorry, deque too big”);
+ 当扩容成功之后，对数组进行复制，由于循环数组是有头尾的，而且头尾会移动，
+ 所以复制的时候会在新数组中重新拼接一下之前的数组。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> //原数组中从 head 开始，向右到数组最后一个元素，顶头放入新数组
+ System.arraycopy(elements, p, a, 0, r);
+ //原数组中从 tail 开始, 向左的全部元素（换个方向描述就是从element[0] 到 tail 的全部元素)，拼接到a剩下的空槽中
+ System.arraycopy(elements, 0, a, r, p);
+</code></pre></div></div>
+
+<h2 id="tips">tips</h2>
+
+<h3 id="位运算符-和-正反补">位运算符 和 正反补</h3>
+
+<p>表格的样式有点问题，讲究看吧，我前端是渣渣搞不清楚这个。</p>
+
+<p><strong>位运算符</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ops</th>
+      <th>中文名</th>
+      <th>描述</th>
+      <th>口诀 / 小技巧</th>
+      <th>例子</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&amp;</td>
+      <td>与</td>
+      <td>如果相对应位都是1，则结果为1，否则为0</td>
+      <td>同1为1，不同为0</td>
+      <td>A &amp; B</td>
+    </tr>
+    <tr>
+      <td>或</td>
+      <td>或</td>
+      <td>如果相对应位都是 0，则结果为 0，否则为 1</td>
+      <td>同0为0，不同为1</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>异或</td>
+      <td>如果相对应位值相同，则结果为0，否则为1</td>
+      <td>相同为0，不同为1</td>
+      <td>A ^ B</td>
+    </tr>
+    <tr>
+      <td>～</td>
+      <td>取反</td>
+      <td>也叫按位取反，就是把每一位的数反转，即0变成1，1变成0</td>
+      <td>取反不需要口诀吧</td>
+      <td>~A</td>
+    </tr>
+    <tr>
+      <td>«</td>
+      <td>左移</td>
+      <td>把符号左面的数的二进制版本向左移动n位</td>
+      <td>1 « n = 2^n</td>
+      <td>假设A = 1, A « 2 = 4</td>
+    </tr>
+    <tr>
+      <td>»</td>
+      <td>右移</td>
+      <td>跟左移一样，不过方向向右</td>
+      <td>n/a</td>
+      <td>假设A = 1, A » 2 = 0</td>
+    </tr>
+    <tr>
+      <td>»&gt;</td>
+      <td>按位右移补0</td>
+      <td>跟右移差不多，不过空位要补0</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong><em>正反补码</em></strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>描述</th>
+      <th>正负0</th>
+      <th>拓展</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>原码</td>
+      <td>原码最高位为符号为，0正1负，其余位置表示数值，不足位时在符号为和数值之间补0</td>
+      <td>正数的原码就是它本身，符号位为0；负数的原码符号位是1，其他跟正数一样；0就全是0</td>
+      <td>大致长这样：{1: 0 0001} {-1: 1 0001} {0: 0 0000} 但是不能做加减法，-1+1原码的结果是-2，于是搞了反码</td>
+    </tr>
+    <tr>
+      <td>反码</td>
+      <td>反码主要折腾负数，负数的反码符号位依然为1，但是其他位要全部取反。</td>
+      <td>正数还是跟原码一样，负数前面说了，0就尴尬了，有俩0.</td>
+      <td>反码解决了 1-1 = -2的问题，但是根据符号位不同，诞生了正0和负0两个0</td>
+    </tr>
+    <tr>
+      <td>补码</td>
+      <td>补码也是折腾负数，负数的补码是在其反码的末位+1，如果超出最高位则丢弃最高位</td>
+      <td>正数正反补码都一样，负数就是前面说的反码末位+1，0就是0啦</td>
+      <td>补码解决了双0问题，反码中负0全是1，末位+1之后最高位越界丢弃，只剩0，终于只有一个0了。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>补码，中补的来源，two’s complement，对2求补，这是离散数学中的一种计算方法，我念书的时候为啥离散数学没教这个。</p>
+
+<hr />
+
+<h3 id="tips1">tips1</h3>
+
+<p>-1 &amp; n === 求n的补码 aka -1 &amp; n === n，n 可以是任意整数。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>推导过程:
+-1 ，其符号位为1，原码为 1 0001，但是计算机存储负数是存其补码，也就是符号位不变，其他位反转，之后末位+1
+-1的反码: 1 1110 ,  
+-1的补码: 1 1111 。
+
+然后按位与操作的原则是： 同1则1，不同为0.
+
+很明显-1这个所有位上全是1的二进制数 跟 任何整数 进行 与操作 都不会改变对方的值。
+
+1111     1111
+1010     0000
+--------------
+1010     0000
+
+</code></pre></div></div>
+
+<h3 id="tips2">tips2</h3>
+
+<p>任意正整数 m,n ，当 m &lt;= 2^n-1时， m &amp; (2^n - 1) ==  m mod (2^n -1)</p>
+
+<p>描述： m 对 2^n - 1 进行与操作，等价于 m 对 2^n - 1 取模。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 2^n 的二进制除了高位有个1，低位全是0，也就是 1000...000 这个样子。
+ 2^n -1 的二进制低位全是1，也就是 000111..111 这种样子。
+
+ 类似上面-1的那一堆1是不是。
+ 当 m &lt;= 2^n - 1 时候，那么一定是这个样子
+ m    : 0000 1001
+ 2^n-1: 0111 1111
+ -----------------
+ 肯定还是m本身，跟前面-1的情况基本类似。  
+ 从取模的角度去思考的话，跟 2 mod 10 = 2 一样。
+</code></pre></div></div>
+
+<h3 id="tips3">tips3</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2^n &amp; 2^n-1 === 0
+证明看下图:
+2^n   : 1000...000
+2^n-1 : 0111...111
+----------按位与-----
+        0000000000
+
+</code></pre></div></div>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/images/blog-cover.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; Lament's Mage Tower &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/scroll/">Scroll</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/classloading">JVM-类加载笔记-草稿</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/stack-based-architecture">Stack Frame - 草稿</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/JVM-Runtime-Data-Area">JVM-RuntimeDataArea</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/scroll/">
+                                
+                                    See all 5 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/classloading">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM-类加载笔记-草稿</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+                <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
+            
+            <span>Lament's Mage Tower</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">Java集合类系列:Queue</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Java%E9%9B%86%E5%90%88%E7%B1%BB%E7%B3%BB%E5%88%97%3AQueue&amp;url=https://lament-z.comcollections-Queue"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comcollections-Queue"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="/assets/js/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B47LPLXBQP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B47LPLXBQP');
+</script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>

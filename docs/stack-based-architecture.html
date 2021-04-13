@@ -11,7 +11,7 @@
 
 
 
-    <title>2019年终总结</title>
+    <title>Stack Frame - 草稿</title>
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Styles'n'Scripts -->
@@ -34,102 +34,26 @@
     <![endif]-->
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
-    <meta name="description" content="休息一下" />
+    <meta name="description" content="Neutral, sometimes chaotic neutral" />
     <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="http://localhost:4000/in-the-end" />
+    <link rel="canonical" href="http://localhost:4000/stack-based-architecture" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
     <meta property="og:site_name" content="Lament's Mage Tower" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="2019年终总结" />
-    <meta property="og:description" content="小野不是妹纸的2019的反思
-
-
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-" />
-    <meta property="og:url" content="http://localhost:4000/in-the-end" />
+    <meta property="og:title" content="Stack Frame - 草稿" />
+    <meta property="og:description" content="The JVM uses a stack based architecture. 数据结构里的栈(stack) 先抛开语言环境啥的，单聊一下数据结构中的栈是个啥(stack)。 Stack 的结构和性质跟网球罐子差不多。 每次我们想取出一个球只能从最上面拿，想拿最下面的球就必须先把上面的先拿完。 往里装球的时候也是，最先放进去的在最下面，最后放进去的在最上面。 对应到数据结构中这就是 Stack。 网球罐子开口的那一端，对应 Stack 的 top。 向 Stack 中添加元素（也就是往里塞球），叫做入栈，push。 从 Stack 中取出元素(往外拿球)，叫出栈，pop。 LIFO，Last in first out。 栈帧 Stack Frame JVM最基本的执行单元为方法。 而 Stack Frame 是支持方法调用和方法执行背后的数据结构。 组成 Stack Frame中包含 局部变量表，操作数栈，以及其他一些栈帧数据。 局部变量表 local variables Table TODO 复用槽啥的也想略。 是什么 局部变量表(Local Variables" />
+    <meta property="og:url" content="http://localhost:4000/stack-based-architecture" />
     <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
-    <meta property="article:published_time" content="2019-12-31T00:00:00+08:00" />
-    <meta property="article:modified_time" content="2019-12-31T00:00:00+08:00" />
+    <meta property="article:published_time" content="2021-01-04T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2021-01-04T00:00:00+08:00" />
     <meta property="article:tag" content="Scroll" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="2019年终总结" />
-    <meta name="twitter:description" content="小野不是妹纸的2019的反思
-
-
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-" />
+    <meta name="twitter:title" content="Stack Frame - 草稿" />
+    <meta name="twitter:description" content="The JVM uses a stack based architecture. 数据结构里的栈(stack) 先抛开语言环境啥的，单聊一下数据结构中的栈是个啥(stack)。 Stack 的结构和性质跟网球罐子差不多。 每次我们想取出一个球只能从最上面拿，想拿最下面的球就必须先把上面的先拿完。 往里装球的时候也是，最先放进去的在最下面，最后放进去的在最上面。 对应到数据结构中这就是 Stack。 网球罐子开口的那一端，对应 Stack 的 top。 向 Stack 中添加元素（也就是往里塞球），叫做入栈，push。 从 Stack 中取出元素(往外拿球)，叫出栈，pop。 LIFO，Last in first out。 栈帧 Stack Frame JVM最基本的执行单元为方法。 而 Stack Frame 是支持方法调用和方法执行背后的数据结构。 组成 Stack Frame中包含 局部变量表，操作数栈，以及其他一些栈帧数据。 局部变量表 local variables Table TODO 复用槽啥的也想略。 是什么 局部变量表(Local Variables" />
     <meta name="twitter:url" content="http://localhost:4000/" />
     <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -150,7 +74,7 @@
         "name": "Lament's Mage Tower",
         "logo": "http://localhost:4000/assets/images/blog-icon.png"
     },
-    "url": "http://localhost:4000/in-the-end",
+    "url": "http://localhost:4000/stack-based-architecture",
     "image": {
         "@type": "ImageObject",
         "url": "http://localhost:4000/assets/images/blog-cover.jpg",
@@ -159,47 +83,9 @@
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "http://localhost:4000/in-the-end"
+        "@id": "http://localhost:4000/stack-based-architecture"
     },
-    "description": "小野不是妹纸的2019的反思
-
-
-  
-    
-
-      这个博客17年更新了没几次然后就没更了。 
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。
-    
-  
-
-
-言归正传，总结一下自己的2019.
-
-年初的时候我给自己定的2019年的目标浓缩为一个词，休息。
-
-现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。
-
-头三个月完成了生活环境的变化，并且把作息时间正常化。
-
-然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。
-
-养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。
-
-戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。
-
-今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。
-
-另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。
-
-计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。
-
-考研的总结已经写了，发在了我专门用来记录考研的blog下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。
-
-总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～
-
-好了流水账写完了，出门跟朋友们跨年咯～
-"
+    "description": "The JVM uses a stack based architecture. 数据结构里的栈(stack) 先抛开语言环境啥的，单聊一下数据结构中的栈是个啥(stack)。 Stack 的结构和性质跟网球罐子差不多。 每次我们想取出一个球只能从最上面拿，想拿最下面的球就必须先把上面的先拿完。 往里装球的时候也是，最先放进去的在最下面，最后放进去的在最上面。 对应到数据结构中这就是 Stack。 网球罐子开口的那一端，对应 Stack 的 top。 向 Stack 中添加元素（也就是往里塞球），叫做入栈，push。 从 Stack 中取出元素(往外拿球)，叫出栈，pop。 LIFO，Last in first out。 栈帧 Stack Frame JVM最基本的执行单元为方法。 而 Stack Frame 是支持方法调用和方法执行背后的数据结构。 组成 Stack Frame中包含 局部变量表，操作数栈，以及其他一些栈帧数据。 局部变量表 local variables Table TODO 复用槽啥的也想略。 是什么 局部变量表(Local Variables"
 }
     </script>
 
@@ -212,7 +98,7 @@
     </script> -->
 
     <meta name="generator" content="Jekyll 3.6.2" />
-    <link rel="alternate" type="application/rss+xml" title="2019年终总结" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Stack Frame - 草稿" href="/feed.xml" />
 
 
 </head>
@@ -270,7 +156,7 @@ into the {body} of the default.hbs template -->
 
             <header class="post-full-header">
                 <section class="post-full-meta">
-                    <time class="post-full-meta-date" datetime="31 December 2019">31 December 2019</time>
+                    <time class="post-full-meta-date" datetime=" 4 January 2021"> 4 January 2021</time>
                     
                         <span class="date-divider">/</span>
                         
@@ -280,51 +166,161 @@ into the {body} of the default.hbs template -->
                         
                     
                 </section>
-                <h1 class="post-full-title">2019年终总结</h1>
+                <h1 class="post-full-title">Stack Frame - 草稿</h1>
             </header>
 
             
 
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    <h2 id="小野不是妹纸的2019的反思">小野不是妹纸的2019的反思</h2>
-
-<blockquote>
-  <blockquote>
-    <blockquote>
-
-      <p>这个博客17年更新了没几次然后就没更了。 <br />
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  <br />
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。</p>
-    </blockquote>
-  </blockquote>
+                    <blockquote>
+  <p>The JVM uses a stack based architecture.</p>
 </blockquote>
 
-<p>言归正传，总结一下自己的2019.</p>
+<h2 id="数据结构里的栈stack">数据结构里的栈(stack)</h2>
 
-<p>年初的时候我给自己定的2019年的目标浓缩为一个词，休息。</p>
+<p>先抛开语言环境啥的，单聊一下数据结构中的栈是个啥(stack)。</p>
 
-<p>现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。</p>
+<p>Stack 的结构和性质跟网球罐子差不多。</p>
 
-<p>头三个月完成了生活环境的变化，并且把作息时间正常化。</p>
+<p><img src="https://lament-z.com/assets/images/tennis.png" alt="tennis" /></p>
 
-<p>然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。</p>
+<p>每次我们想取出一个球只能从最上面拿，想拿最下面的球就必须先把上面的先拿完。</p>
 
-<p>养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。</p>
+<p>往里装球的时候也是，最先放进去的在最下面，最后放进去的在最上面。</p>
 
-<p>戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。</p>
+<p>对应到数据结构中这就是 Stack。</p>
 
-<p>今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。</p>
+<p>网球罐子开口的那一端，对应 Stack 的 top。</p>
 
-<p>另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。</p>
+<p>向 Stack 中添加元素（也就是往里塞球），叫做入栈，push。</p>
 
-<p>计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。</p>
+<p>从 Stack 中取出元素(往外拿球)，叫出栈，pop。</p>
 
-<p>考研的总结已经写了，发在了我专门用来记录<a href="https://ms.lament-z.com">考研的blog</a>下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。</p>
+<p>LIFO，Last in first out。</p>
 
-<p>总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～</p>
+<h2 id="栈帧-stack-frame">栈帧 Stack Frame</h2>
 
-<p>好了流水账写完了，出门跟朋友们跨年咯～</p>
+<p>JVM最基本的执行单元为方法。</p>
+
+<p>而 Stack Frame 是支持方法调用和方法执行背后的数据结构。</p>
+
+<h3 id="组成">组成</h3>
+
+<p><img src="https://lament-z.com/assets/images/JVM/Stack Frame Diagram.jpg" alt="Stack Frame" /></p>
+
+<p>Stack Frame中包含 局部变量表，操作数栈，以及其他一些栈帧数据。</p>
+
+<h4 id="局部变量表-local-variables-table">局部变量表 local variables Table</h4>
+
+<p>TODO  复用槽啥的也想略。</p>
+
+<ul>
+  <li>是什么</li>
+</ul>
+
+<p>局部变量表(Local Variables Table)是一组变量值的存储空间，用于存放方法参数和方法内部定义 的局部变量。在Java程序被编译为Class文件时，就在方法的Code属性的max_locals数据项中确定了该方 法所需分配的局部变量表的最大容量。</p>
+
+<p>所谓的一组变量值具体是指：方法参数，方法内部定义的那些个局部变量。</p>
+
+<p>局部变量表的最小组成部分叫做变量槽（Variable Slot）。</p>
+
+<p>它的大小要能存放一个X类型的数据，这个X指的是：6种基础元素类型的JVM版（除去double long）+对象实例的引用+returnAddress（比较少见）。</p>
+
+<p>对象实例的引用类型的长度，跟虚拟机是32位/64位相关，如果是64位还跟有没有开启某些对象指针压缩的优化有关。</p>
+
+<p>除了八种大小不会超过32位的数据类型之外，还有double和long这俩64位的。
+JVM存储64位数据类型的方式是，通过高位对其的方式将其分配到俩连续的槽中。</p>
+
+<p>32位的数据类型：</p>
+
+<ul>
+  <li>怎么用</li>
+</ul>
+
+<p>JVM通过索引定位的方式使用局部变量表。</p>
+
+<p>索引范围：[0，slotMax]。</p>
+
+<p>访问32位数据时，索引n就代表第n个槽。
+访问64位时，索引n则是n和n+1俩槽，并且不允许单独访问其中一个。</p>
+
+<p>当方法被调用时，JVM会使用 局部变量表 来完成参数值到参数列表的传递过程。</p>
+
+<p>即实参到型参的传递。</p>
+
+<p>如果执行的是实例方法（非static），局部变量表的0槽里默认存放 用于传递方法所属对象实例的引用。（方法里面写的this就是它）。
+其余的参数则按照参数表顺序排列，从槽1开始依次占坑。</p>
+
+<p>参数表分配完之后，再根据方法内部定义的变量顺序和作用域分配其余的槽。</p>
+
+<ul>
+  <li>复用槽</li>
+</ul>
+
+<p>为了尽可能节省栈帧耗用的内存空间，局部变量表中的变量槽是可以重用的。</p>
+
+<p>方法中的变量的作用域不一定覆盖整个方法体，当pc计数器的值超过了某个变量的作用域范围时，这个槽就可以重用。</p>
+
+<p>次重用的设计虽然节省了栈空间，但是偶尔会影响到GC。</p>
+
+<p>影响主要产生于重用这里，重用并不是超出作用域范围之后立刻清空，而是等到需要的时候才会清。
+在槽被清之前，这个变量虽然已经超出作用域范围了，但是引用还在，gc的时候由于仍然保持着引用，就依然属于可达。</p>
+
+<h3 id="操作数栈操作栈-operand-stack">操作数栈/操作栈 Operand Stack</h3>
+
+<p>也是个栈，也有槽，槽的大小跟前面一致，栈的最大深度是编译器在做数据流分析的时候保证不超过max_stacks的最大值。</p>
+
+<h4 id="运行流程">运行流程</h4>
+
+<p>一个方法刚开始执行时，OperandStack是空的，方法执行的过程中会有各种字节码指令对OperandStack进行入栈、出栈操作。</p>
+
+<p>比如 1+2 ,就是先把俩数入栈，然后字节码指令iadd把这俩数出栈，然后相加，最后把相加的结果再入栈。</p>
+
+<p>抽象模型中 两个StackFrame是相互独立的，但是虚拟机的实现里通常会进行优化处理，通过将不同的栈帧部分重叠，让下面栈帧的部分操作数栈和上面栈帧的部分比局部变量表重叠。</p>
+
+<p>这样即可以节约空间，还可以在方法调用时直接公用一部分数据，避免进行额外的参数复制传递。</p>
+
+<h3 id="frame-data-reference-to-runtime-constant-pool">Frame data: Reference to Runtime Constant Pool</h3>
+
+<p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的<strong>动态连接</strong>(Dynamic Linking)。</p>
+
+<p>类加载的时候提到过<strong>解析阶段</strong>会将 符号引用 转化为 直接引用，这种<strong>叫静态解析</strong>。
+还要一部分 符号引用 在是在运行时转化为 直接引用，这个就是动态链接Dynamic Linking。</p>
+
+<h3 id="frame-data-returnaddress">Frame data: returnAddress</h3>
+
+<p>TODO returnAddress想略过不表。</p>
+
+<p>这个东西属于上古遗留产物，是一种特殊的类型，给Java虚拟机的jsr，ret和jsr_w指令（§jsr，§ret，§jsr_w）用的，主要是处理异常。
+现在异常处理都是用异常表。​
+一个方法开始执行后，有两种退出方式：</p>
+
+<ul>
+  <li>
+    <p>一种是正常退出 Normal Method Invocation Completion</p>
+
+    <p>就正常执行完，要么结束（void），要么返回个返回值给它的上一层调用。</p>
+  </li>
+  <li>
+    <p>一种是执行过程中遇到异常 Abrupt Method Invocation Completion</p>
+
+    <p>方法没执行完，然后代码中出现了未妥善处理的异常，或者jvm内部出错，反正只要是在该方法异常表里没找到匹配的异常处理器，就直接导致方法退出。</p>
+  </li>
+</ul>
+
+<p>无论是那种方式退出，退出之后必须返回最初方法被调用时的位置，程序才能继续运行。
+正常退出时，一般就是主调方法pc计数器的值就是返回地址。</p>
+
+<p>方法退出的过程实际上等同于把当前栈帧出栈，因此退出时可能执行的操作有:恢复上层方法的 局部变量表和操作数栈，把返回值(如果有的话)压入调用者栈帧的操作数栈中，调整PC计数器的值 以指向方法调用指令后面的一条指令等。笔者这里写的“可能”是由于这是基于概念模型的讨论，只有 具体到某一款Java虚拟机实现，会执行哪些操作才能确定下来。</p>
+
+<h3 id="frame-data-others">Frame data: others</h3>
+
+<blockquote>
+  <p>《Java虚拟机规范》允许虚拟机实现增加一些规范里没有描述的信息到栈帧之中，例如与调试、性能收集相关的信息，这部分信息完全取决于具体的虚拟机实现。</p>
+</blockquote>
+
+<p>TODO 这部分也想略。</p>
 
                 </div>
             </section>
@@ -397,16 +393,13 @@ into the {body} of the default.hbs template -->
                                 
                                   
                                     
-                                        
-                                        
-                                            <li><a href="/stack-based-architecture">Stack Frame - 草稿</a></li>
-                                        
-                                    
                                   
                                 
                                   
                                     
                                         
+                                        
+                                            <li><a href="/JVM-Runtime-Data-Area">JVM-RuntimeDataArea</a></li>
                                         
                                     
                                   
@@ -423,6 +416,9 @@ into the {body} of the default.hbs template -->
                                   
                                 
                                   
+                                    
+                                        
+                                        
                                     
                                   
                                 
@@ -446,17 +442,17 @@ into the {body} of the default.hbs template -->
     <article class="post-card post-template no-image">
         
         <div class="post-card-content">
-            <a class="post-card-content-link" href="/2019booklist">
+            <a class="post-card-content-link" href="/classloading">
                 <header class="post-card-header">
                     
                         
                             
-                                <span class="post-card-tags">Magical-index</span>
+                                <span class="post-card-tags">Scroll</span>
                             
                         
                     
 
-                    <h2 class="post-card-title">2019读过的书</h2>
+                    <h2 class="post-card-title">JVM-类加载笔记-草稿</h2>
                 </header>
                 <section class="post-card-excerpt">
                     
@@ -482,6 +478,44 @@ into the {body} of the default.hbs template -->
 
             <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
             
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/JVM-Runtime-Data-Area">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM-RuntimeDataArea</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
 
         </div>
     </div>
@@ -498,18 +532,18 @@ into the {body} of the default.hbs template -->
         </a>
     </div>
     <span class="floating-header-divider">&mdash;</span>
-    <div class="floating-header-title">2019年终总结</div>
+    <div class="floating-header-title">Stack Frame - 草稿</div>
     <div class="floating-header-share">
         <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
 </svg>
 </div>
-        <a class="floating-header-share-tw" href="https://twitter.com/share?text=2019%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93&amp;url=https://lament-z.comin-the-end"
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=Stack+Frame+-+%E8%8D%89%E7%A8%BF&amp;url=https://lament-z.comstack-based-architecture"
             onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
 
         </a>
-        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comin-the-end"
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comstack-based-architecture"
             onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
 

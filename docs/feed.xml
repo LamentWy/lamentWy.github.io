@@ -1,4 +1,694 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-02-26T18:17:02+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">JVM-类加载笔记-草稿</title><link href="http://localhost:4000/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" /><published>2021-01-17T00:00:00+08:00</published><updated>2021-01-17T00:00:00+08:00</updated><id>http://localhost:4000/classloading</id><content type="html" xml:base="http://localhost:4000/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-04-13T18:45:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">Java集合类系列:Queue</title><link href="http://localhost:4000/collections-Queue" rel="alternate" type="text/html" title="Java集合类系列:Queue" /><published>2021-02-01T00:00:00+08:00</published><updated>2021-02-01T00:00:00+08:00</updated><id>http://localhost:4000/collections-Queue</id><content type="html" xml:base="http://localhost:4000/collections-Queue">&lt;h1 id=&quot;queue-笔记&quot;&gt;Queue 笔记&lt;/h1&gt;
+
+&lt;h2 id=&quot;几种不同场景下的队列&quot;&gt;几种不同场景下的队列&lt;/h2&gt;
+
+&lt;p&gt;数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。&lt;/p&gt;
+
+&lt;p&gt;但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。&lt;/p&gt;
+
+&lt;h2 id=&quot;queue-in-java&quot;&gt;Queue In Java&lt;/h2&gt;
+
+&lt;p&gt;Queue 在Java中是作为接口出现的，它的文档也提现了这一点。&lt;/p&gt;
+
+&lt;p&gt;FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Summary of Queue methods&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ops&lt;/td&gt;
+      &lt;td&gt;Throws exception&lt;/td&gt;
+      &lt;td&gt;Returns special value&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Insert&lt;/td&gt;
+      &lt;td&gt;add(e)&lt;/td&gt;
+      &lt;td&gt;offer(e)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;remove&lt;/td&gt;
+      &lt;td&gt;remove()&lt;/td&gt;
+      &lt;td&gt;poll()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Examine&lt;/td&gt;
+      &lt;td&gt;element()&lt;/td&gt;
+      &lt;td&gt;peek()&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;deque&quot;&gt;Deque&lt;/h3&gt;
+
+&lt;p&gt;Deque is short for “double ended queue”.&lt;/p&gt;
+
+&lt;p&gt;它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。
+同时它可以用作传统的FIFO “队列” ，也可以用作 “FILO” “栈”。 Java为这两种”场景”都提供了对应的方法。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;作为双端队列时，提供了12个方法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Summary of Deque methods&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ops&lt;/th&gt;
+      &lt;th&gt;Head&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Tail&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;&lt;em&gt;Throws exception&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;em&gt;Special value&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;em&gt;Throws exception&lt;/em&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;em&gt;Special value&lt;/em&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Insert&lt;/td&gt;
+      &lt;td&gt;addFrist(e)&lt;/td&gt;
+      &lt;td&gt;offerFirst(e)&lt;/td&gt;
+      &lt;td&gt;addLast(e)&lt;/td&gt;
+      &lt;td&gt;offerLast(e)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Remove&lt;/td&gt;
+      &lt;td&gt;removeFirst()&lt;/td&gt;
+      &lt;td&gt;pollFirst()&lt;/td&gt;
+      &lt;td&gt;removeLast()&lt;/td&gt;
+      &lt;td&gt;pollLast()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Examine&lt;/td&gt;
+      &lt;td&gt;getFirst()&lt;/td&gt;
+      &lt;td&gt;peekFirst()&lt;/td&gt;
+      &lt;td&gt;getLast()&lt;/td&gt;
+      &lt;td&gt;peekLast()&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;作为 FIFO Queue 时，提供如下方法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Comparison of Queue and Deque methods&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Queue Method&lt;/th&gt;
+      &lt;th&gt;Equivalent Deque Method&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;add(e)&lt;/td&gt;
+      &lt;td&gt;addLast(e)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;offer(e)&lt;/td&gt;
+      &lt;td&gt;offerLast(e)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;remove()&lt;/td&gt;
+      &lt;td&gt;removeFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;poll()&lt;/td&gt;
+      &lt;td&gt;pollFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;element()&lt;/td&gt;
+      &lt;td&gt;getFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;peek()&lt;/td&gt;
+      &lt;td&gt;peekFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;作为 FILO Stack时，提供如下方法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Comparison of Stack and Deque methods&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Stack Method&lt;/th&gt;
+      &lt;th&gt;Equivalent Deque Method&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;push(e)&lt;/td&gt;
+      &lt;td&gt;addFirst(e)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;pop()&lt;/td&gt;
+      &lt;td&gt;removeFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;peek()&lt;/td&gt;
+      &lt;td&gt;peekFirst()&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;arraydeque&quot;&gt;ArrayDeque&lt;/h3&gt;
+
+&lt;p&gt;ArrayDeque 是基于变长数组对 Deque 的实现。&lt;/p&gt;
+
+&lt;h4 id=&quot;性质&quot;&gt;性质&lt;/h4&gt;
+&lt;p&gt;可自动扩容，具备双端队列的能力，非线程安全，具备快速失败的能力。&lt;/p&gt;
+
+&lt;h4 id=&quot;源码分析&quot;&gt;源码分析&lt;/h4&gt;
+
+&lt;h5 id=&quot;基于数组&quot;&gt;基于数组&lt;/h5&gt;
+
+&lt;p&gt;就是个 Object 数组。&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  transient Object[] elements; // non-private to simplify nested class access
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;不过由于这个场景是双端队列，所以要看作是循环数组，在普通数组的基础上添加了头尾的标记，数组的头尾不再是array[0] 和 array[size-1]，而是由 head / tail 来决定，其中tail永远指向数组中的一个未被占用的元素。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  transient int head;
+
+  transient int tail;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;安全性非线程安全&quot;&gt;安全性：非线程安全&lt;/h5&gt;
+
+&lt;p&gt;快速失败，根据索引删除方法&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;delete(int index)&lt;/code&gt;和遍历元素的代码中都可以看到。&lt;/p&gt;
+
+&lt;h5 id=&quot;遍历&quot;&gt;遍历&lt;/h5&gt;
+
+&lt;p&gt;俩迭代器实现，一个从head遍历到tail，一个从tail到head。&lt;/p&gt;
+
+&lt;h5 id=&quot;构造方法3个-无论使用哪个构造方法其容量一定是2的幂&quot;&gt;构造方法：3个 无论使用哪个构造方法，其容量一定是2的幂。&lt;/h5&gt;
+&lt;ol&gt;
+  &lt;li&gt;无参，默认数组容量为16
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public ArrayDeque() {
+    elements = new Object[16];
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;指定数组容量 ,但数组真实容量永远是正好比 numElements 大的2的n次幂
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public ArrayDeque(int numElements) {
+    allocateElements(numElements);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;其中的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;allocateElements(numElements);&lt;/code&gt;的逻辑很简单就是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new Object[calculateSize(numElements)]&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;主要看一下计算数组容量，如何让数组的真实容量永远是正好比 numElements 大的2的n次幂&lt;/p&gt;
+
+    &lt;p&gt;当传入数组容量的参数不是2的幂时&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; private static int calculateSize(int numElements) {
+        int initialCapacity = MIN_INITIAL_CAPACITY; //这个值为 8
+
+        // Find the best power of two to hold elements.
+        // Tests &quot;&amp;lt;=&quot; because arrays aren't kept full.
+        if (numElements &amp;gt;= initialCapacity) { //如果我们指定的值大于8
+           initialCapacity = numElements;
+           initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  1);
+           initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  2);
+           initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  4);
+           initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  8);
+           initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt; 16);
+           initialCapacity++;
+
+       if (initialCapacity &amp;lt; 0)   // Too many elements, must back off
+           initialCapacity &amp;gt;&amp;gt;&amp;gt;= 1;// Good luck allocating 2 ^ 30 elements
+            }
+            return initialCapacity;
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;以上代码的逻辑是：&lt;/p&gt;
+
+    &lt;p&gt;如果我们给定的数组容量小于8，则按8创建。
+如果比8大，则找到 正好大于给定值的2^n幂。
+如果这个值大到INT越界，那它就是个负数，»&amp;gt;=1 可以把它变成一个至少 2 ^ 30 级别的整数&lt;/p&gt;
+
+    &lt;p&gt;这里分析下计算容量的代码：&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  1);
+initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  2);
+initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  4);
+initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  8);
+initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt; 16);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;5行代码都非常相似，它的功能是找到比 numElements 大的那个 2^n .&lt;/p&gt;
+
+    &lt;p&gt;原理如下：
+首先，所有 2^n 的值，转化成二进制之后，肯定长这样： 1000000…0000。
+然后减去1 ，变成 01111111….1111这样，高位的0忽略，就是 11111111…11111。&lt;/p&gt;
+
+    &lt;p&gt;那怎么把 任意一个整数变成 1111…1111这样呢，就是代码里的办法了。&lt;/p&gt;
+
+    &lt;p&gt;任意整数的二进制表示，忽略掉高位的0之后，他左边的第一位肯定是1，也就是长这样：
+1xxxxxxx。
+当它向右移动一位并补0之后，就变成01xxxxx&lt;/p&gt;
+
+    &lt;p&gt;1xxxxxxx
+01xxxxxx
+–或运算–
+11xxxxxx&lt;/p&gt;
+
+    &lt;p&gt;这个时候，initialCapacity = 11xxxxxx 了&lt;/p&gt;
+
+    &lt;p&gt;后面无论移动多少位都是这个原理，因为或操作代表只要不同时为0，都是1，而»&amp;gt;是一个右移补0的操作，意味着高位永远是1。
+一共最多移动 1 + 2 + 4 + 8 + 16 = 31位，
+如果这个数字非常大，也就是当31位移动完之后，才填满所有的1，一个填满了31位 111…111，再加1妥妥的越界啦。&lt;/p&gt;
+
+    &lt;p&gt;同时这个操作还有个好处是，当你得到想要的结果后，后面的重复计算不会改变结果。&lt;/p&gt;
+
+    &lt;p&gt;假设&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;numElements=9&lt;/code&gt;:&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;第一次运行
+1001  aka initialCapacity = 9
+0100  aka initialCapacity &amp;gt;&amp;gt;&amp;gt; 1
+-或运算-
+1100
+
+第二次运行
+1100
+0011 aka initialCapacity &amp;gt;&amp;gt;&amp;gt;  2
+----
+1111 到这里其实已经拿到结果了
+
+第三次运行
+1111
+0000 aka initialCapacity  &amp;gt;&amp;gt;&amp;gt;  4
+----
+1111
+
+后两次略
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;同时这个过程可以看出来为什么 移动的位数 是 1 2 4 …这个序列。
+移动第一次之后，头两位肯定是11xxxx，所以第二次直接右移动2补俩0，下一次自然就是1111xxx，以此类推。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把集合类的实例转化成对应的Deque的实例&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public ArrayDeque(Collection&amp;lt;? extends E&amp;gt; c) {
+    allocateElements(c.size());
+    addAll(c);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h5 id=&quot;arraydeque-中操作元素的几个主要方法&quot;&gt;ArrayDeque 中操作元素的几个主要方法&lt;/h5&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ArrayDeque 是 Deque 的实现类，而前面介绍 Deque 时罗列的那么多方法它都得实现，打开源码能看到一万个方法，但是实际上主要的新增和删除元素的方法就四个：addFirst，addLast，pollFirst，pollLast。它源码里有三行单行注释说的就是这个。&lt;/p&gt;
+
+&lt;p&gt;其他方法是根据这些定义的，基本不用看。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;addFirst()&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  public void addFirst(E e) {
+            if (e == null)
+       throw new NullPointerException();
+            elements[head = (head - 1) &amp;amp; (elements.length - 1)] = e; //主要看这句
+            if (head == tail) //数组已满需要扩容
+            doubleCapacity(); //这个后面展开
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;重点说addFirst，这个看明白了剩下3个都不难，而且这个跟自动扩容也有点关系。&lt;/p&gt;
+
+&lt;p&gt;这个方法的作用是在 head 之前插入一个元素，并且把这个元素作为新的 head。&lt;/p&gt;
+
+&lt;p&gt;完成这个操作需要考虑容量溢出和下标越界两种情况：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;容量溢出&lt;br /&gt;
+    在 addFirst() 方法中一定不会出现容量溢出，因为在 ArrayDeque 的实现中，tail 永远指向一个可插入数据的空数组元素，所以 head最少也可以占用这个空，此时也正好满足插入完成后，head == tail 从而触发扩容。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;数组下标越界&lt;br /&gt;
+    下标越界是指，由于是双端链表，头尾位置不固定，对于这个方法而言就是发生在 head = 0 时，此时 head = head -1 ,也就是 -1。&lt;/p&gt;
+
+    &lt;p&gt;下面来详细分析下&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;head = (head - 1) &amp;amp; (elements.length - 1)&lt;/code&gt;这段代码 ,它即完成了计算head新值的功能，又解决了-1越界的问题。&lt;/p&gt;
+
+    &lt;p&gt;先从功能上分析，addFirst 时，head 的新值只需要考虑两种可能，head 是否为0，我们自己写代码时可能就会写出如下逻辑：&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; //伪代码
+ if (head == 0){
+   head = length -1;
+ }else{
+   head = head -1;
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;而源码中则利用”与”运算的几个小技巧（tips的验证和推导在最后）：&lt;/p&gt;
+    &lt;blockquote&gt;
+      &lt;p&gt;Tips1: n为任意整数，-1 &amp;amp; n 等价于 求n的补码，我们用的都是补码，说白了就是n， -1 &amp;amp; n === n&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;Tips2: 任意正整数 m,n ,当 m &amp;lt;= 2^n-1时, m &amp;amp; (2^n - 1) ==  m mod (2^n -1) 文字描述： m 对 2^n - 1 进行与操作，等价于 m 对 2^n - 1 取模。&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;p&gt;这俩技巧有啥用呢，我们回到前面 head 求值那行代码。&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; head = (head - 1) &amp;amp; (elements.length - 1);
+
+ //当head = 0时，容量甭管是多少，反正肯定是2^n ,上面的代码实际上变成了
+ head = （-1 &amp;amp; elements.length - 1） = elements.length - 1 // 运用了tips1
+
+ //当head != 0 时，head的取值范围是 1 ～ (length -1) ，head - 1 的范围就是 0 ~ (length -1 -1 )。
+ // 也就是说 head - 1 &amp;lt; length - 1 恒成立 。
+ // 俩正整数 n&amp;lt;m 时，n mod m 恒等于 n ，这里如果一下想不明白的话，可以套用数学里面的求余。
+ head = (head -1) &amp;amp; (elements.length - 1) = head -1 ; //tips2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;源码用一行代码替换了我们前面写的if/else逻辑，并且提供了一些性能上的优势。&lt;/p&gt;
+
+    &lt;p&gt;这也是为什么数组的实际容量 (elements.length) 一定是2的幂次，这是因为可以方便这里的取模(mod)操作，注意 mod (取模) 跟 % (取余) 对于计算机而言是有区别的，主要是返回结果的取舍上，比如 4 &amp;amp; 3 == 0 ，4 % 3 == 1。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;addLast()&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  public void addLast(E e) {
+      if (e == null)
+        throw new NullPointerException();
+        elements[tail] = e;
+      if ( (tail = (tail + 1) &amp;amp; (elements.length - 1)) == head)
+        doubleCapacity();
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这个方法的作用是在 Tail 处直接添加新元素，然后 Tail 指向下一个空的数组元素，如果没有空的就进行扩容。与&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;addFirst()&lt;/code&gt;基本类似，区别在于要保证 Tail 永远要指向一个空的数组元素。&lt;/p&gt;
+
+&lt;p&gt;还是老样子，根据这个需求我们先自己尝试实现一下。尾部同样是容量溢出和数组下标越界两个问题需要解决。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    //伪代码  
+    elements[tail] = newElement; //这一步是一定能完成的
+    //判断数组此时是否已满，如果满了则扩容，如果没满，则tail +1
+
+  if(isFull()){
+    grow(); //扩容
+    tail= tail + 1;
+  }else{
+    tail = tail + 1;
+  }
+  //由于是双端队列，判断数组是不是满了分为两种情况
+  // head &amp;gt; tail 时，tail + 1 =head 则满了
+  // head &amp;lt; tail 时，head + tail + 1 = length 就满了
+
+  isFull(){
+      if(head &amp;gt; tail){
+        return tail +1 == head;
+      }else{
+        return head + tail + 1 == length;
+      }
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;上面的伪代码只解决了容量溢出的问题，没有解决数组下标越界的问题。&lt;/p&gt;
+
+&lt;p&gt;比如情况1： head=4 ，tail=6，length=7，按照双端队列 tail 之后应该为 0，而不是 7；&lt;/p&gt;
+
+&lt;p&gt;或者情况2： 如果head是1，tail是0，触发扩容，扩容之后，tail+1指到head头上去了。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    //伪代码 moveTail只能解决情况1.
+    moveTail(){
+      if (tail + 1 == length){
+        tail = 0;
+      }else{
+        tail = tail + 1;
+      }
+    }
+
+    //为了解决情况2，我们需要在扩容时把双端数组规整一下。让head在新数组中回到0的位置去，其他的按照顺序依次填充。
+    grow(){
+      newArrary[length*2];
+      //遍历旧数组，把head放到newArray[0]，其他的按顺序排列。
+      head = 0;
+      tail = length -1; //因为我们的伪代码里 grow()之后tail 还要+1
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;是不是特别麻烦，下面来看源码里为什么这么短。&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  elements[tail] = e; //向空的数组元素中插入数据
+  if ( (tail = (tail + 1) &amp;amp; (elements.length - 1)) == head) //即完成了tail的赋值工作，又完成了数组是否已满的判断。
+    doubleCapacity();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;由于 tail 永远指向一个可插入数据的空数组元素，所以插入数据这一步&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elements[tail] = e;&lt;/code&gt;是一定会完成的，如果满了就进行扩容，除非扩容失败，比如数组的容量超过数组允许的最大值会&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;throw new IllegalStateException(&quot;Sorry, deque too big&quot;);&lt;/code&gt;。扩容解决了，但是 tail 如何指向空的数组元素，这个在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;doubleCapacity();&lt;/code&gt;中进行保证，逻辑大体跟我们伪代码里一样，只不过它的tail = length，细节在扩容部分再说。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    //拆分代码
+    tail = (tail + 1) &amp;amp; (elements.length - 1);
+
+    if(tail == head){
+      doubleCapacity();
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;根据前面 addFirst()中学到的技巧，当 (tail + 1) &amp;lt;= (elements.length - 1) 时，tail = tail + 1。但是 tail = length-1 时， 很明显 tail + 1 就是 length , 这时候代码转化为 tail = length &amp;amp; （length -1）= 0, 由于length一定是2^n所以，tail一定为0(这里不明白拉到最后看一眼tips3)。&lt;/p&gt;
+
+&lt;p&gt;由于先计算了tail的新值，所以判断数组是否满了也不需要我们之前伪代码演示的那么麻烦了，直接判断 head == tail即可，并且也不存在tail 指向head这种情况发生，因为扩容之后head会重新回到0，tail则为length。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;pollFirst()&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    public E pollFirst() {
+        int h = head;
+        @SuppressWarnings(&quot;unchecked&quot;)
+        E result = (E) elements[h];
+        // Element is null if deque empty
+        if (result == null)
+            return null;
+        elements[h] = null;     // Must null out slot
+        head = (h + 1) &amp;amp; (elements.length - 1);
+        return result;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这方法就简单多了，把 elements[head] 取出来，然后把这个数组元素置为空，移动head。需要注意的是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;elements[h] = null;     // Must null out slot&lt;/code&gt; 注释也说了，必须null掉。虽然好像不null掉也问题不大，判断扩容啥的都是根据下标来的，实际上问题很大，比如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;contains(Object o)&lt;/code&gt;方法就会出现poll完了，怎么还在的情况。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;pollLast
+    同上，略。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h5 id=&quot;自动扩容&quot;&gt;自动扩容&lt;/h5&gt;
+&lt;p&gt;当队列满了，或者说数组填充满元素时会触发自动扩容。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;触发扩容的条件&lt;/p&gt;
+
+    &lt;p&gt;只有添加元素时才会触发自动扩容，也就是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;addFirst()&lt;/code&gt;、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;addLast()&lt;/code&gt; 这俩方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;自动扩容：&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; private void doubleCapacity() {
+        assert head == tail;
+        int p = head;
+        int n = elements.length;
+        int r = n - p; // number of elements to the right of p
+        int newCapacity = n &amp;lt;&amp;lt; 1;
+        if (newCapacity &amp;lt; 0)
+            throw new IllegalStateException(&quot;Sorry, deque too big&quot;);
+        Object[] a = new Object[newCapacity];
+        System.arraycopy(elements, p, a, 0, r);
+        System.arraycopy(elements, 0, a, r, p);
+        elements = a;
+        head = 0;
+        tail = n;
+ }        
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;大体逻辑跟我们在伪代码中写的一样。
+ 通过 doubleCapacity() ，直接将原数组扩为2倍大小， int newCapacity = n « 1;
+ 如果这个值超过了数组允许的最大值，则throw new IllegalStateException(“Sorry, deque too big”);
+ 当扩容成功之后，对数组进行复制，由于循环数组是有头尾的，而且头尾会移动，
+ 所以复制的时候会在新数组中重新拼接一下之前的数组。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; //原数组中从 head 开始，向右到数组最后一个元素，顶头放入新数组
+ System.arraycopy(elements, p, a, 0, r);
+ //原数组中从 tail 开始, 向左的全部元素（换个方向描述就是从element[0] 到 tail 的全部元素)，拼接到a剩下的空槽中
+ System.arraycopy(elements, 0, a, r, p);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;tips&quot;&gt;tips&lt;/h2&gt;
+
+&lt;h3 id=&quot;位运算符-和-正反补&quot;&gt;位运算符 和 正反补&lt;/h3&gt;
+
+&lt;p&gt;表格的样式有点问题，讲究看吧，我前端是渣渣搞不清楚这个。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;位运算符&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;ops&lt;/th&gt;
+      &lt;th&gt;中文名&lt;/th&gt;
+      &lt;th&gt;描述&lt;/th&gt;
+      &lt;th&gt;口诀 / 小技巧&lt;/th&gt;
+      &lt;th&gt;例子&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&amp;amp;&lt;/td&gt;
+      &lt;td&gt;与&lt;/td&gt;
+      &lt;td&gt;如果相对应位都是1，则结果为1，否则为0&lt;/td&gt;
+      &lt;td&gt;同1为1，不同为0&lt;/td&gt;
+      &lt;td&gt;A &amp;amp; B&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;或&lt;/td&gt;
+      &lt;td&gt;或&lt;/td&gt;
+      &lt;td&gt;如果相对应位都是 0，则结果为 0，否则为 1&lt;/td&gt;
+      &lt;td&gt;同0为0，不同为1&lt;/td&gt;
+      &lt;td&gt;A&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;^&lt;/td&gt;
+      &lt;td&gt;异或&lt;/td&gt;
+      &lt;td&gt;如果相对应位值相同，则结果为0，否则为1&lt;/td&gt;
+      &lt;td&gt;相同为0，不同为1&lt;/td&gt;
+      &lt;td&gt;A ^ B&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;～&lt;/td&gt;
+      &lt;td&gt;取反&lt;/td&gt;
+      &lt;td&gt;也叫按位取反，就是把每一位的数反转，即0变成1，1变成0&lt;/td&gt;
+      &lt;td&gt;取反不需要口诀吧&lt;/td&gt;
+      &lt;td&gt;~A&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;«&lt;/td&gt;
+      &lt;td&gt;左移&lt;/td&gt;
+      &lt;td&gt;把符号左面的数的二进制版本向左移动n位&lt;/td&gt;
+      &lt;td&gt;1 « n = 2^n&lt;/td&gt;
+      &lt;td&gt;假设A = 1, A « 2 = 4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;»&lt;/td&gt;
+      &lt;td&gt;右移&lt;/td&gt;
+      &lt;td&gt;跟左移一样，不过方向向右&lt;/td&gt;
+      &lt;td&gt;n/a&lt;/td&gt;
+      &lt;td&gt;假设A = 1, A » 2 = 0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;»&amp;gt;&lt;/td&gt;
+      &lt;td&gt;按位右移补0&lt;/td&gt;
+      &lt;td&gt;跟右移差不多，不过空位要补0&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;正反补码&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;name&lt;/th&gt;
+      &lt;th&gt;描述&lt;/th&gt;
+      &lt;th&gt;正负0&lt;/th&gt;
+      &lt;th&gt;拓展&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;原码&lt;/td&gt;
+      &lt;td&gt;原码最高位为符号为，0正1负，其余位置表示数值，不足位时在符号为和数值之间补0&lt;/td&gt;
+      &lt;td&gt;正数的原码就是它本身，符号位为0；负数的原码符号位是1，其他跟正数一样；0就全是0&lt;/td&gt;
+      &lt;td&gt;大致长这样：{1: 0 0001} {-1: 1 0001} {0: 0 0000} 但是不能做加减法，-1+1原码的结果是-2，于是搞了反码&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;反码&lt;/td&gt;
+      &lt;td&gt;反码主要折腾负数，负数的反码符号位依然为1，但是其他位要全部取反。&lt;/td&gt;
+      &lt;td&gt;正数还是跟原码一样，负数前面说了，0就尴尬了，有俩0.&lt;/td&gt;
+      &lt;td&gt;反码解决了 1-1 = -2的问题，但是根据符号位不同，诞生了正0和负0两个0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;补码&lt;/td&gt;
+      &lt;td&gt;补码也是折腾负数，负数的补码是在其反码的末位+1，如果超出最高位则丢弃最高位&lt;/td&gt;
+      &lt;td&gt;正数正反补码都一样，负数就是前面说的反码末位+1，0就是0啦&lt;/td&gt;
+      &lt;td&gt;补码解决了双0问题，反码中负0全是1，末位+1之后最高位越界丢弃，只剩0，终于只有一个0了。&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;补码，中补的来源，two’s complement，对2求补，这是离散数学中的一种计算方法，我念书的时候为啥离散数学没教这个。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;tips1&quot;&gt;tips1&lt;/h3&gt;
+
+&lt;p&gt;-1 &amp;amp; n === 求n的补码 aka -1 &amp;amp; n === n，n 可以是任意整数。&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;推导过程:
+-1 ，其符号位为1，原码为 1 0001，但是计算机存储负数是存其补码，也就是符号位不变，其他位反转，之后末位+1
+-1的反码: 1 1110 ,  
+-1的补码: 1 1111 。
+
+然后按位与操作的原则是： 同1则1，不同为0.
+
+很明显-1这个所有位上全是1的二进制数 跟 任何整数 进行 与操作 都不会改变对方的值。
+
+1111     1111
+1010     0000
+--------------
+1010     0000
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;tips2&quot;&gt;tips2&lt;/h3&gt;
+
+&lt;p&gt;任意正整数 m,n ，当 m &amp;lt;= 2^n-1时， m &amp;amp; (2^n - 1) ==  m mod (2^n -1)&lt;/p&gt;
+
+&lt;p&gt;描述： m 对 2^n - 1 进行与操作，等价于 m 对 2^n - 1 取模。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 2^n 的二进制除了高位有个1，低位全是0，也就是 1000...000 这个样子。
+ 2^n -1 的二进制低位全是1，也就是 000111..111 这种样子。
+
+ 类似上面-1的那一堆1是不是。
+ 当 m &amp;lt;= 2^n - 1 时候，那么一定是这个样子
+ m    : 0000 1001
+ 2^n-1: 0111 1111
+ -----------------
+ 肯定还是m本身，跟前面-1的情况基本类似。  
+ 从取模的角度去思考的话，跟 2 mod 10 = 2 一样。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;tips3&quot;&gt;tips3&lt;/h3&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2^n &amp;amp; 2^n-1 === 0
+证明看下图:
+2^n   : 1000...000
+2^n-1 : 0111...111
+----------按位与-----
+        0000000000
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">Queue 笔记</summary></entry><entry><title type="html">JVM-类加载笔记-草稿</title><link href="http://localhost:4000/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" /><published>2021-01-17T00:00:00+08:00</published><updated>2021-01-17T00:00:00+08:00</updated><id>http://localhost:4000/classloading</id><content type="html" xml:base="http://localhost:4000/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
 
 &lt;p&gt;Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。&lt;/p&gt;
 
@@ -294,7 +984,154 @@ To allow for upgrading/overriding of modules defined to the platform class loade
 &lt;/blockquote&gt;
 
 &lt;p&gt;更多细节参考：
-&lt;a href=&quot;https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html&quot;&gt;JDK9-Docs-ClassLoader&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">笔记</summary></entry><entry><title type="html">JVM-RuntimeDataArea</title><link href="http://localhost:4000/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Runtime-Data-Area</id><content type="html" xml:base="http://localhost:4000/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+&lt;a href=&quot;https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html&quot;&gt;JDK9-Docs-ClassLoader&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">笔记</summary></entry><entry><title type="html">Stack Frame - 草稿</title><link href="http://localhost:4000/stack-based-architecture" rel="alternate" type="text/html" title="Stack Frame - 草稿" /><published>2021-01-04T00:00:00+08:00</published><updated>2021-01-04T00:00:00+08:00</updated><id>http://localhost:4000/stack-based-architecture</id><content type="html" xml:base="http://localhost:4000/stack-based-architecture">&lt;blockquote&gt;
+  &lt;p&gt;The JVM uses a stack based architecture.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;数据结构里的栈stack&quot;&gt;数据结构里的栈(stack)&lt;/h2&gt;
+
+&lt;p&gt;先抛开语言环境啥的，单聊一下数据结构中的栈是个啥(stack)。&lt;/p&gt;
+
+&lt;p&gt;Stack 的结构和性质跟网球罐子差不多。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/tennis.png&quot; alt=&quot;tennis&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;每次我们想取出一个球只能从最上面拿，想拿最下面的球就必须先把上面的先拿完。&lt;/p&gt;
+
+&lt;p&gt;往里装球的时候也是，最先放进去的在最下面，最后放进去的在最上面。&lt;/p&gt;
+
+&lt;p&gt;对应到数据结构中这就是 Stack。&lt;/p&gt;
+
+&lt;p&gt;网球罐子开口的那一端，对应 Stack 的 top。&lt;/p&gt;
+
+&lt;p&gt;向 Stack 中添加元素（也就是往里塞球），叫做入栈，push。&lt;/p&gt;
+
+&lt;p&gt;从 Stack 中取出元素(往外拿球)，叫出栈，pop。&lt;/p&gt;
+
+&lt;p&gt;LIFO，Last in first out。&lt;/p&gt;
+
+&lt;h2 id=&quot;栈帧-stack-frame&quot;&gt;栈帧 Stack Frame&lt;/h2&gt;
+
+&lt;p&gt;JVM最基本的执行单元为方法。&lt;/p&gt;
+
+&lt;p&gt;而 Stack Frame 是支持方法调用和方法执行背后的数据结构。&lt;/p&gt;
+
+&lt;h3 id=&quot;组成&quot;&gt;组成&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://lament-z.com/assets/images/JVM/Stack Frame Diagram.jpg&quot; alt=&quot;Stack Frame&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Stack Frame中包含 局部变量表，操作数栈，以及其他一些栈帧数据。&lt;/p&gt;
+
+&lt;h4 id=&quot;局部变量表-local-variables-table&quot;&gt;局部变量表 local variables Table&lt;/h4&gt;
+
+&lt;p&gt;TODO  复用槽啥的也想略。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;是什么&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;局部变量表(Local Variables Table)是一组变量值的存储空间，用于存放方法参数和方法内部定义 的局部变量。在Java程序被编译为Class文件时，就在方法的Code属性的max_locals数据项中确定了该方 法所需分配的局部变量表的最大容量。&lt;/p&gt;
+
+&lt;p&gt;所谓的一组变量值具体是指：方法参数，方法内部定义的那些个局部变量。&lt;/p&gt;
+
+&lt;p&gt;局部变量表的最小组成部分叫做变量槽（Variable Slot）。&lt;/p&gt;
+
+&lt;p&gt;它的大小要能存放一个X类型的数据，这个X指的是：6种基础元素类型的JVM版（除去double long）+对象实例的引用+returnAddress（比较少见）。&lt;/p&gt;
+
+&lt;p&gt;对象实例的引用类型的长度，跟虚拟机是32位/64位相关，如果是64位还跟有没有开启某些对象指针压缩的优化有关。&lt;/p&gt;
+
+&lt;p&gt;除了八种大小不会超过32位的数据类型之外，还有double和long这俩64位的。
+JVM存储64位数据类型的方式是，通过高位对其的方式将其分配到俩连续的槽中。&lt;/p&gt;
+
+&lt;p&gt;32位的数据类型：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;怎么用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;JVM通过索引定位的方式使用局部变量表。&lt;/p&gt;
+
+&lt;p&gt;索引范围：[0，slotMax]。&lt;/p&gt;
+
+&lt;p&gt;访问32位数据时，索引n就代表第n个槽。
+访问64位时，索引n则是n和n+1俩槽，并且不允许单独访问其中一个。&lt;/p&gt;
+
+&lt;p&gt;当方法被调用时，JVM会使用 局部变量表 来完成参数值到参数列表的传递过程。&lt;/p&gt;
+
+&lt;p&gt;即实参到型参的传递。&lt;/p&gt;
+
+&lt;p&gt;如果执行的是实例方法（非static），局部变量表的0槽里默认存放 用于传递方法所属对象实例的引用。（方法里面写的this就是它）。
+其余的参数则按照参数表顺序排列，从槽1开始依次占坑。&lt;/p&gt;
+
+&lt;p&gt;参数表分配完之后，再根据方法内部定义的变量顺序和作用域分配其余的槽。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;复用槽&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了尽可能节省栈帧耗用的内存空间，局部变量表中的变量槽是可以重用的。&lt;/p&gt;
+
+&lt;p&gt;方法中的变量的作用域不一定覆盖整个方法体，当pc计数器的值超过了某个变量的作用域范围时，这个槽就可以重用。&lt;/p&gt;
+
+&lt;p&gt;次重用的设计虽然节省了栈空间，但是偶尔会影响到GC。&lt;/p&gt;
+
+&lt;p&gt;影响主要产生于重用这里，重用并不是超出作用域范围之后立刻清空，而是等到需要的时候才会清。
+在槽被清之前，这个变量虽然已经超出作用域范围了，但是引用还在，gc的时候由于仍然保持着引用，就依然属于可达。&lt;/p&gt;
+
+&lt;h3 id=&quot;操作数栈操作栈-operand-stack&quot;&gt;操作数栈/操作栈 Operand Stack&lt;/h3&gt;
+
+&lt;p&gt;也是个栈，也有槽，槽的大小跟前面一致，栈的最大深度是编译器在做数据流分析的时候保证不超过max_stacks的最大值。&lt;/p&gt;
+
+&lt;h4 id=&quot;运行流程&quot;&gt;运行流程&lt;/h4&gt;
+
+&lt;p&gt;一个方法刚开始执行时，OperandStack是空的，方法执行的过程中会有各种字节码指令对OperandStack进行入栈、出栈操作。&lt;/p&gt;
+
+&lt;p&gt;比如 1+2 ,就是先把俩数入栈，然后字节码指令iadd把这俩数出栈，然后相加，最后把相加的结果再入栈。&lt;/p&gt;
+
+&lt;p&gt;抽象模型中 两个StackFrame是相互独立的，但是虚拟机的实现里通常会进行优化处理，通过将不同的栈帧部分重叠，让下面栈帧的部分操作数栈和上面栈帧的部分比局部变量表重叠。&lt;/p&gt;
+
+&lt;p&gt;这样即可以节约空间，还可以在方法调用时直接公用一部分数据，避免进行额外的参数复制传递。&lt;/p&gt;
+
+&lt;h3 id=&quot;frame-data-reference-to-runtime-constant-pool&quot;&gt;Frame data: Reference to Runtime Constant Pool&lt;/h3&gt;
+
+&lt;p&gt;每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的&lt;strong&gt;动态连接&lt;/strong&gt;(Dynamic Linking)。&lt;/p&gt;
+
+&lt;p&gt;类加载的时候提到过&lt;strong&gt;解析阶段&lt;/strong&gt;会将 符号引用 转化为 直接引用，这种&lt;strong&gt;叫静态解析&lt;/strong&gt;。
+还要一部分 符号引用 在是在运行时转化为 直接引用，这个就是动态链接Dynamic Linking。&lt;/p&gt;
+
+&lt;h3 id=&quot;frame-data-returnaddress&quot;&gt;Frame data: returnAddress&lt;/h3&gt;
+
+&lt;p&gt;TODO returnAddress想略过不表。&lt;/p&gt;
+
+&lt;p&gt;这个东西属于上古遗留产物，是一种特殊的类型，给Java虚拟机的jsr，ret和jsr_w指令（§jsr，§ret，§jsr_w）用的，主要是处理异常。
+现在异常处理都是用异常表。​
+一个方法开始执行后，有两种退出方式：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;一种是正常退出 Normal Method Invocation Completion&lt;/p&gt;
+
+    &lt;p&gt;就正常执行完，要么结束（void），要么返回个返回值给它的上一层调用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;一种是执行过程中遇到异常 Abrupt Method Invocation Completion&lt;/p&gt;
+
+    &lt;p&gt;方法没执行完，然后代码中出现了未妥善处理的异常，或者jvm内部出错，反正只要是在该方法异常表里没找到匹配的异常处理器，就直接导致方法退出。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;无论是那种方式退出，退出之后必须返回最初方法被调用时的位置，程序才能继续运行。
+正常退出时，一般就是主调方法pc计数器的值就是返回地址。&lt;/p&gt;
+
+&lt;p&gt;方法退出的过程实际上等同于把当前栈帧出栈，因此退出时可能执行的操作有:恢复上层方法的 局部变量表和操作数栈，把返回值(如果有的话)压入调用者栈帧的操作数栈中，调整PC计数器的值 以指向方法调用指令后面的一条指令等。笔者这里写的“可能”是由于这是基于概念模型的讨论，只有 具体到某一款Java虚拟机实现，会执行哪些操作才能确定下来。&lt;/p&gt;
+
+&lt;h3 id=&quot;frame-data-others&quot;&gt;Frame data: others&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;《Java虚拟机规范》允许虚拟机实现增加一些规范里没有描述的信息到栈帧之中，例如与调试、性能收集相关的信息，这部分信息完全取决于具体的虚拟机实现。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;TODO 这部分也想略。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">The JVM uses a stack based architecture.</summary></entry><entry><title type="html">JVM-RuntimeDataArea</title><link href="http://localhost:4000/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Runtime-Data-Area</id><content type="html" xml:base="http://localhost:4000/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 
 &lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
 
