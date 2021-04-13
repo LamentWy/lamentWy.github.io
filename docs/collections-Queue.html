@@ -35,8 +35,8 @@
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
     <meta name="description" content="Queue" />
-    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="http://localhost:4000/collections-Queue" />
+    <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="/collections-Queue" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
@@ -44,8 +44,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Java集合类系列:Queue" />
     <meta property="og:description" content="Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作" />
-    <meta property="og:url" content="http://localhost:4000/collections-Queue" />
-    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="og:url" content="/collections-Queue" />
+    <meta property="og:image" content="/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
     <meta property="article:published_time" content="2021-02-01T00:00:00+08:00" />
@@ -54,8 +54,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Java集合类系列:Queue" />
     <meta name="twitter:description" content="Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作" />
-    <meta name="twitter:url" content="http://localhost:4000/" />
-    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Lament's Mage Tower" />
     <meta name="twitter:label2" content="Filed under" />
@@ -72,18 +72,18 @@
     "publisher": {
         "@type": "Organization",
         "name": "Lament's Mage Tower",
-        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+        "logo": "/assets/images/blog-icon.png"
     },
-    "url": "http://localhost:4000/collections-Queue",
+    "url": "/collections-Queue",
     "image": {
         "@type": "ImageObject",
-        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "url": "/assets/images/blog-cover.jpg",
         "width": 2000,
         "height": 666
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "http://localhost:4000/collections-Queue"
+        "@id": "/collections-Queue"
     },
     "description": "Queue 笔记 几种不同场景下的队列 数据结构中，通常把 FIFO 这种叫做队列，而 FILO 这种叫做栈。 但是编码的时候队列和栈的实现都可以“看作”是不同性质的队列。 Queue In Java Queue 在Java中是作为接口出现的，它的文档也提现了这一点。 FIFO就不是强制性的了。 这个接口定义了 新增/删除/检测三类操作，并且规定了两套实现规则：抛异常/返回特定值,见下表。   Summary of Queue methods   ops Throws exception Returns special value Insert add(e) offer(e) remove remove() poll() Examine element() peek() Deque Deque is short for “double ended queue”. 它继承Queue接口，并在这个基础上做了双端队列的扩展，自然规定了双端队列的一整套方法。 同时它可以用作传统的FIFO “队列” ，也可以用作"
 }
@@ -117,7 +117,7 @@ into the {body} of the default.hbs template -->
     <div class="site-nav-left">
         
             
-                <a class="site-nav-logo" href="http://localhost:4000/">
+                <a class="site-nav-logo" href="/">
                   <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
                   Lament
                 </a>
@@ -1029,7 +1029,7 @@ initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);
 <!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
 <div class="floating-header">
     <div class="floating-header-logo">
-        <a href="http://localhost:4000/">
+        <a href="/">
             
                 <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
             
@@ -1073,7 +1073,7 @@ initialCapacity |= (initialCapacity &gt;&gt;&gt; 16);
         <!-- The footer at the very bottom of the screen -->
         <footer class="site-footer outer">
             <div class="site-footer-content inner">
-                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="copyright"><a href="/">Lament's Mage Tower</a> &copy; 2021</section>
                 <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
                     <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
                     <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>

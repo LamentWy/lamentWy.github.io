@@ -35,8 +35,8 @@
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
     <meta name="description" content="Neutral, sometimes chaotic neutral" />
-    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="http://localhost:4000/classloading" />
+    <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="/classloading" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
@@ -44,8 +44,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="JVM-类加载笔记-草稿" />
     <meta property="og:description" content="笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an" />
-    <meta property="og:url" content="http://localhost:4000/classloading" />
-    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="og:url" content="/classloading" />
+    <meta property="og:image" content="/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
     <meta property="article:published_time" content="2021-01-17T00:00:00+08:00" />
@@ -54,8 +54,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="JVM-类加载笔记-草稿" />
     <meta name="twitter:description" content="笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an" />
-    <meta name="twitter:url" content="http://localhost:4000/" />
-    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Lament's Mage Tower" />
     <meta name="twitter:label2" content="Filed under" />
@@ -72,18 +72,18 @@
     "publisher": {
         "@type": "Organization",
         "name": "Lament's Mage Tower",
-        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+        "logo": "/assets/images/blog-icon.png"
     },
-    "url": "http://localhost:4000/classloading",
+    "url": "/classloading",
     "image": {
         "@type": "ImageObject",
-        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "url": "/assets/images/blog-cover.jpg",
         "width": 2000,
         "height": 666
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "http://localhost:4000/classloading"
+        "@id": "/classloading"
     },
     "description": "笔记 Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。 类加载的整个生命周期 其中验证、准备、解析三个阶段统称为：连接 Linking。 图中的整个生命周期中，解析可能在初始化之后才开始，并且很多阶段是交叉混合运行的，并不是某阶段结束后下一阶段才开始。 加载 Loading 加载阶段JVM要完成三件事： 通过类的全限定名拿到这个类的二进制字节流。 把这个字节流转化成方法区的运行时数据结构。 内存中生成一个代表这个类的java.lang.Class对象，作为这个类在方法区的访问入口。 说白了就是找到类，拿到它的数据，按照JVM的要求进行存储，然后在内存里打个招牌，就可以营业了。 这一步就有很多方式: 比如从jar,war中读取 运行时计算生成（动态代理技术），java.lang.reflect.Proxy中的ProxyGenerator.generateProxyClass()。 从其他文件中生成类，比如jsp。 不常见和没见过的，从加密文件中获取，网络中获取，数据库中读取。 加载阶段获取类的二进制字节流的这个动作，是实现代码动态性的一个重要口子。 数组又不太一样。 数组本身是jvm在内存中直接动态生成的，但是它的类型也跟类加载有关系。 首先它有俩类型，一个element type ,一个component type. component type 比较好理解，数组的特点就是它存储一堆相同类型的元素，在jvms里面 数组里这些元素就是component，他们的类型就是component type。 这个element type就很绕了，但实际麻烦的是component type，先上原文。 The component type of an array may itself be an array type. The components of such an"
 }
@@ -117,7 +117,7 @@ into the {body} of the default.hbs template -->
     <div class="site-nav-left">
         
             
-                <a class="site-nav-logo" href="http://localhost:4000/">
+                <a class="site-nav-logo" href="/">
                   <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
                   Lament
                 </a>
@@ -673,7 +673,7 @@ To allow for upgrading/overriding of modules defined to the platform class loade
 <!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
 <div class="floating-header">
     <div class="floating-header-logo">
-        <a href="http://localhost:4000/">
+        <a href="/">
             
                 <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
             
@@ -717,7 +717,7 @@ To allow for upgrading/overriding of modules defined to the platform class loade
         <!-- The footer at the very bottom of the screen -->
         <footer class="site-footer outer">
             <div class="site-footer-content inner">
-                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="copyright"><a href="/">Lament's Mage Tower</a> &copy; 2021</section>
                 <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
                     <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
                     <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
