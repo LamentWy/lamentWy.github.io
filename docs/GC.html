@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Document Settings -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Base Meta -->
+    <!-- dynamically fixing the title for tag/author pages -->
+
+
+
+    <title>GC</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Styles'n'Scripts -->
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/screen.edited.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/built/syntax.css" />
+    <!-- highlight.js -->
+    <link rel="stylesheet" href="/assets/built/default.min.css">
+    <style>.hljs { background: none; }</style>
+
+    <!--[if IE]>
+        <style>
+            p, ol, ul{
+                width: 100%;
+            }
+            blockquote{
+                width: 100%;
+            }
+        </style>
+    <![endif]-->
+
+    <!-- This tag outputs SEO meta+structured data and other important settings -->
+    <meta name="description" content="Neutral, sometimes chaotic neutral" />
+    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:4000/GC" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+
+     <!--title below is coming from _includes/dynamic_title-->
+    <meta property="og:site_name" content="Lament's Mage Tower" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GC" />
+    <meta property="og:description" content="什么是GC GC short for Garbage Collection. 笼统的说回收那些被“没用的数据”所占用的内存，就是GC。 所有的动态分配内存的语言都要考虑GC的灵魂三问： 什么东西需要回收？什么时候回收？用什么方法回收？ 经过几十年的发展，现在对于这灵魂三问已经有了很多非常成熟的技术，绝大部分时候我们都不用关心JVM在GC这里都干了些啥。 那为啥要学GC呢？ 因为面试要问 因为当你需要排查内存溢出、内存泄露、GC导致系统响应时间长等等问题时，总要知道JVM那个黑盒子里都干了点啥才能分析不是。 什么东西需要GC？ 对于Java而言，讨论内存相关的问题自然离不开运行时数据区的基础知识。 RuntimeDataArea中主要包含两类内存：一类是被线程私有的，比如 Program Counter Register、VM Stack等等；另一类则是共享内存，比如 Heap、Method Area啥的。 被线程私有的这些内存都是，其大小基本都是“固定”的，比如 VM Stack中每个栈帧需要多少内存，在编译期基本就确定了，其生命周期是随线程生灭的，线程死掉它占用的内存自然也就释放了，所以无需过多考虑。 而被线程共享的这部分内存则充满了不确定性。 比如所有类的实例、数组啥的都在 Heap 里分配，而一个Java应用会在运行时创建多少对象根本不可预知，这部分需要动态分配内存，也就需要动态回收内存。 所以GC的主要关注点也在这里。 换句说话，无论是Lisp还是Java，要确定什么东西需要回收，首先先找到需要动态分配的地方。 对方法区进行GC 方法区比较特别，JVMS中提到过不强制要求JVM对方法区实现GC，这个主要是因为回收条件很苛刻，然后还回收不了多少内存，性价比比较低。 这部分的GC目标主要是两部分内容：1. 废弃的常量 2. 不再使用的类型 常量比较简单，比如”lament”这个字符串，如果没有任何一个String的值是它，并且JVM肯定也用不到这个字符串，那么就会被从常量池中扫地出门。 但是判定不再使用的类就很麻烦了。 首先，这个类的所有实例（包括其派生子类的实例）都已经被回收啦；然后这个类的加载器也被回收啦（这个就很少见了）；然后这个类对应的 java.lang.Class 对象也没有引用了，并且也没办法通过反射访问该类。以上所有条件都满足的时候，也只是允许回收，不是一定会回收。 这种对类的回收，也叫类型卸载，在大量使用反射，CGLib，动态代理、JSP、OSGi这些场景里才需要JVM具备类型卸载的能力。 用什么方法GC？ 确定了需要回收的主角，接下来就介绍一下回收的方法，至于什么时候回收，需要结合回收方法来确定合适的时机，所以最后聊啥时候回收。 回收的方法也要分两部分来讨论 如何确定哪些是回收对象 以下介绍两种标记待回收对象的方法。 引用计数法 这个办法就是给对象加个引用计数器，每多一个引用，计数器就+1，引用失效就-1，如果计数器的值为0，那就说明没人再用它了，没用了就可以回收了。" />
+    <meta property="og:url" content="http://localhost:4000/GC" />
+    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="article:publisher" content="https://www.facebook.com/" />
+    <meta property="article:author" content="https://www.facebook.com/" />
+    <meta property="article:published_time" content="2021-01-10T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2021-01-10T00:00:00+08:00" />
+    <meta property="article:tag" content="Scroll" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="GC" />
+    <meta name="twitter:description" content="什么是GC GC short for Garbage Collection. 笼统的说回收那些被“没用的数据”所占用的内存，就是GC。 所有的动态分配内存的语言都要考虑GC的灵魂三问： 什么东西需要回收？什么时候回收？用什么方法回收？ 经过几十年的发展，现在对于这灵魂三问已经有了很多非常成熟的技术，绝大部分时候我们都不用关心JVM在GC这里都干了些啥。 那为啥要学GC呢？ 因为面试要问 因为当你需要排查内存溢出、内存泄露、GC导致系统响应时间长等等问题时，总要知道JVM那个黑盒子里都干了点啥才能分析不是。 什么东西需要GC？ 对于Java而言，讨论内存相关的问题自然离不开运行时数据区的基础知识。 RuntimeDataArea中主要包含两类内存：一类是被线程私有的，比如 Program Counter Register、VM Stack等等；另一类则是共享内存，比如 Heap、Method Area啥的。 被线程私有的这些内存都是，其大小基本都是“固定”的，比如 VM Stack中每个栈帧需要多少内存，在编译期基本就确定了，其生命周期是随线程生灭的，线程死掉它占用的内存自然也就释放了，所以无需过多考虑。 而被线程共享的这部分内存则充满了不确定性。 比如所有类的实例、数组啥的都在 Heap 里分配，而一个Java应用会在运行时创建多少对象根本不可预知，这部分需要动态分配内存，也就需要动态回收内存。 所以GC的主要关注点也在这里。 换句说话，无论是Lisp还是Java，要确定什么东西需要回收，首先先找到需要动态分配的地方。 对方法区进行GC 方法区比较特别，JVMS中提到过不强制要求JVM对方法区实现GC，这个主要是因为回收条件很苛刻，然后还回收不了多少内存，性价比比较低。 这部分的GC目标主要是两部分内容：1. 废弃的常量 2. 不再使用的类型 常量比较简单，比如”lament”这个字符串，如果没有任何一个String的值是它，并且JVM肯定也用不到这个字符串，那么就会被从常量池中扫地出门。 但是判定不再使用的类就很麻烦了。 首先，这个类的所有实例（包括其派生子类的实例）都已经被回收啦；然后这个类的加载器也被回收啦（这个就很少见了）；然后这个类对应的 java.lang.Class 对象也没有引用了，并且也没办法通过反射访问该类。以上所有条件都满足的时候，也只是允许回收，不是一定会回收。 这种对类的回收，也叫类型卸载，在大量使用反射，CGLib，动态代理、JSP、OSGi这些场景里才需要JVM具备类型卸载的能力。 用什么方法GC？ 确定了需要回收的主角，接下来就介绍一下回收的方法，至于什么时候回收，需要结合回收方法来确定合适的时机，所以最后聊啥时候回收。 回收的方法也要分两部分来讨论 如何确定哪些是回收对象 以下介绍两种标记待回收对象的方法。 引用计数法 这个办法就是给对象加个引用计数器，每多一个引用，计数器就+1，引用失效就-1，如果计数器的值为0，那就说明没人再用它了，没用了就可以回收了。" />
+    <meta name="twitter:url" content="http://localhost:4000/" />
+    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Lament's Mage Tower" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="Scroll" />
+    <meta name="twitter:site" content="@" />
+    <meta name="twitter:creator" content="@" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="933" />
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Lament's Mage Tower",
+        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+    },
+    "url": "http://localhost:4000/GC",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "width": 2000,
+        "height": 666
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:4000/GC"
+    },
+    "description": "什么是GC GC short for Garbage Collection. 笼统的说回收那些被“没用的数据”所占用的内存，就是GC。 所有的动态分配内存的语言都要考虑GC的灵魂三问： 什么东西需要回收？什么时候回收？用什么方法回收？ 经过几十年的发展，现在对于这灵魂三问已经有了很多非常成熟的技术，绝大部分时候我们都不用关心JVM在GC这里都干了些啥。 那为啥要学GC呢？ 因为面试要问 因为当你需要排查内存溢出、内存泄露、GC导致系统响应时间长等等问题时，总要知道JVM那个黑盒子里都干了点啥才能分析不是。 什么东西需要GC？ 对于Java而言，讨论内存相关的问题自然离不开运行时数据区的基础知识。 RuntimeDataArea中主要包含两类内存：一类是被线程私有的，比如 Program Counter Register、VM Stack等等；另一类则是共享内存，比如 Heap、Method Area啥的。 被线程私有的这些内存都是，其大小基本都是“固定”的，比如 VM Stack中每个栈帧需要多少内存，在编译期基本就确定了，其生命周期是随线程生灭的，线程死掉它占用的内存自然也就释放了，所以无需过多考虑。 而被线程共享的这部分内存则充满了不确定性。 比如所有类的实例、数组啥的都在 Heap 里分配，而一个Java应用会在运行时创建多少对象根本不可预知，这部分需要动态分配内存，也就需要动态回收内存。 所以GC的主要关注点也在这里。 换句说话，无论是Lisp还是Java，要确定什么东西需要回收，首先先找到需要动态分配的地方。 对方法区进行GC 方法区比较特别，JVMS中提到过不强制要求JVM对方法区实现GC，这个主要是因为回收条件很苛刻，然后还回收不了多少内存，性价比比较低。 这部分的GC目标主要是两部分内容：1. 废弃的常量 2. 不再使用的类型 常量比较简单，比如”lament”这个字符串，如果没有任何一个String的值是它，并且JVM肯定也用不到这个字符串，那么就会被从常量池中扫地出门。 但是判定不再使用的类就很麻烦了。 首先，这个类的所有实例（包括其派生子类的实例）都已经被回收啦；然后这个类的加载器也被回收啦（这个就很少见了）；然后这个类对应的 java.lang.Class 对象也没有引用了，并且也没办法通过反射访问该类。以上所有条件都满足的时候，也只是允许回收，不是一定会回收。 这种对类的回收，也叫类型卸载，在大量使用反射，CGLib，动态代理、JSP、OSGi这些场景里才需要JVM具备类型卸载的能力。 用什么方法GC？ 确定了需要回收的主角，接下来就介绍一下回收的方法，至于什么时候回收，需要结合回收方法来确定合适的时机，所以最后聊啥时候回收。 回收的方法也要分两部分来讨论 如何确定哪些是回收对象 以下介绍两种标记待回收对象的方法。 引用计数法 这个办法就是给对象加个引用计数器，每多一个引用，计数器就+1，引用失效就-1，如果计数器的值为0，那就说明没人再用它了，没用了就可以回收了。"
+}
+    </script>
+
+    <!-- <script type="text/javascript" src="https://demo.ghost.io/public/ghost-sdk.min.js?v=724281a32e"></script>
+    <script type="text/javascript">
+    ghost.init({
+    	clientId: "ghost-frontend",
+    	clientSecret: "f84a07a72b17"
+    });
+    </script> -->
+
+    <meta name="generator" content="Jekyll 3.6.2" />
+    <link rel="alternate" type="application/rss+xml" title="GC" href="/feed.xml" />
+
+
+</head>
+<body class="post-template">
+
+    <div class="site-wrapper">
+        <!-- All the main content gets inserted here, index.hbs, post.hbs, etc -->
+        <!-- default -->
+
+<!-- The tag above means: insert everything in this file
+into the {body} of the default.hbs template -->
+
+<header class="site-header outer">
+    <div class="inner">
+        <nav class="site-nav">
+    <div class="site-nav-left">
+        
+            
+                <a class="site-nav-logo" href="http://localhost:4000/">
+                  <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
+                  Lament
+                </a>
+            
+        
+        
+            <ul class="nav" role="menu">
+    <li class="nav-home" role="menuitem"><a href="/">Home</a></li>
+    <li class="nav-magical-index" role="menuitem"><a href="/tag/magical-index/">Magical Index</a></li>
+    <li class="nav-alchemy-lab" role="menuitem"><a href="/tag/alchemy-lab/">Alchemy Lab</a></li>
+    <li class="nav-scroll" role="menuitem"><a href="/tag/scroll/">Scroll</a></li>
+    <li class="nav-about" role="menuitem"><a href="/about/">About</a></li>
+</ul>
+
+        
+    </div>
+    <div class="site-nav-right">
+        <div class="social-links">
+            
+            
+        </div>
+        
+    </div>
+</nav>
+
+    </div>
+</header>
+
+<!-- Everything inside the #post tags pulls data from the post -->
+<!-- #post -->
+
+<main id="site-main" class="site-main outer" role="main">
+    <div class="inner">
+
+        <article class="post-full post tag-scroll no-image">
+
+            <header class="post-full-header">
+                <section class="post-full-meta">
+                    <time class="post-full-meta-date" datetime="10 January 2021">10 January 2021</time>
+                    
+                        <span class="date-divider">/</span>
+                        
+                            
+                               <a href='/tag/scroll/'>SCROLL</a>
+                            
+                        
+                    
+                </section>
+                <h1 class="post-full-title">GC</h1>
+            </header>
+
+            
+
+            <section class="post-full-content">
+                <div class="kg-card-markdown">
+                    <h1 id="什么是gc">什么是GC</h1>
+
+<p>GC short for Garbage Collection.</p>
+
+<p>笼统的说回收那些被“没用的数据”所占用的内存，就是GC。</p>
+
+<p>所有的动态分配内存的语言都要考虑GC的灵魂三问：</p>
+
+<p>什么东西需要回收？什么时候回收？用什么方法回收？</p>
+
+<p>经过几十年的发展，现在对于这灵魂三问已经有了很多非常成熟的技术，绝大部分时候我们都不用关心JVM在GC这里都干了些啥。</p>
+
+<p>那为啥要学GC呢？</p>
+
+<p><del>因为面试要问</del></p>
+
+<p>因为当你需要排查内存溢出、内存泄露、GC导致系统响应时间长等等问题时，总要知道JVM那个黑盒子里都干了点啥才能分析不是。</p>
+
+<h2 id="什么东西需要gc">什么东西需要GC？</h2>
+
+<p>对于Java而言，讨论内存相关的问题自然离不开运行时数据区的基础知识。</p>
+
+<p>RuntimeDataArea中主要包含两类内存：一类是被线程私有的，比如 Program Counter Register、VM Stack等等；另一类则是共享内存，比如 Heap、Method Area啥的。</p>
+
+<p>被线程私有的这些内存都是，其大小基本都是“固定”的，比如 VM Stack中每个栈帧需要多少内存，在编译期基本就确定了，其生命周期是随线程生灭的，线程死掉它占用的内存自然也就释放了，所以无需过多考虑。</p>
+
+<p>而被线程共享的这部分内存则充满了不确定性。
+比如所有类的实例、数组啥的都在 Heap 里分配，而一个Java应用会在运行时创建多少对象根本不可预知，这部分需要动态分配内存，也就需要动态回收内存。</p>
+
+<p>所以GC的主要关注点也在这里。</p>
+
+<p>换句说话，无论是Lisp还是Java，要确定什么东西需要回收，首先先找到需要动态分配的地方。</p>
+
+<h3 id="对方法区进行gc">对方法区进行GC</h3>
+
+<p>方法区比较特别，JVMS中提到过不强制要求JVM对方法区实现GC，这个主要是因为回收条件很苛刻，然后还回收不了多少内存，性价比比较低。</p>
+
+<p>这部分的GC目标主要是两部分内容：1. 废弃的常量 2. 不再使用的类型</p>
+
+<p>常量比较简单，比如”lament”这个字符串，如果没有任何一个String的值是它，并且JVM肯定也用不到这个字符串，那么就会被从常量池中扫地出门。</p>
+
+<p>但是判定不再使用的类就很麻烦了。</p>
+
+<p>首先，这个类的所有实例（包括其派生子类的实例）都已经被回收啦；然后这个类的加载器也被回收啦（这个就很少见了）；然后这个类对应的 java.lang.Class 对象也没有引用了，并且也没办法通过反射访问该类。以上所有条件都满足的时候，也只是允许回收，不是一定会回收。</p>
+
+<p>这种对类的回收，也叫类型卸载，在大量使用反射，CGLib，动态代理、JSP、OSGi这些场景里才需要JVM具备类型卸载的能力。</p>
+
+<h2 id="用什么方法gc">用什么方法GC？</h2>
+
+<p>确定了需要回收的主角，接下来就介绍一下回收的方法，至于什么时候回收，需要结合回收方法来确定合适的时机，所以最后聊啥时候回收。</p>
+
+<p>回收的方法也要分两部分来讨论</p>
+
+<h3 id="如何确定哪些是回收对象">如何确定哪些是回收对象</h3>
+
+<p>以下介绍两种标记待回收对象的方法。</p>
+
+<h4 id="引用计数法">引用计数法</h4>
+
+<p>这个办法就是给对象加个<strong>引用计数器</strong>，每多一个引用，计数器就+1，引用失效就-1，如果计数器的值为0，那就说明没人再用它了，没用了就可以回收了。</p>
+
+<p>这个办法简单高效，虽然计数器带来了一丢丢额外的内存开销，但是很好用。 然而主流JVM的实现里没有用这个办法的，主要是很难解决对象之间互相引用的情况。</p>
+
+<h4 id="可达性分析reachability-analysis法">可达性分析(Reachability Analysis)法</h4>
+
+<blockquote>
+  <p>其实这又是数学概念 =，=  妈蛋有钱之后第一件事：回炉去念个数学系</p>
+</blockquote>
+
+<p>这种方法就是从Root出发，根据引用关系向下搜索，如果搜到头找到了，叫做可达，没找到，叫做不可达。
+搜素的路径通常被称为 Reference Chain。</p>
+
+<p>当从Root到某对象不可达时，说明某对象没用啦，然后就可以回收啦,但是不一定真的被回收。</p>
+
+<h5 id="二次标记">二次标记</h5>
+
+<p>当一个对象被判定为不可达时，它会被第一次标记，然后JVM会对其进行一次判定，看这个对象是否有必要执行finalize()，没必要的话直接去等gc。</p>
+
+<p>如果需要执行，那么这个对象会被放入F-Queue中，之后JVM会启动一个优先级比较低的Finalizer线程去执行这个队列里的对象的finalize()。</p>
+
+<p>由于这个线程优先级很低，也不保证队列里那些对象的finalize()都执行完，所以JVM还会对这个队列进行二次标记，如果在二次标记前队列中的某个对象又被赋值给其他变量了，它会在二次标记的时候被移出队列，剩下的就等着被GC。</p>
+
+<h5 id="可作为gc-roots的对象们">可作为GC Roots的对象们</h5>
+
+<ul>
+  <li>
+    <p>在虚拟机栈(栈帧中的本地变量表)中引用的对象，譬如各个线程被调用的方法堆栈中使用到的参数、局部变量、临时变量等。</p>
+  </li>
+  <li>
+    <p>在方法区中类静态属性引用的对象，譬如Java类的引用类型静态变量。</p>
+  </li>
+  <li>
+    <p>在方法区中常量引用的对象，譬如字符串常量池(String Table)里的引用。</p>
+  </li>
+  <li>
+    <p>在本地方法栈中JNI(即通常所说的Native方法)引用的对象。</p>
+  </li>
+  <li>
+    <p>Java虚拟机内部的引用</p>
+  </li>
+</ul>
+
+<p>如基本数据类型对应的Class对象，一些常驻的异常对象(比如NullPointExcepiton、OutOfMemoryError)等，还有系统类加载器。</p>
+
+<ul>
+  <li>
+    <p>所有被同步锁(synchronized关键字)持有的对象。</p>
+  </li>
+  <li>
+    <p>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。</p>
+  </li>
+  <li>
+    <p>临时工Root对象</p>
+
+    <p>除了上述的GC Roots集合以外，根据用户所选用的垃圾收集器以及当前回收的内存区域不同，还可以有其他对象“临时性”地加入，共同构成完整GC Roots集合。</p>
+  </li>
+</ul>
+
+<h3 id="如何回收对象--gc算法">如何回收对象 ｜ GC算法</h3>
+
+<h4 id="名词解释">名词解释</h4>
+
+<ul>
+  <li>
+    <p>Minor GC/Young GC</p>
+
+    <p>指目标只是新生代的垃圾收集。</p>
+  </li>
+  <li>
+    <p>Major GC/Old GC</p>
+
+    <p>通常指目标只是老年代的垃圾收集，某些情况下Major GC有时也指整堆GC。</p>
+  </li>
+  <li>
+    <p>Full GC</p>
+
+    <p>收集整个Java堆和方法区的垃圾收集。</p>
+  </li>
+  <li>
+    <p>Mixed GC</p>
+
+    <p>指目标是收集整个新生代以及部分老年代的垃圾收集。目前只有G1收 集器会有这种行为。</p>
+  </li>
+  <li>
+    <p>Partial GC<br />
+指目标不是完整收集整个Java堆的垃圾收集，前面的Minor GC等都属于部分收集。</p>
+  </li>
+</ul>
+
+<h4 id="分代假说">分代假说</h4>
+<p>很多JVM的都是基于分代收集的理论来进行GC的。</p>
+
+<p>分代收集名为理论，实质是一套符合大多数程序运行实际情况的经验法则，它建立在两个分代假说之上:</p>
+
+<ol>
+  <li>
+    <p>弱分代假说(Weak Generational Hypothesis)<br />
+  绝大多数对象都是朝生夕灭的。</p>
+  </li>
+  <li>
+    <p>强分代假说(Strong Generational Hypothesis)</p>
+  </li>
+</ol>
+
+<p>熬过越多次垃圾收集过程的对象就越难以消亡。</p>
+
+<ol>
+  <li>跨代引用假说(Intergenerational Reference Hypothesis)</li>
+</ol>
+
+<p>第三条假设则是基于上面两条的推论，存在互相引用的两个对象通常会同时生存或同时消亡，因此，跨代引用相对于同代引用来说仅占极少数。</p>
+
+<p>通常分代至少会分为新生代和老年代两代，当一个处于新生代的对象存在跨代引用关系时，那么引用它的对象一定是在老年代，由于老年代对象很难消亡，被其引用的对象自然也会进入老年代，此时跨代引用关系就消失了。</p>
+
+<p>第三条假说主要是为了解释为什么JVM不会为了跨代引用而去扫描整个老年代，只要在新生代上建立一个Remembered Set，这个记忆集会将老年代分为若干区域，并且标记出哪个区域存在跨代引用。当JVM开始对新生代进行GC（也叫Minor GC）时，只有被标记区域的老年代对象才会加入GC Roots，从而避免扫描整个老年代。</p>
+
+<p>基于第一、第二假说，很多常用的垃圾收集器都确立了以下设计原则：</p>
+
+<p>收集器应该将Java堆划分 出不同的区域，然后将回收对象依据其年龄(年龄即对象熬过垃圾收集过程的次数)分配到不同的区域之中存储。显而易见，如果一个区域中大多数对象都是朝生夕灭，难以熬过垃圾收集过程的话，那么把它们集中放在一起，每次回收时只关注如何保留少量存活而不是去标记那些大量将要被回收的对象，就能以较低代价回收到大量的空间;如果剩下的都是难以消亡的对象，那把它们集中放在一块，虚拟机便可以使用较低的频率来回收这个区域，这就同时兼顾了垃圾收集的时间开销和内存的空间有效利用。</p>
+
+<p>根据这个原则就可以完成对内存/对象们的划分，产生不同分区之后自然也就可以对不同的区域进行特定的回收，比如Minor GC,Major GC，Full GC等等。</p>
+
+<p>同时也因此发展出了以下几种具有针对性的垃圾回收算法。</p>
+
+<h4 id="标记-清除算法-mark-sweep">标记-清除算法 Mark-Sweep</h4>
+
+<p>Mark-Sweep是很古老，也是很基础的GC算法，现代的很多GC算法都是在其基础上进化来的。</p>
+
+<p>最早出现的GC算法，标记就是通过之前说的引用计数法or可达性分析法来对待回收对象进行标记（反过来标记存活，回收未标记对象也是一样的）， 然后将所有被标记的对象清除掉，从而完成回收。</p>
+
+<ul>
+  <li>缺陷</li>
+</ul>
+
+<p>主要是两个缺点：</p>
+
+<p>执行效率不稳定，需要标记-清除的对象越多，GC就越慢。</p>
+
+<p>内存碎片化严重，当大对象无法找到连续内存时会提前触发GC，如果GC之后还是不够…</p>
+
+<h4 id="标记-复制算法">标记-复制算法</h4>
+
+<p>比如标记-复制 Semispace Copying,这个也挺老的，1969年诞生的。</p>
+
+<p>这个算法其实不如叫<strong>标记-清除-复制</strong>算法， <strong>标记-清除</strong>跟前面一样，主要说说<strong>复制</strong>。</p>
+
+<p>这种算法会将内存划分为大小相等的两块，假设一个叫A区，一个叫B区。一开始内存分配的时候在A区进行分配，标记也只标记A区，当GC开始，清除结束，还活着的对象会被复制到B区，然后A区整个清空。</p>
+
+<ul>
+  <li>
+    <p>优点</p>
+
+    <p>完全克服了内存碎片的问题，并且由于完全没有内存碎片，所以分配内存也很简单，移动堆指针就完了。并且当绝大部分对象均可回收时，复制也只需要复制少量存活对象。</p>
+  </li>
+  <li>
+    <p>缺点</p>
+
+    <p>内存上来就浪费了一半。存活对象多的时候复制的代价也大。</p>
+  </li>
+</ul>
+
+<p>所以目前的实际应用中并不会真的采用 1:1 的比例对内存进行划分，基于前面提过的假说，98%的对象都活不过第一轮收集，所以大部分时候划分是 8:2 or 8:1:1 。</p>
+
+<p>这种方法常用于对新生代进行收集，其中留存下来的那些对象通常就被扔去老年代或者Survivor之类的地方，比如8:1:1的Appel式回收，8为Eden，1为Survivor，两个Survivor其中一个被浪费掉，当一次Minor GC执行完后，如果Survivor里放不下，就会让老年代分担多出来的对象，这种分担被称作分配担保(Handle Promotion)。</p>
+
+<h4 id="标记-整理算法-mark-compact">标记-整理算法 Mark-Compact</h4>
+
+<p>这个算法的标记阶段还是跟<strong>标记-清除</strong>一样，区别在于，标记完之后不先清除，而是将存活对象进行移动，向内存的一端对齐，也就是把存活对象都整理到一块儿去，除此之外的全部清除。</p>
+
+<ul>
+  <li>
+    <p>优点
+内存空间不会被浪费，也没有内存碎片。</p>
+  </li>
+  <li>
+    <p>缺点<br />
+“整理”是一个非常重的操作，不光要在内存里移动对象，还要更新这些对象的引用，并且“整理”的时候应用啥也不能干，俗称“Stop the world”。</p>
+  </li>
+</ul>
+
+<h3 id="gc算法的实现各种收集器-collecters">GC算法的实现：各种收集器 Collecters</h3>
+
+<p>TODO 考虑根据时间线/进化史来整理各种收集器。</p>
+
+<h5 id="serial-收集器">Serial 收集器</h5>
+
+<p>最基础的收集器，除了单线程工作之外，它更强调当它进行GC时，其他工作线程必须全部暂停，一直到收集完成，俗称’Stop the world’。</p>
+
+<ul>
+  <li>
+    <p>算法</p>
+
+    <p>对新生代收集时采用标记-复制算法，对老年代收集时采用标记-整理算法。</p>
+  </li>
+  <li>
+    <p>应用<br />
+jdk1.3.1 之前是 HotSpot 虚拟机回收新生代时的唯一收集器。
+现在更适合用于新生代内存容量一两百兆以内的客户端，因为只要新生代的规模不大并且回收行为不频繁时，几十毫秒最多一两百毫秒的停顿是完全可以接受的。</p>
+  </li>
+</ul>
+
+<h5 id="parnew-收集器">ParNew 收集器</h5>
+
+<p>Serial 收集器的多线程版本，可以使用多条线程进行垃圾收集，除了多线程之外跟Serial收集器基本一致，包括Stop the world。</p>
+
+<p>但是它有一个性能无关的特点是，除 Serial 收集器之外，只有它可以与CMS收集器配合工作。</p>
+
+<p>所以运行在-Server模式下的HotSpot虚拟机（JDK7前）通常都是使用ParNew收集器来对新生代进行回收。</p>
+
+<blockquote>
+  <p>历史故事 -节选自《深入JVM虚拟机》
+在JDK 5发布时，HotSpot推出了一款在强交互应用中几乎可称为具有划时代意义的垃圾收集器 ——CMS收集器。这款收集器是HotSpot虚拟机中第一款真正意义上支持并发的垃圾收集器，它首次 实现了让垃圾收集线程与用户线程(基本上)同时工作。&lt;/br&gt;
+遗憾的是，CMS作为老年代的收集器，却无法与JDK 1.4.0中已经存在的新生代收集器Parallel
+Scavenge配合工作[1]，所以在JDK 5中使用CMS来收集老年代的时候，新生代只能选择ParNew或者 Serial收集器中的一个。ParNew收集器是激活CM S后(使用-XX:+UseConcMarkSweep GC选项)的默认新生代收集器，也可以使用-XX:+/-UseParNewGC选项来强制指定或者禁用它。&lt;/br&gt;
+可以说直到CMS的出现才巩固了ParNew的地位，但成也萧何败也萧何，随着垃圾收集器技术的不断改进，更先进的G1收集器带着CMS继承者和替代者的光环登场。G1是一个面向全堆的收集器，不再需要其他新生代收集器的配合工作。所以自JDK 9开始，ParNew加CMS收集器的组合就不再是官方推荐的服务端模式下的收集器解决方案了。官方希望它能完全被G1所取代，甚至还取消了ParNew加 Serial Old以及Serial加CMS这两组收集器组合的支持(其实原本也很少人这样使用)，并直接取消了 -XX:+UseParNewGC 参数，这意味着ParNew和CMS从此只能互相搭配使用，再也没有其他收集器能够和它们配合了。读者也可以理解为从此以后，ParNew合并入CMS，成为它专门处理新生代的组成部分。ParNew可以说是HotSpot虚拟机中第一款退出历史舞台的垃圾收集器。</p>
+</blockquote>
+
+<h5 id="parallel-scavenge-收集器">Parallel Scavenge 收集器</h5>
+<p>Parallel 并行，Scavenge 搜索，直译就是并行搜索收集器。</p>
+
+<p>这款收集器主要关注点是：吞吐量可控。（其他收集器关注的是停顿时间尽量短）</p>
+
+<p>这里吞吐量的计算公式为： 吞吐量 = 用户代码运行时间 / (用户代码运行时间 + 运行GC花费时间)。</p>
+
+<ul>
+  <li>算法</li>
+</ul>
+
+<p>标记-复制</p>
+
+<h5 id="serial-old收集器">Serial Old收集器</h5>
+<p>Serial收集器的老年代版本，通常与Parallel Scavenge收集器搭配使用，或者作为CMS收集器发生失败时的后备方案。</p>
+
+<blockquote>
+  <p>节选
+需要说明一下，Parallel Scavenge收集器架构中本身有PS M arkSweep收集器来进行老年代收集，并非 直接调用Serial Old收集器，但是这个PS MarkSweep收集器与Serial Old的实现几乎是一样的，所以在官
+方的许多资料中都是直接以Serial Old代替PS MarkSweep进行讲解，这里笔者也采用这种方式。</p>
+</blockquote>
+
+<ul>
+  <li>算法</li>
+</ul>
+
+<p>标记-整理</p>
+
+<h5 id="parallel-old收集器">Parallel Old收集器</h5>
+
+<p>Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，主要用来配合Parallel Scavenge收集器搭配使用。</p>
+
+<ul>
+  <li>算法</li>
+</ul>
+
+<p>标记-整理</p>
+
+<h5 id="concurrent-mark-sweep-cms收集器">Concurrent Mark Sweep CMS收集器</h5>
+
+<p>并发的，采用标记清除算法的收集器。
+该收集器主要关注目标是停顿时间短。
+它的整个收集过程相对前面几种也复杂一些，为了尽可能的缩短停顿时间，他把标记这个阶段拆分成了好几步完成，其中相对耗时的步骤不需要stop the world。</p>
+
+<p>TODO cms还是单独开一篇</p>
+
+<ul>
+  <li>缺点</li>
+</ul>
+
+<ol>
+  <li>
+    <p>占用cpu的计算资源，默契启动线程数是 核心数+3/4,也就是说最好是四核以上的cpu</p>
+  </li>
+  <li>
+    <p>无法处理“浮动垃圾”(FloatingGarbage)，可能出现Con-current Mode Failure，然后导致一次full gc.</p>
+  </li>
+  <li>
+    <p>碎片内存太多可能会提前触发full gc</p>
+  </li>
+</ol>
+
+<ul>
+  <li>收集过程</li>
+</ul>
+
+<p>这个感觉也可以摘出来放到CMS单独成篇。</p>
+
+<ol>
+  <li>
+    <p>初始标记(CMS initial mark)</p>
+  </li>
+  <li>
+    <p>并发标记(CMS concurrent mark)</p>
+  </li>
+  <li>
+    <p>重新标记(CMS remark)</p>
+  </li>
+  <li>
+    <p>并发清除(CMS concurrent sweep)</p>
+  </li>
+</ol>
+
+<ul>
+  <li>算法<br />
+标记-清除</li>
+</ul>
+
+<h5 id="garbage-first-g1收集器">Garbage First (G1)收集器</h5>
+
+<p>全功能的垃圾收集器(Fully-Featured Garbage Collector)</p>
+
+<p>TODO 这个肯定得单独开一篇。</p>
+
+<p>G1收集器开始面向回收集进行GC，回收集（collection set）可以是堆的任何部分（不在乎是什么代）。</p>
+
+<p>它GC的标准是哪里垃圾多就回收哪里，这个就是Mixed GC模式。</p>
+
+<p>G1不再将内存划分为各个代，而是将连续的堆划分成多个大小相等、相互独立的 Region，每个Region可以根据需要，作为新生代或者老年代。</p>
+
+<p>收集器会根据Region所代表的功能不同来采用不同的策略。并且为了应对大对象的情况，G1准备了Humongous区，所以超过Region容量一半大小的对象，都视为大对象，都放在Humongous区，如果对象大到超过Humongous，则会放在几个连续的Humongous区中。
+Humongous区是被视为老年代的一部分。</p>
+
+<h5 id="zgc">ZGC</h5>
+<p>jdk 11开始加入的试验性收集器，先，就知道个名字算了。</p>
+
+<h3 id="内存分配">内存分配</h3>
+
+<p>Java技术体系的自动内存管理，最根本的目标是自动化地解决两个问题:</p>
+
+<ol>
+  <li>自动给对象分配内存</li>
+  <li>自动回收分配给对象的内存</li>
+</ol>
+
+<h4 id="自动分配内存">自动分配内存</h4>
+
+<p>首先，对象通常优先分配新生代，特殊情况下，如大对象（占据大量连续内存空间的Java对象）会直接进老年代。</p>
+
+<p>然后，对象在内存中是有年龄的，JVM在对象头里存储了他们的年龄，每活过一次GC年龄就涨一岁，年龄大于某个值（默认15）后就进入老年代。</p>
+
+<p>除了年龄符合可以“晋升”老年代之外，某些虚拟机规定，当同年龄对象占用Survivor空间一半以上的时候，也会进入老年代。</p>
+
+<p>最后还有空间分配担保机制，Eden+双Survivor的分配方式下（标记复制算法）是有可能出现存活的对象们的总大小超过Survivor空间大小的。</p>
+
+<h2 id="什么时候gc">什么时候GC？</h2>
+
+<p>准确的说这部分应该叫，在什么情况下会触发什么GC。</p>
+
+<p>这部分先略，不同收集器的触发条件都不太相同。</p>
+
+<h2 id="引用">引用</h2>
+
+<p>前面各种提到引用，引用到底是啥。</p>
+
+<p>最传统的定义就是：如果reference类型的数据中存储的是另一块内存的起始地址，那么这个reference类型的数据就是某个东西（就是前半句的另一块内存里存的东西）的引用。</p>
+
+<p>传统概念下的引用非常直观，要么你是他的引用，要么不是，但是实际情况下，尤其是讨论GC的时候，这种区分就不够了，没有引用的对象还好说，回收了就完了，但是有引用的对象有一些我们希望在内存足够的情况下先留着，实在不够的（比如gc一次之后仍然内存不足）情况下，即便它还有引用也先回收了。</p>
+
+<p>所以自JDK1.2之后，Java把引用的概念扩展成了四种。</p>
+
+<ul>
+  <li>
+    <p>强引用 Strongly Reference</p>
+
+    <p>在程序代码之中普遍存在的引用赋值, 比如 <code class="language-plaintext highlighter-rouge">Object obj = new Object()</code>这种。
+无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回 收掉被引用的对象。</p>
+  </li>
+  <li>
+    <p>软引用 Soft Reference</p>
+  </li>
+</ul>
+
+<blockquote>
+  <p>软引用是用来描述一些还有用，但非必须的对象。</p>
+</blockquote>
+
+<blockquote>
+  <p>只被软引用关联着的对象，在系统将要发生内 存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存， 才会抛出内存溢出异常。在JDK 1.2版之后提供了SoftReference类来实现软引用。</p>
+</blockquote>
+
+<ul>
+  <li>弱引用 Weak Reference</li>
+</ul>
+
+<blockquote>
+  <p>弱引用也是用来描述那些非必须对象，但是它的强度比软引用更弱一些，被弱引用关联的对象只 能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只 被弱引用关联的对象。在JDK 1.2版之后提供了WeakReference类来实现弱引用。</p>
+</blockquote>
+
+<p>只能活到下一次GC开始前。</p>
+
+<ul>
+  <li>虚引用 Phantom Reference</li>
+</ul>
+
+<blockquote>
+  <p>虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的 存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。在JDK 1.2版之后提供 了PhantomReference类来实现虚引用。</p>
+</blockquote>
+
+<p>为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。</p>
+
+                </div>
+            </section>
+
+            <!-- Email subscribe form at the bottom of the page -->
+            
+
+            <footer class="post-full-footer">
+                <!-- Everything inside the #author tags pulls data from the author -->
+                <!-- #author-->
+                
+                    
+                
+                <!-- /author  -->
+            </footer>
+
+            <!-- If you use Disqus comments, just uncomment this block.
+            The only thing you need to change is "test-apkdzgmqhj" - which
+            should be replaced with your own Disqus site-id. -->
+            
+
+        </article>
+
+    </div>
+</main>
+
+<!-- Links to Previous/Next posts -->
+<aside class="read-next outer">
+    <div class="inner">
+        <div class="read-next-feed">
+            
+                
+                
+                
+                
+                    <article class="read-next-card"
+                        
+                            style="background-image: url(/assets/images/blog-cover.jpg)"
+                        
+                    >
+                        <header class="read-next-card-header">
+                            <small class="read-next-card-header-sitetitle">&mdash; Lament's Mage Tower &mdash;</small>
+                            
+                                <h3 class="read-next-card-header-title"><a href="/tag/scroll/">Scroll</a></h3>
+                            
+                        </header>
+                        <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+</div>
+                        <div class="read-next-card-content">
+                            <ul>
+                                
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/collections-Queue">Java集合类系列:Queue</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/lock-ad">几种锁优化简介</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                            <li><a href="/Thread-Safe">线程安全及常见的实现思路(draft)</a></li>
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                                  
+                                
+                                  
+                                
+                                  
+                                    
+                                        
+                                        
+                                    
+                                  
+                                
+                            </ul>
+                        </div>
+                        <footer class="read-next-card-footer">
+                            <a href="/tag/scroll/">
+                                
+                                    See all 10 posts  →
+                                
+                            </a>
+                        </footer>
+                    </article>
+                
+            
+
+            <!-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/JVM-Tools">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">JVM-Tools</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+            <!-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+            
+                
+
+    <article class="post-card post-template no-image">
+        
+        <div class="post-card-content">
+            <a class="post-card-content-link" href="/stack-based-architecture">
+                <header class="post-card-header">
+                    
+                        
+                            
+                                <span class="post-card-tags">Scroll</span>
+                            
+                        
+                    
+
+                    <h2 class="post-card-title">Stack Frame - 草稿</h2>
+                </header>
+                <section class="post-card-excerpt">
+                    
+                        <p></p>
+                    
+                </section>
+            </a>
+            <footer class="post-card-meta">
+                
+                    
+                
+                <span class="reading-time">
+                    
+                    
+                      1 min read
+                    
+                </span>
+            </footer>
+        </div>
+    </article>
+
+            
+
+        </div>
+    </div>
+</aside>
+
+<!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
+<div class="floating-header">
+    <div class="floating-header-logo">
+        <a href="http://localhost:4000/">
+            
+                <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
+            
+            <span>Lament's Mage Tower</span>
+        </a>
+    </div>
+    <span class="floating-header-divider">&mdash;</span>
+    <div class="floating-header-title">GC</div>
+    <div class="floating-header-share">
+        <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
+</svg>
+</div>
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=GC&amp;url=https://lament-z.comGC"
+            onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+
+        </a>
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comGC"
+            onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+
+        </a>
+    </div>
+    <progress class="progress" value="0">
+        <div class="progress-container">
+            <span class="progress-bar"></span>
+        </div>
+    </progress>
+</div>
+
+
+<!-- /post -->
+
+<!-- The #contentFor helper here will send everything inside it up to the matching #block helper found in default.hbs -->
+
+
+        <!-- Previous/next page links - displayed on every page -->
+        
+
+        <!-- The footer at the very bottom of the screen -->
+        <footer class="site-footer outer">
+            <div class="site-footer-content inner">
+                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
+                    <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
+                    <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
+                <nav class="site-footer-nav">
+                    <a href="/">Latest Posts</a>
+                    
+                    
+                    <a href="https://ghost.org" target="_blank" rel="noopener">Ghost</a>
+                </nav>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- The big email subscribe modal content -->
+    
+
+    <!-- highlight.js -->
+    <script src="/assets/js/prism-abap.min.js"></script>
+    <script>$(document).ready(function() {
+      $('pre code').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });</script>
+
+    <!-- jQuery + Fitvids, which makes all video embeds responsive -->
+    <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=724281a32e"></script>
+
+
+    <!-- Paginator increased to "infinit" in _config.yml -->
+    <!-- if paginator.posts  -->
+    <!-- <script>
+        var maxPages = parseInt('');
+    </script>
+    <script src="/assets/js/infinitescroll.js"></script> -->
+    <!-- /endif -->
+
+    
+
+
+    <!-- Add Google Analytics  -->
+    <!-- Google Analytics Tracking code -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B47LPLXBQP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B47LPLXBQP');
+</script>
+
+
+    <!-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+    
+        <script>
+
+// NOTE: Scroll performance is poor in Safari
+// - this appears to be due to the events firing much more slowly in Safari.
+//   Dropping the scroll event and using only a raf loop results in smoother
+//   scrolling but continuous processing even when not scrolling
+$(document).ready(function () {
+    // Start fitVids
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    // End fitVids
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        // show/hide floating header
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+
+    
+
+    <!-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+    <!-- ghost_foot -->
+
+</body>
+</html>

@@ -11,7 +11,7 @@
 
 
 
-    <title>JVM Overview</title>
+    <title>JVM-Tools</title>
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Styles'n'Scripts -->
@@ -34,26 +34,26 @@
     <![endif]-->
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
-    <meta name="description" content="序章" />
+    <meta name="description" content="Neutral, sometimes chaotic neutral" />
     <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="http://localhost:4000/JVM-Overview" />
+    <link rel="canonical" href="http://localhost:4000/JVM-Tools" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
     <meta property="og:site_name" content="Lament's Mage Tower" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="JVM Overview" />
-    <meta property="og:description" content="前一阵微信提醒我不要浪费订阅号资源。 于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。 因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。 用法 我特别不擅长背东西，通常需要借助一些手段来帮助记忆。 对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。 当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。 当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。 每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。 这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。 当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。 不至于重演之前用完就忘了的尴尬。 一个面试题告诉你什么叫鱼的记忆 这简直就是我鱼的记忆一个典型例子。 我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下： String str1 = new StringBuilder("lament").append("z").toString(); System.out.println(str1); System.out.println(str1.intern()); System.out.println(str1 == str1.intern()); System.out.println(); String str2 = new StringBuilder("ja").append("va").toString(); System.out.println(str2); System.out.println(str2.intern()); System.out.println(str2 == str2.intern()); 我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。 这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。 需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 ** Oracle JDK7u / OpenJDK7u HotSpot VM ** 。 不然你很可能看到两个true XD。" />
-    <meta property="og:url" content="http://localhost:4000/JVM-Overview" />
+    <meta property="og:title" content="JVM-Tools" />
+    <meta property="og:description" content="JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo" />
+    <meta property="og:url" content="http://localhost:4000/JVM-Tools" />
     <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
-    <meta property="article:published_time" content="2020-12-26T00:00:00+08:00" />
-    <meta property="article:modified_time" content="2020-12-26T00:00:00+08:00" />
+    <meta property="article:published_time" content="2021-01-13T00:00:00+08:00" />
+    <meta property="article:modified_time" content="2021-01-13T00:00:00+08:00" />
     <meta property="article:tag" content="Scroll" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="JVM Overview" />
-    <meta name="twitter:description" content="前一阵微信提醒我不要浪费订阅号资源。 于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。 因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。 用法 我特别不擅长背东西，通常需要借助一些手段来帮助记忆。 对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。 当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。 当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。 每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。 这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。 当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。 不至于重演之前用完就忘了的尴尬。 一个面试题告诉你什么叫鱼的记忆 这简直就是我鱼的记忆一个典型例子。 我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下： String str1 = new StringBuilder("lament").append("z").toString(); System.out.println(str1); System.out.println(str1.intern()); System.out.println(str1 == str1.intern()); System.out.println(); String str2 = new StringBuilder("ja").append("va").toString(); System.out.println(str2); System.out.println(str2.intern()); System.out.println(str2 == str2.intern()); 我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。 这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。 需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 ** Oracle JDK7u / OpenJDK7u HotSpot VM ** 。 不然你很可能看到两个true XD。" />
+    <meta name="twitter:title" content="JVM-Tools" />
+    <meta name="twitter:description" content="JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo" />
     <meta name="twitter:url" content="http://localhost:4000/" />
     <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
@@ -74,7 +74,7 @@
         "name": "Lament's Mage Tower",
         "logo": "http://localhost:4000/assets/images/blog-icon.png"
     },
-    "url": "http://localhost:4000/JVM-Overview",
+    "url": "http://localhost:4000/JVM-Tools",
     "image": {
         "@type": "ImageObject",
         "url": "http://localhost:4000/assets/images/blog-cover.jpg",
@@ -83,9 +83,9 @@
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "http://localhost:4000/JVM-Overview"
+        "@id": "http://localhost:4000/JVM-Tools"
     },
-    "description": "前一阵微信提醒我不要浪费订阅号资源。 于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。 因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。 用法 我特别不擅长背东西，通常需要借助一些手段来帮助记忆。 对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。 当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。 当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。 每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。 这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。 当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。 不至于重演之前用完就忘了的尴尬。 一个面试题告诉你什么叫鱼的记忆 这简直就是我鱼的记忆一个典型例子。 我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下： String str1 = new StringBuilder("lament").append("z").toString(); System.out.println(str1); System.out.println(str1.intern()); System.out.println(str1 == str1.intern()); System.out.println(); String str2 = new StringBuilder("ja").append("va").toString(); System.out.println(str2); System.out.println(str2.intern()); System.out.println(str2 == str2.intern()); 我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。 这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。 需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 ** Oracle JDK7u / OpenJDK7u HotSpot VM ** 。 不然你很可能看到两个true XD。"
+    "description": "JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo"
 }
     </script>
 
@@ -98,7 +98,7 @@
     </script> -->
 
     <meta name="generator" content="Jekyll 3.6.2" />
-    <link rel="alternate" type="application/rss+xml" title="JVM Overview" href="/feed.xml" />
+    <link rel="alternate" type="application/rss+xml" title="JVM-Tools" href="/feed.xml" />
 
 
 </head>
@@ -156,7 +156,7 @@ into the {body} of the default.hbs template -->
 
             <header class="post-full-header">
                 <section class="post-full-meta">
-                    <time class="post-full-meta-date" datetime="26 December 2020">26 December 2020</time>
+                    <time class="post-full-meta-date" datetime="13 January 2021">13 January 2021</time>
                     
                         <span class="date-divider">/</span>
                         
@@ -166,78 +166,76 @@ into the {body} of the default.hbs template -->
                         
                     
                 </section>
-                <h1 class="post-full-title">JVM Overview</h1>
+                <h1 class="post-full-title">JVM-Tools</h1>
             </header>
 
             
 
             <section class="post-full-content">
                 <div class="kg-card-markdown">
-                    <p>前一阵微信提醒我不要浪费订阅号资源。</p>
+                    <h1 id="jvm相关的工具们">JVM相关的工具们</h1>
 
-<p>于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。</p>
+<h2 id="java_homebin-下面白送的工具们">JAVA_HOME/bin 下面白送的工具们</h2>
+<p>这些工具分为三类：商业授权工具，正式支持工具，试验性工具。</p>
 
-<p>因为当时先发的微信订阅号，所以这里的内容会跟订阅号略有不同。</p>
+<p>正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。</p>
 
-<p><img src="https://lament-z.com/assets/images/JVM/JVM-Overview.jpg" alt="JVM Overview" /></p>
+<p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/toc.html">工具的文档们</a></p>
 
-<h2 id="用法">用法</h2>
+<p>不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8160376">JDK-8160376:DebuggerException: Can’t attach symbolicator to the process</a></p>
 
-<p>我特别不擅长背东西，通常需要借助一些手段来帮助记忆。</p>
+<p>而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。</p>
 
-<p>对于JVM这种，我用的是看图说话+推理式记忆法，核心思路就是按照逻辑去记忆和推理细节。</p>
+<p>反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了…</p>
 
-<p>当JVM的模型结构还不熟悉时，可以一边口述逻辑关系，一边画出这个图。</p>
+<ul>
+  <li>
+    <p>jps: JVM Process Status Tool</p>
 
-<p>当可以熟练的画出该图后，可以尝试分模块口述每个模块的功能，甚至每个模块内部的细分结构。</p>
+    <p>类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。</p>
+  </li>
+  <li>
+    <p>jstat: JVM Statistics Monitoring Tool</p>
 
-<p>每一层只回忆当前层的知识，深入讨论放在合适的层面，比如overview时不去回忆什么方法区，只想RuntimeDataArea。</p>
+    <p>顾名思义，JVM状态监控工具。</p>
 
-<p>这样可以在脑内建立一个符合JVM模型/设计逻辑的知识体系，相当于一个索引一样。</p>
+    <p>不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。</p>
 
-<p>当工作/面试时遇到某些零散知识点的时候，研究明白之后就可以相对精准的补充到合适的维度。</p>
+    <p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html">jstat-doc-jdk8</a></p>
+  </li>
+  <li>
+    <p>jinfo: Configuration Info for Java</p>
 
-<p>不至于重演之前用完就忘了的尴尬。</p>
+    <p>这个是实时查看和修改JVM参数的。
+jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用<code class="language-plaintext highlighter-rouge">sdkman use java 11.xxx</code>绕过这个bug去调试。</p>
 
-<h2 id="一个面试题告诉你什么叫鱼的记忆">一个面试题告诉你什么叫鱼的记忆</h2>
+    <p>下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jinfo -flags 49522
+VM Flags:
+-XX:CICompilerCount=4 -XX:ConcGCThreads=2 -XX:G1HeapRegionSize=1048576 -XX:InitialHeapSize=268435456 -XX:MarkStackSize=4194304 -XX:MaxHeapSize=2147483648 -XX:MaxNewSize=1287651328 -XX:MinHeapDeltaBytes=1048576 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseG1GC -XX:+UseStringDeduplication
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>jmap: Memory Map for Java</p>
 
-<p>这简直就是我鱼的记忆一个典型例子。</p>
+    <p>用于生成堆转储快照,生成的文件可以通过另一个工具jhat来分析，不过一般来说都是把这个文件从服务器上下载到本地然后使用其他可视化工具来分析，因为这个过程可漫长了，当然如果你本地机器内存比服务器的还小，最好找一台内存至少跟服务器内存差不多的机器。</p>
 
-<p>我学习JVM最初主要通过《深入理解JAVA虚拟机》这本书，翻来覆去的看了好多遍，然而昨天朋友发来一道从该书提取出的面试题大致如下：</p>
+    <p>比如你先启动自己的IDE，假设是Eclipse，然后通过jps拿到Eclipse的pid，再通过<code class="language-plaintext highlighter-rouge">jmap -dump:format=b,file=eclipse.bin 55555</code>生成快照，最后通过<code class="language-plaintext highlighter-rouge">jhat eclipse.bin</code>读取文件。</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-        String str1 = new StringBuilder("lament").append("z").toString();
-        System.out.println(str1);
-        System.out.println(str1.intern());
-        System.out.println(str1 == str1.intern());
+    <p>文件读取完成之后会返回：</p>
 
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Snapshot resolved.
+Started HTTP server on port 7000
+Server is ready.
+</code></pre></div>    </div>
+    <p>这时候你打开<code class="language-plaintext highlighter-rouge">127.0.0.1:7000</code>就可以看到快照的内容了，可读性极差，不建议使用jhat。</p>
+  </li>
+  <li>
+    <p>jstack：Stack Trace for Java</p>
 
-        System.out.println();
-
-        String str2 = new StringBuilder("ja").append("va").toString();
-        System.out.println(str2);
-        System.out.println(str2.intern());
-        System.out.println(str2 == str2.intern());
-
-
-</code></pre></div></div>
-
-<p>我对此完全没有印象，打开书特意找了一下才发现确实是介绍方法区那一节的一个例子。</p>
-
-<p>这个例子本身非常有趣，但是其实作为面试题（尤其是问为什么最后一行的输出是false）来考察是不是看过这本书，对我这种鱼的记忆简直太过分了。</p>
-
-<p>需要注意的是这个例子是与环境强相关的，如果你想自己重现false的情况，可以使用 <em>** Oracle JDK7u / OpenJDK7u HotSpot VM **</em> 。</p>
-
-<p>不然你很可能看到两个true XD。</p>
-
-<p>当然如果你看到这里突然对“字符串常量池”和“String#intern”产生兴趣了，可以看看美团的这一篇<a href="https://tech.meituan.com/2014/03/06/in-depth-understanding-string-intern.html">解析</a>.</p>
-
-<h2 id="参考资料">参考资料</h2>
-
-<ol>
-  <li><a href="https://book.douban.com/subject/34907497/">深入理解JAVA虚拟机(第三版)</a></li>
-  <li><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/index.html">The Java® Virtual Machine Specification</a></li>
-</ol>
+    <p>用于生成虚拟机当前时刻的线程快照，快照的内容就是线程正在执行的方法栈的集合，跟Thread.getAllStackTraces()方法的功能差不多。</p>
+  </li>
+</ul>
 
                 </div>
             </section>
@@ -333,9 +331,6 @@ into the {body} of the default.hbs template -->
                                 
                                   
                                     
-                                        
-                                        
-                                    
                                   
                                 
                                   
@@ -360,6 +355,9 @@ into the {body} of the default.hbs template -->
                                   
                                 
                                   
+                                    
+                                        
+                                        
                                     
                                   
                                 
@@ -394,7 +392,7 @@ into the {body} of the default.hbs template -->
     <article class="post-card post-template no-image">
         
         <div class="post-card-content">
-            <a class="post-card-content-link" href="/JVM-Runtime-Data-Area">
+            <a class="post-card-content-link" href="/classloading">
                 <header class="post-card-header">
                     
                         
@@ -404,7 +402,7 @@ into the {body} of the default.hbs template -->
                         
                     
 
-                    <h2 class="post-card-title">JVM-RuntimeDataArea</h2>
+                    <h2 class="post-card-title">JVM-类加载笔记-草稿</h2>
                 </header>
                 <section class="post-card-excerpt">
                     
@@ -435,17 +433,17 @@ into the {body} of the default.hbs template -->
     <article class="post-card post-template no-image">
         
         <div class="post-card-content">
-            <a class="post-card-content-link" href="/dev-tools-1">
+            <a class="post-card-content-link" href="/GC">
                 <header class="post-card-header">
                     
                         
                             
-                                <span class="post-card-tags">Alchemy-lab</span>
+                                <span class="post-card-tags">Scroll</span>
                             
                         
                     
 
-                    <h2 class="post-card-title">好用的工具们(一)</h2>
+                    <h2 class="post-card-title">GC</h2>
                 </header>
                 <section class="post-card-excerpt">
                     
@@ -484,18 +482,18 @@ into the {body} of the default.hbs template -->
         </a>
     </div>
     <span class="floating-header-divider">&mdash;</span>
-    <div class="floating-header-title">JVM Overview</div>
+    <div class="floating-header-title">JVM-Tools</div>
     <div class="floating-header-share">
         <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/>
 </svg>
 </div>
-        <a class="floating-header-share-tw" href="https://twitter.com/share?text=JVM+Overview&amp;url=https://lament-z.comJVM-Overview"
+        <a class="floating-header-share-tw" href="https://twitter.com/share?text=JVM-Tools&amp;url=https://lament-z.comJVM-Tools"
             onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
 
         </a>
-        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comJVM-Overview"
+        <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=https://lament-z.comJVM-Tools"
             onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
 

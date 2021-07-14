@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator>
-  <link href="/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
-  <link href="/" rel="alternate" type="text/html" />
-  <updated>2021-04-13T18:52:38+08:00</updated>
-  <id>/tag/scroll/feed.xml</id>
+  <link href="http://localhost:4000/tag/scroll/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
+  <updated>2021-07-14T10:45:29+08:00</updated>
+  <id>http://localhost:4000/tag/scroll/feed.xml</id>
 
   
   
@@ -33,11 +33,11 @@
   
     <entry>
       <title type="html">Java集合类系列:Queue</title>
-      <link href="/collections-Queue" rel="alternate" type="text/html" title="Java集合类系列:Queue" />
+      <link href="http://localhost:4000/collections-Queue" rel="alternate" type="text/html" title="Java集合类系列:Queue" />
       <published>2021-02-01T00:00:00+08:00</published>
       <updated>2021-02-01T00:00:00+08:00</updated>
-      <id>/collections-Queue</id>
-      <content type="html" xml:base="/collections-Queue">&lt;h1 id=&quot;queue-笔记&quot;&gt;Queue 笔记&lt;/h1&gt;
+      <id>http://localhost:4000/collections-Queue</id>
+      <content type="html" xml:base="http://localhost:4000/collections-Queue">&lt;h1 id=&quot;queue-笔记&quot;&gt;Queue 笔记&lt;/h1&gt;
 
 &lt;h2 id=&quot;几种不同场景下的队列&quot;&gt;几种不同场景下的队列&lt;/h2&gt;
 
@@ -260,7 +260,7 @@
         int initialCapacity = MIN_INITIAL_CAPACITY; //这个值为 8
 
         // Find the best power of two to hold elements.
-        // Tests &quot;&amp;lt;=&quot; because arrays aren't kept full.
+        // Tests &quot;&amp;lt;=&quot; because arrays aren&apos;t kept full.
         if (numElements &amp;gt;= initialCapacity) { //如果我们指定的值大于8
            initialCapacity = numElements;
            initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt;  1);
@@ -756,12 +756,593 @@ initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt; 16);
     </entry>
   
     <entry>
+      <title type="html">几种锁优化简介</title>
+      <link href="http://localhost:4000/lock-ad" rel="alternate" type="text/html" title="几种锁优化简介" />
+      <published>2021-01-25T00:00:00+08:00</published>
+      <updated>2021-01-25T00:00:00+08:00</updated>
+      <id>http://localhost:4000/lock-ad</id>
+      <content type="html" xml:base="http://localhost:4000/lock-ad">&lt;h2 id=&quot;锁优化&quot;&gt;锁优化&lt;/h2&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;高效并发是从JDK 5升级到JDK 6后一项重要的改进项，HotSpot虚拟机开发团队在这个版本上花 费了大量的资源去实现各种锁优化技术，如适应性自旋(Adaptive Spinning)、锁消除(Lock Elimination)、锁膨胀(Lock Coarsening)、轻量级锁(Lightweight Locking)、偏向锁(Biased Locking)等，这些技术都是为了在线程之间更高效地共享数据及解决竞争问题，从而提高程序的执行效率。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;可以看到大部分优化都是针对&lt;strong&gt;阻塞同步&lt;/strong&gt;这个最重的操作进行的。&lt;/p&gt;
+
+&lt;h3 id=&quot;自旋锁--适应性自旋锁&quot;&gt;自旋锁 &amp;amp; 适应性自旋锁&lt;/h3&gt;
+
+&lt;p&gt;阻塞/互斥同步性能问题最大的原因是由于挂起和恢复线程很麻烦，并且很多共享数据的锁定时间很短，可能阻塞线程的挂起恢复还没完成，它锁定就结束了。&lt;/p&gt;
+
+&lt;p&gt;针对这种情况，于是就出现了自旋锁，当一个线程持有共享数据时，另一个线程不必挂起，而是原地自旋spinning，这样不会进行挂起和恢复操作。&lt;/p&gt;
+
+&lt;p&gt;当然缺点就是自旋时候依然占用着处理器时间，并且自旋操作没有意义，如果多次自旋后依然获取不到锁，还是要挂起。&lt;/p&gt;
+
+&lt;p&gt;自旋次数默认为10次，并且可以通过JVM参数 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-XX: PreBlockSpin&lt;/code&gt;进行更改。&lt;/p&gt;
+
+&lt;p&gt;而适应性自旋锁，就是自旋时间不固定（相对于前面的 单次自旋时间*自旋次数），它的时间取决于前一次在同一个锁上的自旋时间，以及锁的持有者的状态来决定。&lt;/p&gt;
+
+&lt;p&gt;如果对于同一个共享资源（上锁的对象），一个线程自旋刚刚成功获取到锁，并且这个线程正在运行，那么JVM会认为该资源的其他等待线程接着自旋也很有可能很快获取到锁，于是JVM会允许这些等待线程进行更多的自旋次数；相反，如果某个共享资源，等待线程基本就没成功获取过锁，那么之后可能直接忽略掉自旋，转为直接挂起。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;自旋 Spinning
+所谓自旋Spinning，就是让线程自己保持状态原地自己玩一会儿。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;锁消除&quot;&gt;锁消除&lt;/h3&gt;
+
+&lt;p&gt;锁消除是指JVM即时编译器运行时对同步代码进行检测，对于那些不可能存在竞争的共享数据上的锁进行消除。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;锁消除的主要判定依据来源于逃逸分析的数据支持，如果判断到一段代码中，在堆上的所有数据都不会逃逸出去被其他线程访问到，那就可 以把它们当作栈上数据对待，认为它们是线程私有的，同步加锁自然就无须再进行。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;由于Java应用中除了开发者自行编写的代码外，Java类库、框架等等代码中是存在很多开发者并不知晓的同步代码的，只要逃逸分析发现代码中的共享资源的引用不会逃逸，并且其他线程永远访问不到他，这部分锁就会被即时编译器消除掉（解释执行时锁还是在的）。&lt;/p&gt;
+
+&lt;h3 id=&quot;锁粗化&quot;&gt;锁粗化&lt;/h3&gt;
+
+&lt;p&gt;原则上，我们在编写代码的时候，总是推荐将同步块的作用范围限制得尽量小——只在共享数据 的实际作用域中才进行同步，这样是为了使得需要同步的操作数量尽可能变少，即使存在锁竞争，等待锁的线程也能尽可能快地拿到锁。&lt;/p&gt;
+
+&lt;p&gt;但是如果一系列的连续操作都对同一个对象反复加锁和 解锁，甚至加锁操作是出现在循环体之中的，那即使没有线程竞争，频繁地进行互斥同步操作也会导致不必要的性能损耗。&lt;/p&gt;
+
+&lt;p&gt;这个时候JVM会把这一堆小锁换成一个包含这些资源的大锁，比如循环里的锁换成循环外的锁。&lt;/p&gt;
+
+&lt;h3 id=&quot;轻量级锁&quot;&gt;轻量级锁&lt;/h3&gt;
+
+&lt;p&gt;在代码即将进入同步块的时候，如果此同步对象没有被锁定(锁标志位为“01”状态)，虚拟机首先将在当前线程的栈帧中建立一个名为锁记录(Lock Record)的空间，用于存储锁对象目前的Mark Word的拷贝(官方为这份拷贝加了一个Displaced前缀，即Displaced Mark Word)。&lt;/p&gt;
+
+&lt;p&gt;然后，虚拟机将使用CAS操作尝试把对象的Mark Word更新为指向Lock Record的指针。如果这个更新动作成功了，即代表该线程拥有了这个对象的锁，并且对象Mark Word的锁标志位(Mark Word的 最后两个比特)将转变为“00”，表示此对象处于轻量级锁定状态。&lt;/p&gt;
+
+&lt;p&gt;这时候线程堆栈里存着原来Mark Word的值，而Mark word的现在存的是指向Lock Record的指针。&lt;/p&gt;
+
+&lt;p&gt;释放锁的过程也是通过CAS操作进行，指针如果还是指向线程的Lock Record，那么就把之前拷贝的Mark Word信息还给对象头。&lt;/p&gt;
+
+&lt;p&gt;说完正常流程来说不正常流程。&lt;/p&gt;
+
+&lt;p&gt;加锁过程中的CAS如果失败了，说明有其他线程竞争这个对象，JVM这个时候会先检测对象的Mark Word是不是指向（当前线程的栈中的）Lock Record的指针，如果是，那说明当前线程抢到这个锁了，执行同步块然后释放锁就好了；如果不是那说明这个对象被其他线程先抢走了，这个时候要么自旋一会儿，要么膨胀成重量级锁。&lt;/p&gt;
+
+&lt;p&gt;释放锁过程中如果CAS操作失败，说明有其他线程尝试过获取锁，八成都膨胀成重量级锁了，这个时候要释放锁，并且唤醒其他挂起的线程。&lt;/p&gt;
+
+&lt;h4 id=&quot;性能&quot;&gt;性能&lt;/h4&gt;
+
+&lt;p&gt;轻量级锁能提升程序同步性能的依据是“对于绝大部分的锁，在整个同步周期内都是不存在竞争的”这一经验法则。如果没有竞争，轻量级锁便通过CAS操作成功避免了使用互斥量的开销;但如果确实存在锁竞争，除了互斥量的本身开销外，还额外发生了CAS操作的开销。因此在有竞争的情况下，轻量级锁反而会比传统的重量级锁更慢。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;对象头 Mark Word&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;&quot; alt=&quot;img TODO 对象头，线程的栈帧， 以及整个过程二者的交互图&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;偏向锁&quot;&gt;偏向锁&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;(启用参数-XX:+UseBiased Locking，这是自JDK 6 起HotSpot虚拟机的默认值)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;偏向锁也是JDK 6中引入的一项锁优化措施，它的目的是消除数据在无竞争情况下的同步原语，进一步提高性能。如果说轻量级锁是在无竞争的情况下使用CAS操作去消除同步使用的互斥量，那偏向锁就是在无竞争的情况下把整个同步都消除掉，连CAS操作都不去做了。&lt;/p&gt;
+
+&lt;p&gt;偏向锁会偏向于第一个获得它的线程，如果在接下来的执行过程中，该锁一直没有被其他的线程获取，则持有偏向锁的线程将永远不需要再进行同步。&lt;/p&gt;
+
+&lt;p&gt;当锁对象第一次被线程获取的时候，虚拟机将会把对象头中的标志 位设置为“01”、把偏向模式设置为“1”，表示进入偏向模式。同时使用CAS操作把获取到这个锁的线程 的ID记录在对象的Mark Word之中。如果CAS操作成功，持有偏向锁的线程以后每次进入这个锁相关的同步块时，虚拟机都可以不再进行任何同步操作(例如加锁、解锁及对Mark Word的更新操作等)。&lt;/p&gt;
+
+&lt;p&gt;一旦出现另外一个线程去尝试获取这个锁的情况，偏向模式就马上宣告结束。根据锁对象目前是 否处于被锁定的状态决定是否撤销偏向(偏向模式设置为“ 0”)，撤销后标志位恢复到未锁定(标志位 为“ 01”)或轻量级锁定(标志位为“ 00”)的状态，后续的同步操作该膨胀膨胀，该解锁解锁。&lt;/p&gt;
+
+&lt;p&gt;由于偏向锁没有保存对象头Mark word原本存着的信息（毕竟把CAS都省了），所以对象的hashcode是会丢失的。
+Object::hashCode()或者System::identityHashCode(Object)这俩方法实际上返回值是对象的一致性哈希码(Identity Hash Code)，这个值就是存在MarkWord中的HashCode。很多API都是依赖这个值的，所以一但计算过这个哈希的对象，就永远不能进入偏向锁状态，处于该状态的对象如果收到计算这个哈希值的请求，就会立刻退出偏向锁状态，直接膨胀成重量级锁，而重量级锁和轻量级锁都是会保存Mark Word的。&lt;/p&gt;
+
+&lt;h4 id=&quot;性能-1&quot;&gt;性能&lt;/h4&gt;
+
+&lt;p&gt;同样是无竞争的情况越多效率越高。特殊情况下可能关闭之后效率更高。&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">锁优化</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">线程安全及常见的实现思路(draft)</title>
+      <link href="http://localhost:4000/Thread-Safe" rel="alternate" type="text/html" title="线程安全及常见的实现思路(draft)" />
+      <published>2021-01-25T00:00:00+08:00</published>
+      <updated>2021-01-25T00:00:00+08:00</updated>
+      <id>http://localhost:4000/Thread-Safe</id>
+      <content type="html" xml:base="http://localhost:4000/Thread-Safe"># 线程安全
+
+当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。
+
+## 五种共享数据的类型
+
+1. 不可变的类型  
+
+  final关键字带来的可见性，保证了只要一个不可变对象（基本数据类型or不可变类的实例）正确的被创建了，那他就是线程安全的。
+
+  当然对于不可变类，Java不能保证它的值不会变，这个要靠类自己的实现确保不会改变，比如String。
+
+2. 绝对线程安全的类型  
+
+  **“绝对线程安全”**类型的共享数据是指：无论在什么情况下，直接使用都不会出意外状况，由于要求过于严格，代价可能非常大。
+  JavaAPI中很多线程安全的类都不是绝对线程安全，往往需要增加额外的同步手段，比如java.util.Vector。
+
+3. 相对线程安全的类型
+  此类共享数据是指：保证对该数据的单次操作是线程安全的，特殊情况需要调用方通过同步等手段保证正确。
+  java.util.Vector 就是相对安全的类型。
+
+4. 线程兼容的类型  
+   这类共享数据，本身不是线程安全的，但是调用方可以使用同步手段，让这些数据在并发环境中正常工作。
+
+5. 线程对立的类型  
+   无论如何都不能被并发的数据。
+
+## 线程安全的实现思路  
+
+### 互斥同步/阻塞同步  
+
+   互斥同步中，互斥指共享的数据本身是互斥的，同一时刻只能被一个线程（信号量则是一些）访问（主要是写/修改），以此保证多线程同时访问共享数据仍然保持同步。
+   由于共享数据是互斥的，其他线程在锁释放前都会被阻塞，所以也叫阻塞同步。
+
+   互斥同步/阻塞同步是一种悲观的并发策略，它假设不加锁就一定会出问题。
+
+#### 互斥的实现方式
+
+TODO
+
+1. 临界区 Critical Section
+
+2. 互斥量 Mutex
+
+3. 信号量 Semaphore
+
+#### 实现互斥同步的几种方式：
+
+##### synchronized块
+
+  先回忆下前面的知识：
+
+  更大范围的原子性保证通过 lock 和 unlock 来实现，JVM提供了 monitorEnter 和 monitorExit 来隐式的使用 lock 和 unlock ，代码中对应的则是 synchronized 关键字。
+
+  主流Java虚拟机实现中，Java的线程是映射到操作系统的原生内核线程之上的，如果要阻塞或唤醒一条线程，则需要操作系统来帮忙完成，这就不可避免地陷入用户态到核心态的转换中，进行这种状态转换需要耗费很多的处理器时间。
+
+  所以 synchronized 会被编译成 monitorEnter monitorExit 这两条字节码指令，这两个字节码指令都需要一个 reference 类型的参数来指明 要锁定和解锁的对象。如果Java源码中的synchronized明确指定了对象参数，那就以这个对象的引用作为reference;如果没有明确指定，那将根据synchronized修饰的方法类型(如实例方法或类方法)，来决定是取代码所在的对象实例还是取类型对应的Class对象来作为线程要持有的锁。
+
+      1. synchronized块中的代码，可以被同一线程重复进入，简称可重入。
+
+      2. 释放锁之前无条件阻塞其他线程。其他的线程拿他一点办法没有。
+
+  根据上面的信息可以看出，synchronized块是一种重量级的操作，首先它会阻塞其他线程，这种阻塞会导致大量的状态转换。
+
+##### 重入锁(ReentrantLock)
+
+  由于synchronized块的局限性(只能对引用类型加锁，只能等执行结束or异常中断，不可避免的切换代价)，Java类库提供了java.util.concurrent包，通常被简称为JUC，其中java.util.concurrent.locks.Lock接口便成了Java的另一种全新的互斥同步手段。
+
+  基于Lock接口，用户能够以非块结构(Non-Block Structured)来实现互斥同步，从而摆脱了语言特性的束缚，改为在类库层面去实现同步。
+
+  重入锁-ReentrantLock就是Lock的一种实现。 与synchronized块一样它是可重入的（就这种锁都带个计数器），但是多了一些高级功能：
+
+  1. 等待可中断
+    当持有锁的线程长时间不放弃锁的话，等待线程可以放弃等待，然后去干别的。
+    synchronized block 的话，就只能老老实实的等着。
+
+  2. 公平锁  
+    所谓公平就是，一个锁释放后，其他等待线程按照先来后到的顺序获取锁。
+    重入锁(ReentrantLock) 默认和synchronized块一样都是非公平锁，一个锁释放后，其他在等待的线程谁抢到是谁的。
+    不过重入锁(ReentrantLock) 可以通过构造函数的参数来创建成公平的可重入锁。
+
+  3. 锁可以绑定多个条件  
+    一个ReentrantLock对象可以绑定多个Condition对象。
+    synchronized块 锁对象的wait()和notify()/notifyAll()配合起来实现一个隐含条件，但是多个条件就得多加对应数量的锁。
+
+
+### 非阻塞同步    
+
+    这种一种乐观的并发策略，这种策略认为不对被共享的数据“加锁”，直接操作也不一定就会出错。
+    所以它是先对数据操作，如果这期间共享数据确实没有被其他线程折腾，那就直接成功；如果发生了冲突，那再执行补救措施，比如重试等。
+
+    这种策略中非常重要的两步 操作 和 冲突检测 这两步必须具备原子性，而且需要由硬件指令来保证（软件的话保证它们的原子性就又绕回阻塞同步了），当硬件指令可以保证这两部操作的原子性时，这种策略就成为了可能，Java中给开发者提供的是 CAS(Compare-and-Swap) 指令。
+
+    比如Java类库里的原子整数类型的自增方法  AtomicInteger.incrementAndGet().
+    虽然CAS很美好，但是存在ABA问题。
+#### ABA问题
+
+  假设 letter = &quot;A&quot;， T1 读到letter的值为A，然后T1做了一些准备工作，做完后又读取letter（还是A）打算给它赋值。这个A是T1第一次读到的A吗？
+
+  T1做准备工作的时候，它不知道有没有一个T2来了，并且T2 把letter的值改为了B，然后又改回了A。
+
+  为了解决ABA问题，它们又给letter加了个时间戳属性，但是比较鸡肋，因为大部分时候ABA问题不会导致并发错误。
+
+### 无同步  
+
+  这种策略就干脆是，我所有的代码都不存在变量被并发访问的情况，即便有一些共享数据但是我把他们都放在同一个线程里(Thread Local Storage)，自然也就无所谓线程安全。</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html"># 线程安全</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">Java内存模型</title>
+      <link href="http://localhost:4000/JMM-And-Thread" rel="alternate" type="text/html" title="Java内存模型" />
+      <published>2021-01-23T00:00:00+08:00</published>
+      <updated>2021-01-23T00:00:00+08:00</updated>
+      <id>http://localhost:4000/JMM-And-Thread</id>
+      <content type="html" xml:base="http://localhost:4000/JMM-And-Thread">&lt;h1 id=&quot;jvm内存模型与线程&quot;&gt;JVM内存模型与线程&lt;/h1&gt;
+
+&lt;h2 id=&quot;java内存模型概述&quot;&gt;Java内存模型概述&lt;/h2&gt;
+
+&lt;p&gt;屏蔽各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。&lt;/p&gt;
+
+&lt;p&gt;Java内存模型的主要目的是定义程序中各种变量的访问规则。&lt;/p&gt;
+
+&lt;p&gt;主要关注在虚拟机中把变量值存储到内存和从内存中取出变量值这样的底层细节。&lt;/p&gt;
+
+&lt;p&gt;Java内存模型规定了所有的变量都存储在主内存(Main Memory)中。&lt;/p&gt;
+
+&lt;p&gt;每个线程还有自己的工作内存(Working Memory)。&lt;/p&gt;
+
+&lt;p&gt;线程的工作内存中保存了被该线程使用的变量的主内存副本，线程对变量的所有操作(读取、赋值等)都必须在工作内存中进行，而不能直接读写主内存中的数据。&lt;/p&gt;
+
+&lt;p&gt;不同的线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。&lt;/p&gt;
+
+&lt;h3 id=&quot;变量&quot;&gt;变量&lt;/h3&gt;
+&lt;p&gt;这里的变量指的是实例字段、静态字段，数组的元素等等，但是不包括局部变量和方法参数（因为线程私有）。&lt;/p&gt;
+
+&lt;h3 id=&quot;主内存-main-memory&quot;&gt;主内存 Main Memory&lt;/h3&gt;
+
+&lt;p&gt;主内存(Main Memory)中存储所有的变量。&lt;/p&gt;
+
+&lt;p&gt;类似硬件上的内存。&lt;/p&gt;
+
+&lt;h3 id=&quot;工作内存-working-memory&quot;&gt;工作内存 Working Memory&lt;/h3&gt;
+
+&lt;p&gt;保存了被该线程使用的变量的主内存副本。&lt;/p&gt;
+
+&lt;p&gt;线程对变量的所有操作(读取、赋值等)都在此处进行，不允许直接读写主内存数据。&lt;/p&gt;
+
+&lt;p&gt;类似硬件中的CPU高速缓存。&lt;/p&gt;
+
+&lt;h3 id=&quot;线程-工作内存-主内存交互关系图&quot;&gt;线程-工作内存-主内存交互关系图&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;&quot; alt=&quot;TODO——交互关系图&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;jmm与runtime-data-area&quot;&gt;JMM与Runtime Data Area&lt;/h3&gt;
+
+&lt;p&gt;二者均为JVM在内存方面的抽象模型，但是相互之间可以看作没有关系（主要是两者关注的点不同）。&lt;/p&gt;
+
+&lt;h2 id=&quot;jmm---内存交互&quot;&gt;JMM - 内存交互&lt;/h2&gt;
+
+&lt;p&gt;关于主内存与工作内存之间具体的交互协议，即一个变量如何从主内存拷贝到工作内存、如何从工作内存同步回主内存这一类的实现细节，Java内存模型中定义了以下8种原子操作来完成。&lt;/p&gt;
+
+&lt;h3 id=&quot;8个原子操作&quot;&gt;8个原子操作&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;lock(锁定):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于主内存的变量，它把一个变量标识为一条线程独占的状态。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;unlock(解锁):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;read(读取):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的load动作使用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;load(载入):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;use(使用):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值
+的字节码指令时将会执行这个操作。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;assign(赋值):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于工作内存的变量，它把一个从执行引擎接收的值赋给工作内存的变量。&lt;/p&gt;
+
+&lt;p&gt;每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;store(存储):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的write操作使用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;write(写入):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;作用于主内存的变量，它把store操作从工作内存中得到的变量的值放入主内存的变量中。&lt;/p&gt;
+
+&lt;h4 id=&quot;使用规范&quot;&gt;使用规范&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;read -&amp;gt; load 必须按顺序出现&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;也就是，必须先把变量的值读到工作内存中，然后才能把这个值给到工作内存中的变量的副本。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;store -&amp;gt; write 必须按顺序出现&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;必须先把工作内存中变量的值传输到主内存，然后主内存才能把这个值写入对应的变量。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;table&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;(read &amp;amp; load)&lt;/td&gt;
+          &lt;td&gt; &lt;/td&gt;
+          &lt;td&gt;(store &amp;amp; write) 必须成对出现&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;也就是说不允许读值不存、无值存储、回写主存不接受，无值回写…&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;assign 必须完成&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不允许一个线程丢弃它最近的assign操作。&lt;/p&gt;
+
+&lt;p&gt;即变量在工作内存中改变了之后必须把该变化同步回主内存。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;不允许无因 store + write。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;不允许一个线程无原因地(没有发生过任何assign操作)把数据从线程的工作内存同步回主内存中。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;新的变量只能在主内存中“诞生”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一个新的变量只能在主内存中“诞生”，不允许在工作内存中直接使用一个未被初始化(load or assign)的变量。&lt;/p&gt;
+
+&lt;p&gt;换句话说就是对一个新变量实施use、store操作之前，必须先执行 assign 和 load 操作。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个变量同一时刻只能被一条线程Lock&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一个变量在同一个时刻只允许一条线程对其进行lock操作，但lock操作可以被同一条线程重复执 行多次，多次执行lock后，只有执行相同次数的unlock操作，变量才会被解锁。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;对变量进行Lock会清空工作内存中此变量的值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果对一个变量执行lock操作，那将会清空工作内存中此变量的值，在执行引擎使用这个变量前，需要重新执行load或assign操作以初始化变量的值。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;未经Lock的变量不允许unlock，也不允许跨线程unLock&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果一个变量事先没有被lock操作锁定，那就不允许对它执行unlock操作，也不允许去unlock一个被其他线程锁定的变量。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unlock前必须先同步回主内存中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对一个变量执行unlock操作之前，必须先把此变量同步回主内存中(执行store、write操作)。&lt;/p&gt;
+
+&lt;h4 id=&quot;等价化简&quot;&gt;等价化简&lt;/h4&gt;
+
+&lt;p&gt;Java内存模型的操作简化为read、write、lock和unlock四种，但这只是语言描述上的等价化简。&lt;/p&gt;
+
+&lt;h4 id=&quot;volatile&quot;&gt;volatile&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;origin mean: (of a computer’s memory) retaining data only as long as there is a power supply connected.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;当一个变量被定义成volatile之后，它将具备两项特性:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;第一个语义是保证此变量对所有线程的可见性。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这里的“可见性”是指当一条线程修改了这个变量的值，新值对于其他线程来说是可以立即得知的。&lt;/p&gt;
+
+&lt;p&gt;普通变量并不能做到这一点，普通变量的值在线程间传递时均需要通过主内存来完成。比如，线程A修改一个普通变量的值，然后向主内存进行回写，另外一条线程B在线程A回写完成了之后再对主内存进行读取操作，新变量值才会对线程B可见。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;第二个语义是禁止指令重排序优化。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;会加入内存屏障（Memory Barrier or Memory Fence），该屏障保证指令重排时不会将屏障后面的指令重排序到屏障之前。&lt;/p&gt;
+
+&lt;p&gt;普通的变量仅会保证在该方法的执行过程中所有依赖赋值结果的地方都能获取到正确的结果，而不能保证变量赋值操作的顺序与程序代码中的执行顺序一致。因为在同一个线程的方法执行过程中无法感知到这点，这就是Java内存模型中描述的所谓“线程内表现为串行的语义”(Within-Thread As-If-Serial Semantics)。&lt;/p&gt;
+
+&lt;h4 id=&quot;long和double的非原子性协定-non-atomic-treatment-of-double-and-long-variables&quot;&gt;long和double的非原子性协定 (Non-Atomic Treatment of double and long Variables)&lt;/h4&gt;
+
+&lt;p&gt;在模型中对Long和double特别定义了一条宽松的规定:
+允许虚拟机将没有被volatile修饰的64位数据的读写操作划分为两次32位的操作来进行，即允许虚拟机实现自行选择是否 要保证64位数据类型的 load、store、read和 write 这四个操作的原子性。&lt;/p&gt;
+
+&lt;h4 id=&quot;原子性可见性与有序性&quot;&gt;原子性、可见性与有序性&lt;/h4&gt;
+
+&lt;p&gt;并发需要关注的三个特征。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;原子性(Atomicity)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Java内存模型直接保证的原子性变量操作包括read、load、assign、use、store和write这六个，我们大致可以认为，基本数据类型的访问、读写都是具备原子性的，例外就是long和double的非原子性协定。&lt;/p&gt;
+
+&lt;p&gt;更大范围的原子性保证通过 lock 和 unlock 来实现，JVM提供了 monitorEnter 和 monitorExit 来隐式的使用 lock 和 unlock ，代码中对应的则是 synchronized 关键字。&lt;/p&gt;
+
+&lt;p&gt;也就是代码中通过 synchronized 块中的操作可以保证更大范围的原子性。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;可见性(Visibility)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;所谓可见性指的是：一个线程修改了共享变量的值时，其他线程能立刻知晓这个修改。&lt;/p&gt;
+
+&lt;p&gt;volatile, synchronized, final均可提供可见效。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;volatile&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;它的可见性的提供方式是： 共享变量被修改后，会将新值同步回主内存；然后该变量每次被读取前，都会先从主内存刷新最新的值。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;synchronized&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;它的可见性的提供方式是： 前面说了 synchronized 可以看成是通过lock和unlock来保证原子性，其可见性则是在unlock之前，必须先将变量同步回主内存实现的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;final&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因为它不可变，主要正确初始化了（没有发生this引用逃逸），就天然提供可见性。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;有序性(Ordering)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果在本线程内观察，所有的操作都是有序的;如果在一个线程中观察另一个线程，所有的操作都是无序的。
+前半句是指“线程内似表现为串行的语义”(Within-Thread As-If-Serial Semantics) ，后半句是指“指令重排序”现象和“工作内存与主内存同步延迟”现象 。&lt;/p&gt;
+
+&lt;p&gt;Java语言提供了volatile和synchronized两个关键字来保证线程之间操作的有序性。
+volatile关键字本 身就包含了禁止指令重排序的语义，而synchronized则是由“一个变量在同一个时刻只允许一条线程对其进行lock操作”这条规则获得的，这个规则决定了持有同一个锁的两个同步块只能串行地进入。&lt;/p&gt;
+
+&lt;p&gt;JMM的其他有序性则通过&lt;strong&gt;先行发生原则&lt;/strong&gt;提供。&lt;/p&gt;
+
+&lt;h3 id=&quot;先行发生-happens-before-order&quot;&gt;先行发生 （Happens-before Order）&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;偏序 Partially ordered： 这也是个数学概念，是对一个集合中元素顺序or排序的直觉概念的抽象，说人话就是，偏序就是部分元素之间有序，不要求所有的元素互相之间都有顺序关系。&lt;br /&gt;
+可以把偏序的组成看成两个部分，一个是元素集合本身，一个是匹配给这个元素集合的排序方式， 比如说自然数集合+从小到大排列（&amp;lt;=），这就是个偏序，只不过这个偏序全都满足条件，所以它还是全序。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;先行发生是Java内存模型中定义的两项操作之间的&lt;strong&gt;&lt;em&gt;偏序关系&lt;/em&gt;&lt;/strong&gt;，下文把这种偏序简称为HB。&lt;/p&gt;
+
+&lt;p&gt;所谓按照“先行发生”对原子操作进行排序 或者说 对于两个原子操作之间具备 前者 先行发生于 后者：&lt;/p&gt;
+
+&lt;p&gt;如果操作A 先行发生 操作B，记作hb(A,B)，那么意味着，操作A必须排在操作B之前（这个排真正执行中的排，不是代码书写的前后顺序），并在操作A对操作B是可见的。&lt;/p&gt;
+
+&lt;p&gt;（实在觉得别扭你可以参考这段解释： 自然数集合中任意俩元素A,B 满足 A &amp;lt; B ，则意味着A在B之前，并且A的值小于B的值 ）&lt;/p&gt;
+
+&lt;p&gt;[Oracle-Happens-before Order][https://docs.oracle.com/javase/specs/jls/se7/html/jls-17.html#jls-17.4.5]&lt;/p&gt;
+
+&lt;p&gt;任意俩个原子操作A、B，如果满足hb(A,B),那么自然具备线程安全的特性，无需使用synchronized等手段。&lt;/p&gt;
+
+&lt;p&gt;《深入》一书中在12.3.6中介绍的各种规则都是根据HB推导出来的。&lt;/p&gt;
+
+&lt;p&gt;比如 管程锁定规则(Monitor Lock Rule)，对于同一个变量而言，你上了锁肯定之后得解锁，并且你解锁后另一个线程才能给它上锁，看起来似乎是hb(x,y)和hb(y,x)，实际上对先上锁后解锁 和 解锁后新加锁，这是两个不同的场景，依然是hb(x,y)。&lt;/p&gt;
+
+&lt;p&gt;再比如 传递性(Transitivity): if hb(a,b) and hb(b,c) then hb(a,c) ，这个实际上就是偏序本身就具备的传递性，就像不等式的传递性。&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">JVM内存模型与线程</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
       <title type="html">JVM-类加载笔记-草稿</title>
-      <link href="/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" />
+      <link href="http://localhost:4000/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" />
       <published>2021-01-17T00:00:00+08:00</published>
       <updated>2021-01-17T00:00:00+08:00</updated>
-      <id>/classloading</id>
-      <content type="html" xml:base="/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
+      <id>http://localhost:4000/classloading</id>
+      <content type="html" xml:base="http://localhost:4000/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
 
 &lt;p&gt;Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。&lt;/p&gt;
 
@@ -1086,12 +1667,598 @@ To allow for upgrading/overriding of modules defined to the platform class loade
     </entry>
   
     <entry>
+      <title type="html">JVM-Tools</title>
+      <link href="http://localhost:4000/JVM-Tools" rel="alternate" type="text/html" title="JVM-Tools" />
+      <published>2021-01-13T00:00:00+08:00</published>
+      <updated>2021-01-13T00:00:00+08:00</updated>
+      <id>http://localhost:4000/JVM-Tools</id>
+      <content type="html" xml:base="http://localhost:4000/JVM-Tools">&lt;h1 id=&quot;jvm相关的工具们&quot;&gt;JVM相关的工具们&lt;/h1&gt;
+
+&lt;h2 id=&quot;java_homebin-下面白送的工具们&quot;&gt;JAVA_HOME/bin 下面白送的工具们&lt;/h2&gt;
+&lt;p&gt;这些工具分为三类：商业授权工具，正式支持工具，试验性工具。&lt;/p&gt;
+
+&lt;p&gt;正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/technotes/tools/unix/toc.html&quot;&gt;工具的文档们&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， &lt;a href=&quot;https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8160376&quot;&gt;JDK-8160376:DebuggerException: Can’t attach symbolicator to the process&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。&lt;/p&gt;
+
+&lt;p&gt;反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了…&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;jps: JVM Process Status Tool&lt;/p&gt;
+
+    &lt;p&gt;类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jstat: JVM Statistics Monitoring Tool&lt;/p&gt;
+
+    &lt;p&gt;顾名思义，JVM状态监控工具。&lt;/p&gt;
+
+    &lt;p&gt;不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html&quot;&gt;jstat-doc-jdk8&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jinfo: Configuration Info for Java&lt;/p&gt;
+
+    &lt;p&gt;这个是实时查看和修改JVM参数的。
+jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdkman use java 11.xxx&lt;/code&gt;绕过这个bug去调试。&lt;/p&gt;
+
+    &lt;p&gt;下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。&lt;/p&gt;
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jinfo -flags 49522
+VM Flags:
+-XX:CICompilerCount=4 -XX:ConcGCThreads=2 -XX:G1HeapRegionSize=1048576 -XX:InitialHeapSize=268435456 -XX:MarkStackSize=4194304 -XX:MaxHeapSize=2147483648 -XX:MaxNewSize=1287651328 -XX:MinHeapDeltaBytes=1048576 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseFastUnorderedTimeStamps -XX:+UseG1GC -XX:+UseStringDeduplication
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jmap: Memory Map for Java&lt;/p&gt;
+
+    &lt;p&gt;用于生成堆转储快照,生成的文件可以通过另一个工具jhat来分析，不过一般来说都是把这个文件从服务器上下载到本地然后使用其他可视化工具来分析，因为这个过程可漫长了，当然如果你本地机器内存比服务器的还小，最好找一台内存至少跟服务器内存差不多的机器。&lt;/p&gt;
+
+    &lt;p&gt;比如你先启动自己的IDE，假设是Eclipse，然后通过jps拿到Eclipse的pid，再通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jmap -dump:format=b,file=eclipse.bin 55555&lt;/code&gt;生成快照，最后通过&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jhat eclipse.bin&lt;/code&gt;读取文件。&lt;/p&gt;
+
+    &lt;p&gt;文件读取完成之后会返回：&lt;/p&gt;
+
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Snapshot resolved.
+Started HTTP server on port 7000
+Server is ready.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;p&gt;这时候你打开&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;127.0.0.1:7000&lt;/code&gt;就可以看到快照的内容了，可读性极差，不建议使用jhat。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;jstack：Stack Trace for Java&lt;/p&gt;
+
+    &lt;p&gt;用于生成虚拟机当前时刻的线程快照，快照的内容就是线程正在执行的方法栈的集合，跟Thread.getAllStackTraces()方法的功能差不多。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">JVM相关的工具们</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
+      <title type="html">GC</title>
+      <link href="http://localhost:4000/GC" rel="alternate" type="text/html" title="GC" />
+      <published>2021-01-10T00:00:00+08:00</published>
+      <updated>2021-01-10T00:00:00+08:00</updated>
+      <id>http://localhost:4000/GC</id>
+      <content type="html" xml:base="http://localhost:4000/GC">&lt;h1 id=&quot;什么是gc&quot;&gt;什么是GC&lt;/h1&gt;
+
+&lt;p&gt;GC short for Garbage Collection.&lt;/p&gt;
+
+&lt;p&gt;笼统的说回收那些被“没用的数据”所占用的内存，就是GC。&lt;/p&gt;
+
+&lt;p&gt;所有的动态分配内存的语言都要考虑GC的灵魂三问：&lt;/p&gt;
+
+&lt;p&gt;什么东西需要回收？什么时候回收？用什么方法回收？&lt;/p&gt;
+
+&lt;p&gt;经过几十年的发展，现在对于这灵魂三问已经有了很多非常成熟的技术，绝大部分时候我们都不用关心JVM在GC这里都干了些啥。&lt;/p&gt;
+
+&lt;p&gt;那为啥要学GC呢？&lt;/p&gt;
+
+&lt;p&gt;&lt;del&gt;因为面试要问&lt;/del&gt;&lt;/p&gt;
+
+&lt;p&gt;因为当你需要排查内存溢出、内存泄露、GC导致系统响应时间长等等问题时，总要知道JVM那个黑盒子里都干了点啥才能分析不是。&lt;/p&gt;
+
+&lt;h2 id=&quot;什么东西需要gc&quot;&gt;什么东西需要GC？&lt;/h2&gt;
+
+&lt;p&gt;对于Java而言，讨论内存相关的问题自然离不开运行时数据区的基础知识。&lt;/p&gt;
+
+&lt;p&gt;RuntimeDataArea中主要包含两类内存：一类是被线程私有的，比如 Program Counter Register、VM Stack等等；另一类则是共享内存，比如 Heap、Method Area啥的。&lt;/p&gt;
+
+&lt;p&gt;被线程私有的这些内存都是，其大小基本都是“固定”的，比如 VM Stack中每个栈帧需要多少内存，在编译期基本就确定了，其生命周期是随线程生灭的，线程死掉它占用的内存自然也就释放了，所以无需过多考虑。&lt;/p&gt;
+
+&lt;p&gt;而被线程共享的这部分内存则充满了不确定性。
+比如所有类的实例、数组啥的都在 Heap 里分配，而一个Java应用会在运行时创建多少对象根本不可预知，这部分需要动态分配内存，也就需要动态回收内存。&lt;/p&gt;
+
+&lt;p&gt;所以GC的主要关注点也在这里。&lt;/p&gt;
+
+&lt;p&gt;换句说话，无论是Lisp还是Java，要确定什么东西需要回收，首先先找到需要动态分配的地方。&lt;/p&gt;
+
+&lt;h3 id=&quot;对方法区进行gc&quot;&gt;对方法区进行GC&lt;/h3&gt;
+
+&lt;p&gt;方法区比较特别，JVMS中提到过不强制要求JVM对方法区实现GC，这个主要是因为回收条件很苛刻，然后还回收不了多少内存，性价比比较低。&lt;/p&gt;
+
+&lt;p&gt;这部分的GC目标主要是两部分内容：1. 废弃的常量 2. 不再使用的类型&lt;/p&gt;
+
+&lt;p&gt;常量比较简单，比如”lament”这个字符串，如果没有任何一个String的值是它，并且JVM肯定也用不到这个字符串，那么就会被从常量池中扫地出门。&lt;/p&gt;
+
+&lt;p&gt;但是判定不再使用的类就很麻烦了。&lt;/p&gt;
+
+&lt;p&gt;首先，这个类的所有实例（包括其派生子类的实例）都已经被回收啦；然后这个类的加载器也被回收啦（这个就很少见了）；然后这个类对应的 java.lang.Class 对象也没有引用了，并且也没办法通过反射访问该类。以上所有条件都满足的时候，也只是允许回收，不是一定会回收。&lt;/p&gt;
+
+&lt;p&gt;这种对类的回收，也叫类型卸载，在大量使用反射，CGLib，动态代理、JSP、OSGi这些场景里才需要JVM具备类型卸载的能力。&lt;/p&gt;
+
+&lt;h2 id=&quot;用什么方法gc&quot;&gt;用什么方法GC？&lt;/h2&gt;
+
+&lt;p&gt;确定了需要回收的主角，接下来就介绍一下回收的方法，至于什么时候回收，需要结合回收方法来确定合适的时机，所以最后聊啥时候回收。&lt;/p&gt;
+
+&lt;p&gt;回收的方法也要分两部分来讨论&lt;/p&gt;
+
+&lt;h3 id=&quot;如何确定哪些是回收对象&quot;&gt;如何确定哪些是回收对象&lt;/h3&gt;
+
+&lt;p&gt;以下介绍两种标记待回收对象的方法。&lt;/p&gt;
+
+&lt;h4 id=&quot;引用计数法&quot;&gt;引用计数法&lt;/h4&gt;
+
+&lt;p&gt;这个办法就是给对象加个&lt;strong&gt;引用计数器&lt;/strong&gt;，每多一个引用，计数器就+1，引用失效就-1，如果计数器的值为0，那就说明没人再用它了，没用了就可以回收了。&lt;/p&gt;
+
+&lt;p&gt;这个办法简单高效，虽然计数器带来了一丢丢额外的内存开销，但是很好用。 然而主流JVM的实现里没有用这个办法的，主要是很难解决对象之间互相引用的情况。&lt;/p&gt;
+
+&lt;h4 id=&quot;可达性分析reachability-analysis法&quot;&gt;可达性分析(Reachability Analysis)法&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;其实这又是数学概念 =，=  妈蛋有钱之后第一件事：回炉去念个数学系&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这种方法就是从Root出发，根据引用关系向下搜索，如果搜到头找到了，叫做可达，没找到，叫做不可达。
+搜素的路径通常被称为 Reference Chain。&lt;/p&gt;
+
+&lt;p&gt;当从Root到某对象不可达时，说明某对象没用啦，然后就可以回收啦,但是不一定真的被回收。&lt;/p&gt;
+
+&lt;h5 id=&quot;二次标记&quot;&gt;二次标记&lt;/h5&gt;
+
+&lt;p&gt;当一个对象被判定为不可达时，它会被第一次标记，然后JVM会对其进行一次判定，看这个对象是否有必要执行finalize()，没必要的话直接去等gc。&lt;/p&gt;
+
+&lt;p&gt;如果需要执行，那么这个对象会被放入F-Queue中，之后JVM会启动一个优先级比较低的Finalizer线程去执行这个队列里的对象的finalize()。&lt;/p&gt;
+
+&lt;p&gt;由于这个线程优先级很低，也不保证队列里那些对象的finalize()都执行完，所以JVM还会对这个队列进行二次标记，如果在二次标记前队列中的某个对象又被赋值给其他变量了，它会在二次标记的时候被移出队列，剩下的就等着被GC。&lt;/p&gt;
+
+&lt;h5 id=&quot;可作为gc-roots的对象们&quot;&gt;可作为GC Roots的对象们&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;在虚拟机栈(栈帧中的本地变量表)中引用的对象，譬如各个线程被调用的方法堆栈中使用到的参数、局部变量、临时变量等。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在方法区中类静态属性引用的对象，譬如Java类的引用类型静态变量。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在方法区中常量引用的对象，譬如字符串常量池(String Table)里的引用。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在本地方法栈中JNI(即通常所说的Native方法)引用的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Java虚拟机内部的引用&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如基本数据类型对应的Class对象，一些常驻的异常对象(比如NullPointExcepiton、OutOfMemoryError)等，还有系统类加载器。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;所有被同步锁(synchronized关键字)持有的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;临时工Root对象&lt;/p&gt;
+
+    &lt;p&gt;除了上述的GC Roots集合以外，根据用户所选用的垃圾收集器以及当前回收的内存区域不同，还可以有其他对象“临时性”地加入，共同构成完整GC Roots集合。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;如何回收对象--gc算法&quot;&gt;如何回收对象 ｜ GC算法&lt;/h3&gt;
+
+&lt;h4 id=&quot;名词解释&quot;&gt;名词解释&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Minor GC/Young GC&lt;/p&gt;
+
+    &lt;p&gt;指目标只是新生代的垃圾收集。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Major GC/Old GC&lt;/p&gt;
+
+    &lt;p&gt;通常指目标只是老年代的垃圾收集，某些情况下Major GC有时也指整堆GC。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Full GC&lt;/p&gt;
+
+    &lt;p&gt;收集整个Java堆和方法区的垃圾收集。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Mixed GC&lt;/p&gt;
+
+    &lt;p&gt;指目标是收集整个新生代以及部分老年代的垃圾收集。目前只有G1收 集器会有这种行为。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Partial GC&lt;br /&gt;
+指目标不是完整收集整个Java堆的垃圾收集，前面的Minor GC等都属于部分收集。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;分代假说&quot;&gt;分代假说&lt;/h4&gt;
+&lt;p&gt;很多JVM的都是基于分代收集的理论来进行GC的。&lt;/p&gt;
+
+&lt;p&gt;分代收集名为理论，实质是一套符合大多数程序运行实际情况的经验法则，它建立在两个分代假说之上:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;弱分代假说(Weak Generational Hypothesis)&lt;br /&gt;
+  绝大多数对象都是朝生夕灭的。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;强分代假说(Strong Generational Hypothesis)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;熬过越多次垃圾收集过程的对象就越难以消亡。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;跨代引用假说(Intergenerational Reference Hypothesis)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;第三条假设则是基于上面两条的推论，存在互相引用的两个对象通常会同时生存或同时消亡，因此，跨代引用相对于同代引用来说仅占极少数。&lt;/p&gt;
+
+&lt;p&gt;通常分代至少会分为新生代和老年代两代，当一个处于新生代的对象存在跨代引用关系时，那么引用它的对象一定是在老年代，由于老年代对象很难消亡，被其引用的对象自然也会进入老年代，此时跨代引用关系就消失了。&lt;/p&gt;
+
+&lt;p&gt;第三条假说主要是为了解释为什么JVM不会为了跨代引用而去扫描整个老年代，只要在新生代上建立一个Remembered Set，这个记忆集会将老年代分为若干区域，并且标记出哪个区域存在跨代引用。当JVM开始对新生代进行GC（也叫Minor GC）时，只有被标记区域的老年代对象才会加入GC Roots，从而避免扫描整个老年代。&lt;/p&gt;
+
+&lt;p&gt;基于第一、第二假说，很多常用的垃圾收集器都确立了以下设计原则：&lt;/p&gt;
+
+&lt;p&gt;收集器应该将Java堆划分 出不同的区域，然后将回收对象依据其年龄(年龄即对象熬过垃圾收集过程的次数)分配到不同的区域之中存储。显而易见，如果一个区域中大多数对象都是朝生夕灭，难以熬过垃圾收集过程的话，那么把它们集中放在一起，每次回收时只关注如何保留少量存活而不是去标记那些大量将要被回收的对象，就能以较低代价回收到大量的空间;如果剩下的都是难以消亡的对象，那把它们集中放在一块，虚拟机便可以使用较低的频率来回收这个区域，这就同时兼顾了垃圾收集的时间开销和内存的空间有效利用。&lt;/p&gt;
+
+&lt;p&gt;根据这个原则就可以完成对内存/对象们的划分，产生不同分区之后自然也就可以对不同的区域进行特定的回收，比如Minor GC,Major GC，Full GC等等。&lt;/p&gt;
+
+&lt;p&gt;同时也因此发展出了以下几种具有针对性的垃圾回收算法。&lt;/p&gt;
+
+&lt;h4 id=&quot;标记-清除算法-mark-sweep&quot;&gt;标记-清除算法 Mark-Sweep&lt;/h4&gt;
+
+&lt;p&gt;Mark-Sweep是很古老，也是很基础的GC算法，现代的很多GC算法都是在其基础上进化来的。&lt;/p&gt;
+
+&lt;p&gt;最早出现的GC算法，标记就是通过之前说的引用计数法or可达性分析法来对待回收对象进行标记（反过来标记存活，回收未标记对象也是一样的）， 然后将所有被标记的对象清除掉，从而完成回收。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;缺陷&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;主要是两个缺点：&lt;/p&gt;
+
+&lt;p&gt;执行效率不稳定，需要标记-清除的对象越多，GC就越慢。&lt;/p&gt;
+
+&lt;p&gt;内存碎片化严重，当大对象无法找到连续内存时会提前触发GC，如果GC之后还是不够…&lt;/p&gt;
+
+&lt;h4 id=&quot;标记-复制算法&quot;&gt;标记-复制算法&lt;/h4&gt;
+
+&lt;p&gt;比如标记-复制 Semispace Copying,这个也挺老的，1969年诞生的。&lt;/p&gt;
+
+&lt;p&gt;这个算法其实不如叫&lt;strong&gt;标记-清除-复制&lt;/strong&gt;算法， &lt;strong&gt;标记-清除&lt;/strong&gt;跟前面一样，主要说说&lt;strong&gt;复制&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;这种算法会将内存划分为大小相等的两块，假设一个叫A区，一个叫B区。一开始内存分配的时候在A区进行分配，标记也只标记A区，当GC开始，清除结束，还活着的对象会被复制到B区，然后A区整个清空。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;优点&lt;/p&gt;
+
+    &lt;p&gt;完全克服了内存碎片的问题，并且由于完全没有内存碎片，所以分配内存也很简单，移动堆指针就完了。并且当绝大部分对象均可回收时，复制也只需要复制少量存活对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;缺点&lt;/p&gt;
+
+    &lt;p&gt;内存上来就浪费了一半。存活对象多的时候复制的代价也大。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以目前的实际应用中并不会真的采用 1:1 的比例对内存进行划分，基于前面提过的假说，98%的对象都活不过第一轮收集，所以大部分时候划分是 8:2 or 8:1:1 。&lt;/p&gt;
+
+&lt;p&gt;这种方法常用于对新生代进行收集，其中留存下来的那些对象通常就被扔去老年代或者Survivor之类的地方，比如8:1:1的Appel式回收，8为Eden，1为Survivor，两个Survivor其中一个被浪费掉，当一次Minor GC执行完后，如果Survivor里放不下，就会让老年代分担多出来的对象，这种分担被称作分配担保(Handle Promotion)。&lt;/p&gt;
+
+&lt;h4 id=&quot;标记-整理算法-mark-compact&quot;&gt;标记-整理算法 Mark-Compact&lt;/h4&gt;
+
+&lt;p&gt;这个算法的标记阶段还是跟&lt;strong&gt;标记-清除&lt;/strong&gt;一样，区别在于，标记完之后不先清除，而是将存活对象进行移动，向内存的一端对齐，也就是把存活对象都整理到一块儿去，除此之外的全部清除。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;优点
+内存空间不会被浪费，也没有内存碎片。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;缺点&lt;br /&gt;
+“整理”是一个非常重的操作，不光要在内存里移动对象，还要更新这些对象的引用，并且“整理”的时候应用啥也不能干，俗称“Stop the world”。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;gc算法的实现各种收集器-collecters&quot;&gt;GC算法的实现：各种收集器 Collecters&lt;/h3&gt;
+
+&lt;p&gt;TODO 考虑根据时间线/进化史来整理各种收集器。&lt;/p&gt;
+
+&lt;h5 id=&quot;serial-收集器&quot;&gt;Serial 收集器&lt;/h5&gt;
+
+&lt;p&gt;最基础的收集器，除了单线程工作之外，它更强调当它进行GC时，其他工作线程必须全部暂停，一直到收集完成，俗称’Stop the world’。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;算法&lt;/p&gt;
+
+    &lt;p&gt;对新生代收集时采用标记-复制算法，对老年代收集时采用标记-整理算法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;应用&lt;br /&gt;
+jdk1.3.1 之前是 HotSpot 虚拟机回收新生代时的唯一收集器。
+现在更适合用于新生代内存容量一两百兆以内的客户端，因为只要新生代的规模不大并且回收行为不频繁时，几十毫秒最多一两百毫秒的停顿是完全可以接受的。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;parnew-收集器&quot;&gt;ParNew 收集器&lt;/h5&gt;
+
+&lt;p&gt;Serial 收集器的多线程版本，可以使用多条线程进行垃圾收集，除了多线程之外跟Serial收集器基本一致，包括Stop the world。&lt;/p&gt;
+
+&lt;p&gt;但是它有一个性能无关的特点是，除 Serial 收集器之外，只有它可以与CMS收集器配合工作。&lt;/p&gt;
+
+&lt;p&gt;所以运行在-Server模式下的HotSpot虚拟机（JDK7前）通常都是使用ParNew收集器来对新生代进行回收。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;历史故事 -节选自《深入JVM虚拟机》
+在JDK 5发布时，HotSpot推出了一款在强交互应用中几乎可称为具有划时代意义的垃圾收集器 ——CMS收集器。这款收集器是HotSpot虚拟机中第一款真正意义上支持并发的垃圾收集器，它首次 实现了让垃圾收集线程与用户线程(基本上)同时工作。&amp;lt;/br&amp;gt;
+遗憾的是，CMS作为老年代的收集器，却无法与JDK 1.4.0中已经存在的新生代收集器Parallel
+Scavenge配合工作[1]，所以在JDK 5中使用CMS来收集老年代的时候，新生代只能选择ParNew或者 Serial收集器中的一个。ParNew收集器是激活CM S后(使用-XX:+UseConcMarkSweep GC选项)的默认新生代收集器，也可以使用-XX:+/-UseParNewGC选项来强制指定或者禁用它。&amp;lt;/br&amp;gt;
+可以说直到CMS的出现才巩固了ParNew的地位，但成也萧何败也萧何，随着垃圾收集器技术的不断改进，更先进的G1收集器带着CMS继承者和替代者的光环登场。G1是一个面向全堆的收集器，不再需要其他新生代收集器的配合工作。所以自JDK 9开始，ParNew加CMS收集器的组合就不再是官方推荐的服务端模式下的收集器解决方案了。官方希望它能完全被G1所取代，甚至还取消了ParNew加 Serial Old以及Serial加CMS这两组收集器组合的支持(其实原本也很少人这样使用)，并直接取消了 -XX:+UseParNewGC 参数，这意味着ParNew和CMS从此只能互相搭配使用，再也没有其他收集器能够和它们配合了。读者也可以理解为从此以后，ParNew合并入CMS，成为它专门处理新生代的组成部分。ParNew可以说是HotSpot虚拟机中第一款退出历史舞台的垃圾收集器。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&quot;parallel-scavenge-收集器&quot;&gt;Parallel Scavenge 收集器&lt;/h5&gt;
+&lt;p&gt;Parallel 并行，Scavenge 搜索，直译就是并行搜索收集器。&lt;/p&gt;
+
+&lt;p&gt;这款收集器主要关注点是：吞吐量可控。（其他收集器关注的是停顿时间尽量短）&lt;/p&gt;
+
+&lt;p&gt;这里吞吐量的计算公式为： 吞吐量 = 用户代码运行时间 / (用户代码运行时间 + 运行GC花费时间)。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;算法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;标记-复制&lt;/p&gt;
+
+&lt;h5 id=&quot;serial-old收集器&quot;&gt;Serial Old收集器&lt;/h5&gt;
+&lt;p&gt;Serial收集器的老年代版本，通常与Parallel Scavenge收集器搭配使用，或者作为CMS收集器发生失败时的后备方案。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;节选
+需要说明一下，Parallel Scavenge收集器架构中本身有PS M arkSweep收集器来进行老年代收集，并非 直接调用Serial Old收集器，但是这个PS MarkSweep收集器与Serial Old的实现几乎是一样的，所以在官
+方的许多资料中都是直接以Serial Old代替PS MarkSweep进行讲解，这里笔者也采用这种方式。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;算法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;标记-整理&lt;/p&gt;
+
+&lt;h5 id=&quot;parallel-old收集器&quot;&gt;Parallel Old收集器&lt;/h5&gt;
+
+&lt;p&gt;Parallel Old是Parallel Scavenge收集器的老年代版本，支持多线程并发收集，主要用来配合Parallel Scavenge收集器搭配使用。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;算法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;标记-整理&lt;/p&gt;
+
+&lt;h5 id=&quot;concurrent-mark-sweep-cms收集器&quot;&gt;Concurrent Mark Sweep CMS收集器&lt;/h5&gt;
+
+&lt;p&gt;并发的，采用标记清除算法的收集器。
+该收集器主要关注目标是停顿时间短。
+它的整个收集过程相对前面几种也复杂一些，为了尽可能的缩短停顿时间，他把标记这个阶段拆分成了好几步完成，其中相对耗时的步骤不需要stop the world。&lt;/p&gt;
+
+&lt;p&gt;TODO cms还是单独开一篇&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;缺点&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;占用cpu的计算资源，默契启动线程数是 核心数+3/4,也就是说最好是四核以上的cpu&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;无法处理“浮动垃圾”(FloatingGarbage)，可能出现Con-current Mode Failure，然后导致一次full gc.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;碎片内存太多可能会提前触发full gc&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;收集过程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个感觉也可以摘出来放到CMS单独成篇。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;初始标记(CMS initial mark)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;并发标记(CMS concurrent mark)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;重新标记(CMS remark)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;并发清除(CMS concurrent sweep)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;算法&lt;br /&gt;
+标记-清除&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;garbage-first-g1收集器&quot;&gt;Garbage First (G1)收集器&lt;/h5&gt;
+
+&lt;p&gt;全功能的垃圾收集器(Fully-Featured Garbage Collector)&lt;/p&gt;
+
+&lt;p&gt;TODO 这个肯定得单独开一篇。&lt;/p&gt;
+
+&lt;p&gt;G1收集器开始面向回收集进行GC，回收集（collection set）可以是堆的任何部分（不在乎是什么代）。&lt;/p&gt;
+
+&lt;p&gt;它GC的标准是哪里垃圾多就回收哪里，这个就是Mixed GC模式。&lt;/p&gt;
+
+&lt;p&gt;G1不再将内存划分为各个代，而是将连续的堆划分成多个大小相等、相互独立的 Region，每个Region可以根据需要，作为新生代或者老年代。&lt;/p&gt;
+
+&lt;p&gt;收集器会根据Region所代表的功能不同来采用不同的策略。并且为了应对大对象的情况，G1准备了Humongous区，所以超过Region容量一半大小的对象，都视为大对象，都放在Humongous区，如果对象大到超过Humongous，则会放在几个连续的Humongous区中。
+Humongous区是被视为老年代的一部分。&lt;/p&gt;
+
+&lt;h5 id=&quot;zgc&quot;&gt;ZGC&lt;/h5&gt;
+&lt;p&gt;jdk 11开始加入的试验性收集器，先，就知道个名字算了。&lt;/p&gt;
+
+&lt;h3 id=&quot;内存分配&quot;&gt;内存分配&lt;/h3&gt;
+
+&lt;p&gt;Java技术体系的自动内存管理，最根本的目标是自动化地解决两个问题:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;自动给对象分配内存&lt;/li&gt;
+  &lt;li&gt;自动回收分配给对象的内存&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;自动分配内存&quot;&gt;自动分配内存&lt;/h4&gt;
+
+&lt;p&gt;首先，对象通常优先分配新生代，特殊情况下，如大对象（占据大量连续内存空间的Java对象）会直接进老年代。&lt;/p&gt;
+
+&lt;p&gt;然后，对象在内存中是有年龄的，JVM在对象头里存储了他们的年龄，每活过一次GC年龄就涨一岁，年龄大于某个值（默认15）后就进入老年代。&lt;/p&gt;
+
+&lt;p&gt;除了年龄符合可以“晋升”老年代之外，某些虚拟机规定，当同年龄对象占用Survivor空间一半以上的时候，也会进入老年代。&lt;/p&gt;
+
+&lt;p&gt;最后还有空间分配担保机制，Eden+双Survivor的分配方式下（标记复制算法）是有可能出现存活的对象们的总大小超过Survivor空间大小的。&lt;/p&gt;
+
+&lt;h2 id=&quot;什么时候gc&quot;&gt;什么时候GC？&lt;/h2&gt;
+
+&lt;p&gt;准确的说这部分应该叫，在什么情况下会触发什么GC。&lt;/p&gt;
+
+&lt;p&gt;这部分先略，不同收集器的触发条件都不太相同。&lt;/p&gt;
+
+&lt;h2 id=&quot;引用&quot;&gt;引用&lt;/h2&gt;
+
+&lt;p&gt;前面各种提到引用，引用到底是啥。&lt;/p&gt;
+
+&lt;p&gt;最传统的定义就是：如果reference类型的数据中存储的是另一块内存的起始地址，那么这个reference类型的数据就是某个东西（就是前半句的另一块内存里存的东西）的引用。&lt;/p&gt;
+
+&lt;p&gt;传统概念下的引用非常直观，要么你是他的引用，要么不是，但是实际情况下，尤其是讨论GC的时候，这种区分就不够了，没有引用的对象还好说，回收了就完了，但是有引用的对象有一些我们希望在内存足够的情况下先留着，实在不够的（比如gc一次之后仍然内存不足）情况下，即便它还有引用也先回收了。&lt;/p&gt;
+
+&lt;p&gt;所以自JDK1.2之后，Java把引用的概念扩展成了四种。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;强引用 Strongly Reference&lt;/p&gt;
+
+    &lt;p&gt;在程序代码之中普遍存在的引用赋值, 比如 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object obj = new Object()&lt;/code&gt;这种。
+无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回 收掉被引用的对象。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;软引用 Soft Reference&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;软引用是用来描述一些还有用，但非必须的对象。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;只被软引用关联着的对象，在系统将要发生内 存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存， 才会抛出内存溢出异常。在JDK 1.2版之后提供了SoftReference类来实现软引用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;弱引用 Weak Reference&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;弱引用也是用来描述那些非必须对象，但是它的强度比软引用更弱一些，被弱引用关联的对象只 能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只 被弱引用关联的对象。在JDK 1.2版之后提供了WeakReference类来实现弱引用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;只能活到下一次GC开始前。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;虚引用 Phantom Reference&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的 存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。在JDK 1.2版之后提供 了PhantomReference类来实现虚引用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。&lt;/p&gt;</content>
+
+      
+      
+      
+      
+      
+
+      <author>
+          <name></name>
+        
+        
+      </author>
+
+      
+
+      
+        <category term="Scroll" />
+      
+
+      
+        <summary type="html">什么是GC</summary>
+      
+
+      
+      
+    </entry>
+  
+    <entry>
       <title type="html">Stack Frame - 草稿</title>
-      <link href="/stack-based-architecture" rel="alternate" type="text/html" title="Stack Frame - 草稿" />
+      <link href="http://localhost:4000/stack-based-architecture" rel="alternate" type="text/html" title="Stack Frame - 草稿" />
       <published>2021-01-04T00:00:00+08:00</published>
       <updated>2021-01-04T00:00:00+08:00</updated>
-      <id>/stack-based-architecture</id>
-      <content type="html" xml:base="/stack-based-architecture">&lt;blockquote&gt;
+      <id>http://localhost:4000/stack-based-architecture</id>
+      <content type="html" xml:base="http://localhost:4000/stack-based-architecture">&lt;blockquote&gt;
   &lt;p&gt;The JVM uses a stack based architecture.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -1268,11 +2435,11 @@ JVM存储64位数据类型的方式是，通过高位对其的方式将其分配
   
     <entry>
       <title type="html">JVM-RuntimeDataArea</title>
-      <link href="/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" />
+      <link href="http://localhost:4000/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" />
       <published>2020-12-28T00:00:00+08:00</published>
       <updated>2020-12-28T00:00:00+08:00</updated>
-      <id>/JVM-Runtime-Data-Area</id>
-      <content type="html" xml:base="/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+      <id>http://localhost:4000/JVM-Runtime-Data-Area</id>
+      <content type="html" xml:base="http://localhost:4000/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 
 &lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
 
@@ -1524,11 +2691,11 @@ JVM存储64位数据类型的方式是，通过高位对其的方式将其分配
   
     <entry>
       <title type="html">JVM Overview</title>
-      <link href="/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" />
+      <link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" />
       <published>2020-12-26T00:00:00+08:00</published>
       <updated>2020-12-26T00:00:00+08:00</updated>
-      <id>/JVM-Overview</id>
-      <content type="html" xml:base="/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+      <id>http://localhost:4000/JVM-Overview</id>
+      <content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
 
 &lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
 
@@ -1614,77 +2781,6 @@ JVM存储64位数据类型的方式是，通过高位对其的方式将其分配
 
       
         <summary type="html">前一阵微信提醒我不要浪费订阅号资源。</summary>
-      
-
-      
-      
-    </entry>
-  
-    <entry>
-      <title type="html">2019年终总结</title>
-      <link href="/in-the-end" rel="alternate" type="text/html" title="2019年终总结" />
-      <published>2019-12-31T00:00:00+08:00</published>
-      <updated>2019-12-31T00:00:00+08:00</updated>
-      <id>/in-the-end</id>
-      <content type="html" xml:base="/in-the-end">&lt;h2 id=&quot;小野不是妹纸的2019的反思&quot;&gt;小野不是妹纸的2019的反思&lt;/h2&gt;
-
-&lt;blockquote&gt;
-  &lt;blockquote&gt;
-    &lt;blockquote&gt;
-
-      &lt;p&gt;这个博客17年更新了没几次然后就没更了。 &lt;br /&gt;
-当时我加入了一家公司，然后突然就开启了007的生活，每天睁开眼睛坐在桌子面前就开始上班，熬不住的时候躺下就睡就算是下班了，一直到2019年才结束了这样的生活。  &lt;br /&gt;
-短短两年之后再看自己的博客感触完全不一样，于是决定把之前的内容删了，倒不是完全因为当初写的东西太傻，更主要的原因是那些东西没有太大价值，今天的自己来写的话，估计之前的几十篇我想要表达的东西一到两篇就写完了。&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/blockquote&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;言归正传，总结一下自己的2019.&lt;/p&gt;
-
-&lt;p&gt;年初的时候我给自己定的2019年的目标浓缩为一个词，休息。&lt;/p&gt;
-
-&lt;p&gt;现在回头再看总的来说还是很满足的，差不多完成度达到了90%左右，回想一下自己平时定目标时候那个标准通常都要飞上天去的习惯，今年堪称完美的实现了自己的目标。&lt;/p&gt;
-
-&lt;p&gt;头三个月完成了生活环境的变化，并且把作息时间正常化。&lt;/p&gt;
-
-&lt;p&gt;然后开始健身，主要是做平板撑之类的动作对自己进行腰部疼痛干预，坚持每天游泳锻炼心肺功能。9月开始游泳池脏到站不稳，游泳就停了，再之后泳池没了。附近倒是还有一个更大更好的泳池，但是手头钱太紧张就放弃了。从结果来说，比以前的自己总算是强壮了一丢丢，上臂看起来总算是正常的了，竟然还有了一点胸肌，以至于夏天我凸点了自己根本没注意，然后就被嘲笑了。&lt;/p&gt;
-
-&lt;p&gt;养狗这事儿也越来越熟练，从最开始洗一次狗可能要折腾完一下午，到现在轻车熟路全套最多两小时搞定。不得不说的是，狗对于逃避洗澡这事儿也变得越来越机智，已经达到我才开始放音乐它就晓得要洗澡的地步。&lt;/p&gt;
-
-&lt;p&gt;戒烟进展最好的时候是3月～7月，之后又开始反弹，目前维持在半包～一包/天的频率，还需努力。&lt;/p&gt;
-
-&lt;p&gt;今年还看了不少书，所以明年的计划之一就是写一个读书笔记的系列来分享读书的乐趣，推广读书这事儿上佛系的我决定开启一个新的篇章，这篇博客大概也会改成另外一个更加中二的名字。&lt;/p&gt;
-
-&lt;p&gt;另外今年没有因为穷就放弃现实中的社交，还是强行挤出来钱去保持稳定的社交活动了，认识了好多新朋友，增长了不少见识。比起现在网上糟糕（比如某乎，某博，网友很暴躁啊）的交流环境，现实中大家坐下来面对面交流其实非常有意思，之后应该会以故事的方式记录下来，标题已经想好了，但是怎么写还没想好。&lt;/p&gt;
-
-&lt;p&gt;计划外的事情做了两件，目前来看是非常正确的决定。一是长期稳定的进行心理咨询，二是考研。&lt;/p&gt;
-
-&lt;p&gt;考研的总结已经写了，发在了我专门用来记录&lt;a href=&quot;https://ms.lament-z.com&quot;&gt;考研的blog&lt;/a&gt;下面，当然心理咨询这事儿不太好写，等我把思路理顺了可能会写一点出来。&lt;/p&gt;
-
-&lt;p&gt;总的来说今年虽然也有好几个月比较辛苦的在学习，但是从身体到精神的休整基本上完成了，2020年继续启程～&lt;/p&gt;
-
-&lt;p&gt;好了流水账写完了，出门跟朋友们跨年咯～&lt;/p&gt;</content>
-
-      
-      
-      
-      
-      
-
-      <author>
-          <name></name>
-        
-        
-      </author>
-
-      
-
-      
-        <category term="Scroll" />
-      
-
-      
-        <summary type="html">小野不是妹纸的2019的反思</summary>
       
 
       
