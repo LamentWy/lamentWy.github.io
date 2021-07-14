@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-07-14T10:45:29+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">Java集合类系列:Queue</title><link href="http://localhost:4000/collections-Queue" rel="alternate" type="text/html" title="Java集合类系列:Queue" /><published>2021-02-01T00:00:00+08:00</published><updated>2021-02-01T00:00:00+08:00</updated><id>http://localhost:4000/collections-Queue</id><content type="html" xml:base="http://localhost:4000/collections-Queue">&lt;h1 id=&quot;queue-笔记&quot;&gt;Queue 笔记&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.0">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2021-07-14T11:15:33+08:00</updated><id>/feed.xml</id><title type="html">Lament’s Mage Tower</title><subtitle>Neutral, sometimes chaotic neutral</subtitle><entry><title type="html">Java集合类系列:Queue</title><link href="/collections-Queue" rel="alternate" type="text/html" title="Java集合类系列:Queue" /><published>2021-02-01T00:00:00+08:00</published><updated>2021-02-01T00:00:00+08:00</updated><id>/collections-Queue</id><content type="html" xml:base="/collections-Queue">&lt;h1 id=&quot;queue-笔记&quot;&gt;Queue 笔记&lt;/h1&gt;
 
 &lt;h2 id=&quot;几种不同场景下的队列&quot;&gt;几种不同场景下的队列&lt;/h2&gt;
 
@@ -688,7 +688,7 @@ initialCapacity |= (initialCapacity &amp;gt;&amp;gt;&amp;gt; 16);
 ----------按位与-----
         0000000000
 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">Queue 笔记</summary></entry><entry><title type="html">几种锁优化简介</title><link href="http://localhost:4000/lock-ad" rel="alternate" type="text/html" title="几种锁优化简介" /><published>2021-01-25T00:00:00+08:00</published><updated>2021-01-25T00:00:00+08:00</updated><id>http://localhost:4000/lock-ad</id><content type="html" xml:base="http://localhost:4000/lock-ad">&lt;h2 id=&quot;锁优化&quot;&gt;锁优化&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">Queue 笔记</summary></entry><entry><title type="html">几种锁优化简介</title><link href="/lock-ad" rel="alternate" type="text/html" title="几种锁优化简介" /><published>2021-01-25T00:00:00+08:00</published><updated>2021-01-25T00:00:00+08:00</updated><id>/lock-ad</id><content type="html" xml:base="/lock-ad">&lt;h2 id=&quot;锁优化&quot;&gt;锁优化&lt;/h2&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;高效并发是从JDK 5升级到JDK 6后一项重要的改进项，HotSpot虚拟机开发团队在这个版本上花 费了大量的资源去实现各种锁优化技术，如适应性自旋(Adaptive Spinning)、锁消除(Lock Elimination)、锁膨胀(Lock Coarsening)、轻量级锁(Lightweight Locking)、偏向锁(Biased Locking)等，这些技术都是为了在线程之间更高效地共享数据及解决竞争问题，从而提高程序的执行效率。&lt;/p&gt;
@@ -778,7 +778,7 @@ Object::hashCode()或者System::identityHashCode(Object)这俩方法实际上返
 
 &lt;h4 id=&quot;性能-1&quot;&gt;性能&lt;/h4&gt;
 
-&lt;p&gt;同样是无竞争的情况越多效率越高。特殊情况下可能关闭之后效率更高。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">锁优化</summary></entry><entry><title type="html">线程安全及常见的实现思路(draft)</title><link href="http://localhost:4000/Thread-Safe" rel="alternate" type="text/html" title="线程安全及常见的实现思路(draft)" /><published>2021-01-25T00:00:00+08:00</published><updated>2021-01-25T00:00:00+08:00</updated><id>http://localhost:4000/Thread-Safe</id><content type="html" xml:base="http://localhost:4000/Thread-Safe"># 线程安全
+&lt;p&gt;同样是无竞争的情况越多效率越高。特殊情况下可能关闭之后效率更高。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">锁优化</summary></entry><entry><title type="html">线程安全及常见的实现思路(draft)</title><link href="/Thread-Safe" rel="alternate" type="text/html" title="线程安全及常见的实现思路(draft)" /><published>2021-01-25T00:00:00+08:00</published><updated>2021-01-25T00:00:00+08:00</updated><id>/Thread-Safe</id><content type="html" xml:base="/Thread-Safe"># 线程安全
 
 当多个线程同时访问一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那就称这个对象是线程安全的。
 
@@ -883,7 +883,7 @@ TODO
 
 ### 无同步  
 
-  这种策略就干脆是，我所有的代码都不存在变量被并发访问的情况，即便有一些共享数据但是我把他们都放在同一个线程里(Thread Local Storage)，自然也就无所谓线程安全。</content><author><name></name></author><category term="Scroll" /><summary type="html"># 线程安全</summary></entry><entry><title type="html">Java内存模型</title><link href="http://localhost:4000/JMM-And-Thread" rel="alternate" type="text/html" title="Java内存模型" /><published>2021-01-23T00:00:00+08:00</published><updated>2021-01-23T00:00:00+08:00</updated><id>http://localhost:4000/JMM-And-Thread</id><content type="html" xml:base="http://localhost:4000/JMM-And-Thread">&lt;h1 id=&quot;jvm内存模型与线程&quot;&gt;JVM内存模型与线程&lt;/h1&gt;
+  这种策略就干脆是，我所有的代码都不存在变量被并发访问的情况，即便有一些共享数据但是我把他们都放在同一个线程里(Thread Local Storage)，自然也就无所谓线程安全。</content><author><name></name></author><category term="Scroll" /><summary type="html"># 线程安全</summary></entry><entry><title type="html">Java内存模型</title><link href="/JMM-And-Thread" rel="alternate" type="text/html" title="Java内存模型" /><published>2021-01-23T00:00:00+08:00</published><updated>2021-01-23T00:00:00+08:00</updated><id>/JMM-And-Thread</id><content type="html" xml:base="/JMM-And-Thread">&lt;h1 id=&quot;jvm内存模型与线程&quot;&gt;JVM内存模型与线程&lt;/h1&gt;
 
 &lt;h2 id=&quot;java内存模型概述&quot;&gt;Java内存模型概述&lt;/h2&gt;
 
@@ -1167,7 +1167,7 @@ volatile关键字本 身就包含了禁止指令重排序的语义，而synchron
 
 &lt;p&gt;比如 管程锁定规则(Monitor Lock Rule)，对于同一个变量而言，你上了锁肯定之后得解锁，并且你解锁后另一个线程才能给它上锁，看起来似乎是hb(x,y)和hb(y,x)，实际上对先上锁后解锁 和 解锁后新加锁，这是两个不同的场景，依然是hb(x,y)。&lt;/p&gt;
 
-&lt;p&gt;再比如 传递性(Transitivity): if hb(a,b) and hb(b,c) then hb(a,c) ，这个实际上就是偏序本身就具备的传递性，就像不等式的传递性。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">JVM内存模型与线程</summary></entry><entry><title type="html">JVM-类加载笔记-草稿</title><link href="http://localhost:4000/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" /><published>2021-01-17T00:00:00+08:00</published><updated>2021-01-17T00:00:00+08:00</updated><id>http://localhost:4000/classloading</id><content type="html" xml:base="http://localhost:4000/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
+&lt;p&gt;再比如 传递性(Transitivity): if hb(a,b) and hb(b,c) then hb(a,c) ，这个实际上就是偏序本身就具备的传递性，就像不等式的传递性。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">JVM内存模型与线程</summary></entry><entry><title type="html">JVM-类加载笔记-草稿</title><link href="/classloading" rel="alternate" type="text/html" title="JVM-类加载笔记-草稿" /><published>2021-01-17T00:00:00+08:00</published><updated>2021-01-17T00:00:00+08:00</updated><id>/classloading</id><content type="html" xml:base="/classloading">&lt;h1 id=&quot;笔记&quot;&gt;笔记&lt;/h1&gt;
 
 &lt;p&gt;Java虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验、转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这个过程被称作虚拟机的类加载机制。&lt;/p&gt;
 
@@ -1463,7 +1463,7 @@ To allow for upgrading/overriding of modules defined to the platform class loade
 &lt;/blockquote&gt;
 
 &lt;p&gt;更多细节参考：
-&lt;a href=&quot;https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html&quot;&gt;JDK9-Docs-ClassLoader&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">笔记</summary></entry><entry><title type="html">JVM-Tools</title><link href="http://localhost:4000/JVM-Tools" rel="alternate" type="text/html" title="JVM-Tools" /><published>2021-01-13T00:00:00+08:00</published><updated>2021-01-13T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Tools</id><content type="html" xml:base="http://localhost:4000/JVM-Tools">&lt;h1 id=&quot;jvm相关的工具们&quot;&gt;JVM相关的工具们&lt;/h1&gt;
+&lt;a href=&quot;https://docs.oracle.com/javase/9/docs/api/java/lang/ClassLoader.html&quot;&gt;JDK9-Docs-ClassLoader&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">笔记</summary></entry><entry><title type="html">JVM-Tools</title><link href="/JVM-Tools" rel="alternate" type="text/html" title="JVM-Tools" /><published>2021-01-13T00:00:00+08:00</published><updated>2021-01-13T00:00:00+08:00</updated><id>/JVM-Tools</id><content type="html" xml:base="/JVM-Tools">&lt;h1 id=&quot;jvm相关的工具们&quot;&gt;JVM相关的工具们&lt;/h1&gt;
 
 &lt;h2 id=&quot;java_homebin-下面白送的工具们&quot;&gt;JAVA_HOME/bin 下面白送的工具们&lt;/h2&gt;
 &lt;p&gt;这些工具分为三类：商业授权工具，正式支持工具，试验性工具。&lt;/p&gt;
@@ -1525,7 +1525,7 @@ Server is ready.
 
     &lt;p&gt;用于生成虚拟机当前时刻的线程快照，快照的内容就是线程正在执行的方法栈的集合，跟Thread.getAllStackTraces()方法的功能差不多。&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">JVM相关的工具们</summary></entry><entry><title type="html">GC</title><link href="http://localhost:4000/GC" rel="alternate" type="text/html" title="GC" /><published>2021-01-10T00:00:00+08:00</published><updated>2021-01-10T00:00:00+08:00</updated><id>http://localhost:4000/GC</id><content type="html" xml:base="http://localhost:4000/GC">&lt;h1 id=&quot;什么是gc&quot;&gt;什么是GC&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">JVM相关的工具们</summary></entry><entry><title type="html">GC</title><link href="/GC" rel="alternate" type="text/html" title="GC" /><published>2021-01-10T00:00:00+08:00</published><updated>2021-01-10T00:00:00+08:00</updated><id>/GC</id><content type="html" xml:base="/GC">&lt;h1 id=&quot;什么是gc&quot;&gt;什么是GC&lt;/h1&gt;
 
 &lt;p&gt;GC short for Garbage Collection.&lt;/p&gt;
 
@@ -1981,7 +1981,7 @@ Humongous区是被视为老年代的一部分。&lt;/p&gt;
   &lt;p&gt;虚引用也称为“幽灵引用”或者“幻影引用”，它是最弱的一种引用关系。一个对象是否有虚引用的 存在，完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。在JDK 1.2版之后提供 了PhantomReference类来实现虚引用。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">什么是GC</summary></entry><entry><title type="html">Stack Frame - 草稿</title><link href="http://localhost:4000/stack-based-architecture" rel="alternate" type="text/html" title="Stack Frame - 草稿" /><published>2021-01-04T00:00:00+08:00</published><updated>2021-01-04T00:00:00+08:00</updated><id>http://localhost:4000/stack-based-architecture</id><content type="html" xml:base="http://localhost:4000/stack-based-architecture">&lt;blockquote&gt;
+&lt;p&gt;为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">什么是GC</summary></entry><entry><title type="html">Stack Frame - 草稿</title><link href="/stack-based-architecture" rel="alternate" type="text/html" title="Stack Frame - 草稿" /><published>2021-01-04T00:00:00+08:00</published><updated>2021-01-04T00:00:00+08:00</updated><id>/stack-based-architecture</id><content type="html" xml:base="/stack-based-architecture">&lt;blockquote&gt;
   &lt;p&gt;The JVM uses a stack based architecture.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -2128,7 +2128,7 @@ JVM存储64位数据类型的方式是，通过高位对其的方式将其分配
   &lt;p&gt;《Java虚拟机规范》允许虚拟机实现增加一些规范里没有描述的信息到栈帧之中，例如与调试、性能收集相关的信息，这部分信息完全取决于具体的虚拟机实现。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;TODO 这部分也想略。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">The JVM uses a stack based architecture.</summary></entry><entry><title type="html">JVM-RuntimeDataArea</title><link href="http://localhost:4000/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Runtime-Data-Area</id><content type="html" xml:base="http://localhost:4000/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
+&lt;p&gt;TODO 这部分也想略。&lt;/p&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">The JVM uses a stack based architecture.</summary></entry><entry><title type="html">JVM-RuntimeDataArea</title><link href="/JVM-Runtime-Data-Area" rel="alternate" type="text/html" title="JVM-RuntimeDataArea" /><published>2020-12-28T00:00:00+08:00</published><updated>2020-12-28T00:00:00+08:00</updated><id>/JVM-Runtime-Data-Area</id><content type="html" xml:base="/JVM-Runtime-Data-Area">&lt;h2 id=&quot;概述&quot;&gt;概述&lt;/h2&gt;
 
 &lt;p&gt;《Java虚拟机规范》定义了如下几个运行时数据区：&lt;/p&gt;
 
@@ -2350,7 +2350,7 @@ JVM存储64位数据类型的方式是，通过高位对其的方式将其分配
   &lt;li&gt;
     &lt;p&gt;&lt;a href=&quot;https://www.artima.com/insidejvm/ed2/index.html&quot;&gt;Inside the Java Virtual Machine&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">概述</summary></entry><entry><title type="html">JVM Overview</title><link href="http://localhost:4000/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" /><published>2020-12-26T00:00:00+08:00</published><updated>2020-12-26T00:00:00+08:00</updated><id>http://localhost:4000/JVM-Overview</id><content type="html" xml:base="http://localhost:4000/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="Scroll" /><summary type="html">概述</summary></entry><entry><title type="html">JVM Overview</title><link href="/JVM-Overview" rel="alternate" type="text/html" title="JVM Overview" /><published>2020-12-26T00:00:00+08:00</published><updated>2020-12-26T00:00:00+08:00</updated><id>/JVM-Overview</id><content type="html" xml:base="/JVM-Overview">&lt;p&gt;前一阵微信提醒我不要浪费订阅号资源。&lt;/p&gt;
 
 &lt;p&gt;于是就顺手画了一张图回忆JVM，顺便借着这个机会把JVM的知识点系统化一下。&lt;/p&gt;
 

@@ -35,8 +35,8 @@
 
     <!-- This tag outputs SEO meta+structured data and other important settings -->
     <meta name="description" content="Neutral, sometimes chaotic neutral" />
-    <link rel="shortcut icon" href="http://localhost:4000/assets/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="http://localhost:4000/JVM-Tools" />
+    <link rel="shortcut icon" href="/assets/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="/JVM-Tools" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
      <!--title below is coming from _includes/dynamic_title-->
@@ -44,8 +44,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="JVM-Tools" />
     <meta property="og:description" content="JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo" />
-    <meta property="og:url" content="http://localhost:4000/JVM-Tools" />
-    <meta property="og:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta property="og:url" content="/JVM-Tools" />
+    <meta property="og:image" content="/assets/images/blog-cover.jpg" />
     <meta property="article:publisher" content="https://www.facebook.com/" />
     <meta property="article:author" content="https://www.facebook.com/" />
     <meta property="article:published_time" content="2021-01-13T00:00:00+08:00" />
@@ -54,8 +54,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="JVM-Tools" />
     <meta name="twitter:description" content="JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo" />
-    <meta name="twitter:url" content="http://localhost:4000/" />
-    <meta name="twitter:image" content="http://localhost:4000/assets/images/blog-cover.jpg" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:image" content="/assets/images/blog-cover.jpg" />
     <meta name="twitter:label1" content="Written by" />
     <meta name="twitter:data1" content="Lament's Mage Tower" />
     <meta name="twitter:label2" content="Filed under" />
@@ -72,18 +72,18 @@
     "publisher": {
         "@type": "Organization",
         "name": "Lament's Mage Tower",
-        "logo": "http://localhost:4000/assets/images/blog-icon.png"
+        "logo": "/assets/images/blog-icon.png"
     },
-    "url": "http://localhost:4000/JVM-Tools",
+    "url": "/JVM-Tools",
     "image": {
         "@type": "ImageObject",
-        "url": "http://localhost:4000/assets/images/blog-cover.jpg",
+        "url": "/assets/images/blog-cover.jpg",
         "width": 2000,
         "height": 666
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "http://localhost:4000/JVM-Tools"
+        "@id": "/JVM-Tools"
     },
     "description": "JVM相关的工具们 JAVA_HOME/bin 下面白送的工具们 这些工具分为三类：商业授权工具，正式支持工具，试验性工具。 正式支持和试验性工具就不提了，商业授权的工具要求商业环境中使用付费，个人开发环境是免费的。 工具的文档们 不过这些工具的jdk8版本的在MacOS下很多都有bug，基本只要有Attach to pid的动作的都会崩， JDK-8160376:DebuggerException: Can’t attach symbolicator to the process 而且这bug还是到了jdk9才修复，然后sdkman现在除了8就是11以上的版本，一言难尽。 反正从jdk9开始就模块化了，本地环境实在不行就用jdk11的工具去调试好了… jps: JVM Process Status Tool 类似linux命令中的ps，可以列出正在运行的虚拟机进程，并显示虚拟机执行主类(Main Class，main()函数所在的类)名称以及这些进程的本地虚拟机唯一ID(LVM-ID，Local Virtual Machine Identifier)。 jstat: JVM Statistics Monitoring Tool 顾名思义，JVM状态监控工具。 不同的虚拟机orJDK提供的jstat有些微不同，比如有的是有永久代的，有的已经没有永久代改成元空间了之类的。 jstat-doc-jdk8 jinfo: Configuration Info for Java 这个是实时查看和修改JVM参数的。 jinfo就能遇到之前说的那个bug，不过可以单独开个shell利用sdkman use java 11.xxx绕过这个bug去调试。 下面给出一个打印 Eclipse 启动时JVM参数的例子，其实我顺便试了试idea，发现Eclipse用的是G1GC，idea用的是CMSGC。 jinfo"
 }
@@ -117,7 +117,7 @@ into the {body} of the default.hbs template -->
     <div class="site-nav-left">
         
             
-                <a class="site-nav-logo" href="http://localhost:4000/">
+                <a class="site-nav-logo" href="/">
                   <!-- <img src="/assets/images/blog-icon.png" alt="Lament's Mage Tower" /> -->
                   Lament
                 </a>
@@ -474,7 +474,7 @@ Server is ready.
 <!-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
 <div class="floating-header">
     <div class="floating-header-logo">
-        <a href="http://localhost:4000/">
+        <a href="/">
             
                 <img src="/assets/images/favicon.png" alt="Lament's Mage Tower icon" />
             
@@ -518,7 +518,7 @@ Server is ready.
         <!-- The footer at the very bottom of the screen -->
         <footer class="site-footer outer">
             <div class="site-footer-content inner">
-                <section class="copyright"><a href="http://localhost:4000/">Lament's Mage Tower</a> &copy; 2021</section>
+                <section class="copyright"><a href="/">Lament's Mage Tower</a> &copy; 2021</section>
                 <section class="poweredby">Proudly published with <a href="https://jekyllrb.com/">Jekyll</a> &
                     <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a> using
                     <a href="https://github.com/jekyller/jasper2" target="_blank" rel="noopener">Jasper2</a></section>
